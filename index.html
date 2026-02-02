@@ -91,11 +91,40 @@ font-weight: 500;
 color: #333333;
 white-space: nowrap;
 }
+
+/* Search Container */
+.search-container {
+max-width: 1200px;
+margin: 0 auto 15px;
+padding: 0 20px;
+}
+.search-input {
+width: 100%;
+padding: 14px 20px 14px 45px;
+border: 1px solid #333333;
+border-radius: 15px;
+font-size: 1rem;
+background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E") no-repeat 18px center;
+background-size: 16px;
+box-sizing: border-box;
+transition: all 0.2s;
+}
+.search-input:focus {
+outline: none;
+border-color: #006B54;
+box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E");
+}
+.search-input::placeholder {
+color: #999999;
+}
+
 /* Main Content */
 .main-content {
 max-width: 1200px;
 margin: 0 auto;
 padding: 20px;
+padding-top: 0;
 }
 /* Category Tabs */
 .category-tabs {
@@ -708,6 +737,13 @@ height: 20px;
 .printer-status-text {
 font-size: 0.7rem;
 }
+.search-container {
+padding: 0 15px;
+}
+.search-input {
+padding: 12px 18px 12px 42px;
+font-size: 0.95rem;
+}
 }
 /* Responsive Grid untuk Mobile */
 @media (max-width: 480px) {
@@ -745,6 +781,15 @@ display: none;
 .header-actions button {
 padding: 6px 10px;
 font-size: 12px;
+}
+.search-container {
+padding: 0 12px;
+margin-bottom: 12px;
+}
+.search-input {
+padding: 10px 15px 10px 40px;
+font-size: 0.9rem;
+border-radius: 12px;
 }
 }
 /* Warna untuk input focus */
@@ -904,6 +949,10 @@ Settings
 </header>
 <!-- Main Content -->
 <main class="main-content">
+<!-- Search Bar -->
+<div class="search-container">
+<input type="text" id="product-search" class="search-input" placeholder="Cari produk berdasarkan nama atau kode...">
+</div>
 <!-- Category Tabs -->
 <div class="category-tabs" id="category-tabs">
 <!-- Categories will be loaded here -->
@@ -1086,6 +1135,7 @@ let isPrinterConnected = false;
 let currentBarcodeData = '';
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 3;
+let searchQuery = ''; // Variable untuk pencarian produk
 // Variables for long press handling
 let longPressTimer = null;
 let longPressCategory = null;
@@ -1137,6 +1187,18 @@ renderProducts();
 initPrinterConnection();
 // Initialize long press events
 initLongPressEvents();
+// Setup search functionality
+setupSearch();
+}
+// Setup search functionality
+function setupSearch() {
+const searchInput = document.getElementById('product-search');
+if (searchInput) {
+searchInput.addEventListener('input', function(e) {
+searchQuery = e.target.value.trim().toLowerCase();
+renderProducts();
+});
+}
 }
 // Initialize printer connection
 function initPrinterConnection() {
@@ -1314,11 +1376,6 @@ function loadSettings() {
 const savedConfig = localStorage.getItem('barcodeConfig');
 if (savedConfig) {
 digitConfig = JSON.parse(savedConfig);
-// Validasi konfigurasi
-if (!digitConfig.flex) digitConfig.flex = 2;
-if (!digitConfig.category) digitConfig.category = 2;
-if (!digitConfig.product) digitConfig.product = 4;
-if (!digitConfig.weight) digitConfig.weight = 5;
 }
 }
 // Save Settings
@@ -1426,6 +1483,12 @@ tab.dataset.category = category;
 // Regular click for category selection
 tab.onclick = () => {
 if (!isLongPress) {
+// Clear search when switching categories
+const searchInput = document.getElementById('product-search');
+if (searchInput && searchInput.value.trim() !== '') {
+searchInput.value = '';
+searchQuery = '';
+}
 selectedCategory = category;
 renderCategories();
 renderProducts();
@@ -1579,13 +1642,24 @@ renderCategories();
 renderProducts();
 showNotification('Kategori berhasil dihapus!');
 }
-// Render Products
+// Render Products - MODIFIED TO SUPPORT SEARCH
 function renderProducts() {
 const container = document.getElementById('products-grid');
 container.innerHTML = '';
-const filteredProducts = selectedCategory === 'all'
+// Filter products based on search query or selected category
+let filteredProducts;
+if (searchQuery) {
+// Search across all products when query exists
+filteredProducts = products.filter(p => 
+p.name.toLowerCase().includes(searchQuery) || 
+p.code.toLowerCase().includes(searchQuery)
+);
+} else {
+// Filter by selected category when no search query
+filteredProducts = selectedCategory === 'all'
 ? products
 : products.filter(p => p.category === selectedCategory);
+}
 filteredProducts.forEach(product => {
 const card = document.createElement('div');
 card.className = `product-card ${currentProduct?.id === product.id ? 'selected' : ''}`;
@@ -1651,7 +1725,7 @@ if (currentProduct && currentProduct.id === productId) {
 currentProduct = null;
 }
 }
-// Show Product Modal (Add/Edit) - FIXED CATEGORY HANDLING & DYNAMIC DIGIT CONFIG
+// Show Product Modal (Add/Edit) - FIXED CATEGORY HANDLING
 function showProductModal(product = null) {
 const isEdit = !!product;
 const modalTitle = document.getElementById('product-modal-title');
@@ -1675,31 +1749,6 @@ let categoryOptions = existingCategories.map(cat => {
 const selected = product && product.category === cat ? 'selected' : '';
 return `<option value="${cat}" ${selected}>${cat}</option>`;
 }).join('');
-// Hitung nilai default dan placeholder berdasarkan konfigurasi digit saat ini
-const flexPlaceholder = '0'.repeat(digitConfig.flex);
-const catcodePlaceholder = '0'.repeat(digitConfig.category);
-// Normalisasi nilai flex untuk ditampilkan
-let flexValue = flexPlaceholder;
-if (product && product.flex) {
-if (product.flex.length > digitConfig.flex) {
-flexValue = product.flex.slice(-digitConfig.flex); // Ambil digit terakhir sesuai konfigurasi
-} else {
-flexValue = product.flex.padStart(digitConfig.flex, '0');
-}
-} else if (product) {
-flexValue = flexPlaceholder;
-}
-// Normalisasi nilai catcode untuk ditampilkan
-let catcodeValue = catcodePlaceholder;
-if (product && product.catcode) {
-if (product.catcode.length > digitConfig.category) {
-catcodeValue = product.catcode.slice(-digitConfig.category);
-} else {
-catcodeValue = product.catcode.padStart(digitConfig.category, '0');
-}
-} else if (product) {
-catcodeValue = catcodePlaceholder;
-}
 const formContent = document.getElementById('product-form-content');
 formContent.innerHTML = `
 <div style="margin-bottom:15px;">
@@ -1778,20 +1827,20 @@ id="product-category-new" placeholder="Nama kategori baru">
 <line x1="9" y1="9" x2="15" y2="15"/>
 <line x1="15" y1="9" x2="9" y2="15"/>
 </svg>
-Flex Code (${digitConfig.flex} digit${digitConfig.flex > 1 ? 's' : ''})
+Flex Code (2 digit)
 </div>
 <input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-flex-input" value="${flexValue}" placeholder="${flexPlaceholder}" maxlength="${digitConfig.flex}">
+id="product-flex-input" value="${product ? product.flex : '01'}" placeholder="01" maxlength="2">
 </div>
 <div>
 <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
 <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
 </svg>
-Kategori (${digitConfig.category} digit${digitConfig.category > 1 ? 's' : ''})
+Kategori (2 digit)
 </div>
 <input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-catcode-input" value="${catcodeValue}" placeholder="${catcodePlaceholder}" maxlength="${digitConfig.category}">
+id="product-catcode-input" value="${product ? product.catcode : '01'}" placeholder="01" maxlength="2">
 </div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -1889,7 +1938,7 @@ document.getElementById('product-category-new').focus();
 newCategoryDiv.style.display = 'none';
 }
 }
-// Save Product - FIXED CATEGORY SAVING with duplicate check & DYNAMIC DIGIT HANDLING
+// Save Product - FIXED CATEGORY SAVING with duplicate check
 function saveProduct() {
 const name = document.getElementById('product-name-input').value.trim();
 const code = document.getElementById('product-code-input').value.trim();
@@ -1914,15 +1963,8 @@ categories.push(category);
 saveCategories();
 }
 }
-// Ambil nilai flex dan catcode dengan normalisasi sesuai konfigurasi digit
-let flexInput = document.getElementById('product-flex-input').value.trim();
-let flex = flexInput.padStart(digitConfig.flex, '0');
-if (flex.length > digitConfig.flex) flex = flex.slice(-digitConfig.flex);
-
-let catcodeInput = document.getElementById('product-catcode-input').value.trim();
-let catcode = catcodeInput.padStart(digitConfig.category, '0');
-if (catcode.length > digitConfig.category) catcode = catcode.slice(-digitConfig.category);
-
+const flex = document.getElementById('product-flex-input').value.trim();
+const catcode = document.getElementById('product-catcode-input').value.trim();
 const imagePreview = document.getElementById('image-preview');
 if (!name || !code || !category) {
 showNotification('Isi nama, kode, dan kategori!', 'error');
@@ -1930,11 +1972,6 @@ return;
 }
 if (code.length !== 4) {
 showNotification('Kode harus 4 digit!', 'error');
-return;
-}
-// Validasi flex dan catcode hanya berisi angka
-if (!/^\d+$/.test(flex) || !/^\d+$/.test(catcode)) {
-showNotification('Flex Code dan Kode Kategori harus berisi angka saja!', 'error');
 return;
 }
 let imageData = '';
@@ -1951,8 +1988,8 @@ id: editingProductId || Date.now(),
 name,
 code: code.padStart(4, '0'),
 category,
-flex: flex, // Sudah dinormalisasi sesuai konfigurasi
-catcode: catcode, // Sudah dinormalisasi sesuai konfigurasi
+flex: flex.padStart(2, '0'),
+catcode: catcode.padStart(2, '0'),
 image: imageData
 };
 if (editingProductId) {
@@ -2098,10 +2135,9 @@ if (!weightValue || weightValue === '0') {
 showNotification('Masukkan berat terlebih dahulu!', 'error');
 return;
 }
-// Gunakan nilai yang sudah dinormalisasi sesuai konfigurasi
 currentBarcodeData =
-currentProduct.flex.padStart(digitConfig.flex, '0').slice(-digitConfig.flex) +
-currentProduct.catcode.padStart(digitConfig.category, '0').slice(-digitConfig.category) +
+currentProduct.flex.padStart(digitConfig.flex, '0') +
+currentProduct.catcode.padStart(digitConfig.category, '0') +
 currentProduct.code.padStart(digitConfig.product, '0') +
 weightValue.padStart(digitConfig.weight, '0');
 const totalDigits = digitConfig.flex + digitConfig.category + digitConfig.product + digitConfig.weight;
@@ -2151,7 +2187,7 @@ const gs = '\x1D';
 const lf = '\x0A';
 let data = esc + '@';
 data += esc + 'a' + '\x01';
-data += `[${currentProduct.flex.padStart(digitConfig.flex, '0').slice(-digitConfig.flex)}][${currentProduct.catcode.padStart(digitConfig.category, '0').slice(-digitConfig.category)}]` +
+data += `[${currentProduct.flex.padStart(digitConfig.flex, '0')}][${currentProduct.catcode.padStart(digitConfig.category, '0')}]` +
 `[${currentProduct.code.padStart(digitConfig.product, '0')}][${weightValue.padStart(digitConfig.weight, '0')}]${lf}`;
 data += lf;
 data += esc + 'a' + '\x01';
@@ -2224,22 +2260,22 @@ Konfigurasi Digit Barcode
 <div>
 <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Flex</div>
 <input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="flex-digits" value="${digitConfig.flex}" min="1" max="5" onchange="validateDigitInput('flex-digits')">
+id="flex-digits" value="${digitConfig.flex}" min="1" max="5">
 </div>
 <div>
 <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Kategori</div>
 <input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="category-digits" value="${digitConfig.category}" min="1" max="5" onchange="validateDigitInput('category-digits')">
+id="category-digits" value="${digitConfig.category}" min="1" max="5">
 </div>
 <div>
 <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Produk</div>
 <input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="product-digits" value="${digitConfig.product}" min="1" max="6" onchange="validateDigitInput('product-digits')">
+id="product-digits" value="${digitConfig.product}" min="1" max="5">
 </div>
 <div>
 <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Berat</div>
 <input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="weight-digits" value="${digitConfig.weight}" min="1" max="6" onchange="validateDigitInput('weight-digits')">
+id="weight-digits" value="${digitConfig.weight}" min="1" max="5">
 </div>
 </div>
 <div class="digit-summary" style="background:${isValid ? '#f5f5f5' : '#ffe6e6'};border-color:${isValid ? '#d9d9d9' : '#ffcccc'};">
@@ -2326,15 +2362,6 @@ if (el) el.addEventListener('input', updateDigitSummary);
 });
 document.getElementById('settings-modal').style.display = 'flex';
 }
-// Validasi input digit hanya 1-5
-function validateDigitInput(inputId) {
-const input = document.getElementById(inputId);
-let value = parseInt(input.value);
-if (isNaN(value) || value < 1) value = 1;
-if (value > 5) value = 5;
-input.value = value;
-updateDigitSummary();
-}
 // Add new category from settings
 function addNewCategoryFromSettings() {
 const input = document.getElementById('new-category-input-settings');
@@ -2393,15 +2420,6 @@ digitConfig = { flex, category, product, weight };
 saveSettings();
 showNotification('Pengaturan berhasil disimpan!', 'success');
 closeSettingsModal();
-// Refresh product modal jika terbuka untuk update input fields
-if (document.getElementById('product-modal').style.display === 'flex') {
-if (editingProductId) {
-const product = products.find(p => p.id === editingProductId);
-showProductModal(product);
-} else {
-showProductModal();
-}
-}
 }
 // Data Management
 function exportData() {
