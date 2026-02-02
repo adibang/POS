@@ -95,7 +95,7 @@ white-space: nowrap;
 /* Search Container */
 .search-container {
 max-width: 1200px;
-margin: 0 auto 15px;
+margin: 20px auto 15px; /* TAMBAHAN: margin-top untuk jarak dari header */
 padding: 0 20px;
 }
 .search-input {
@@ -359,8 +359,9 @@ color: #006B54;
 .close-modal {
 display: none;
 }
+/* TAMBAHAN: Jarak antara konten dan header pada modal */
 .modal-body {
-padding: 0 20px 20px;
+padding: 20px 20px; /* TAMBAHAN: padding-top untuk jarak dari header */
 max-height: calc(90vh - 60px);
 overflow-y: auto;
 background: #FFFFFF;
@@ -723,7 +724,7 @@ max-width: 95%;
 padding: 10px 15px;
 }
 .modal-body {
-padding: 0 15px 15px;
+padding: 15px 15px; /* TAMBAHAN: padding-top untuk responsive */
 }
 button {
 padding: 12px 6px;
@@ -739,6 +740,7 @@ font-size: 0.7rem;
 }
 .search-container {
 padding: 0 15px;
+margin-top: 15px; /* TAMBAHAN: margin-top untuk responsive */
 }
 .search-input {
 padding: 12px 18px 12px 42px;
@@ -764,7 +766,7 @@ padding: 8px 12px;
 font-size: 0.95rem;
 }
 .modal-body {
-padding: 0 12px 12px;
+padding: 12px 12px; /* TAMBAHAN: padding-top untuk mobile */
 }
 button {
 padding: 10px 4px;
@@ -784,7 +786,7 @@ font-size: 12px;
 }
 .search-container {
 padding: 0 12px;
-margin-bottom: 12px;
+margin: 12px auto; /* TAMBAHAN: margin untuk mobile */
 }
 .search-input {
 padding: 10px 15px 10px 40px;
@@ -1049,7 +1051,7 @@ CONNECT
 <button class="print-btn function-btn" onclick="printBarcode()">
 <svg class="icon icon-sm" viewBox="0 0 24 24">
 <polyline points="6 9 6 2 18 2 18 9"/>
-<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2 2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
 <rect x="6" y="14" width="12" height="8"/>
 </svg>
 PRINT
@@ -1725,7 +1727,7 @@ if (currentProduct && currentProduct.id === productId) {
 currentProduct = null;
 }
 }
-// Show Product Modal (Add/Edit) - FIXED CATEGORY HANDLING
+// Show Product Modal (Add/Edit) - FIXED: Menggunakan digitConfig untuk maxlength
 function showProductModal(product = null) {
 const isEdit = !!product;
 const modalTitle = document.getElementById('product-modal-title');
@@ -1790,10 +1792,10 @@ id="product-name-input" value="${product ? product.name : ''}" placeholder="Nama
 <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
 </svg>
-Kode Produk (4 digit)
+Kode Produk (${digitConfig.product} digit)
 </div>
 <input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-code-input" value="${product ? product.code : ''}" placeholder="0001" maxlength="4" required>
+id="product-code-input" value="${product ? product.code : ''}" placeholder="Contoh: 0001" maxlength="${digitConfig.product}" required>
 <div id="code-duplicate-warning" style="color:#dc3545;font-size:0.8rem;margin-top:5px;display:none;">
 ⚠ Kode produk sudah digunakan!
 </div>
@@ -1827,20 +1829,20 @@ id="product-category-new" placeholder="Nama kategori baru">
 <line x1="9" y1="9" x2="15" y2="15"/>
 <line x1="15" y1="9" x2="9" y2="15"/>
 </svg>
-Flex Code (2 digit)
+Flex Code (${digitConfig.flex} digit)
 </div>
 <input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-flex-input" value="${product ? product.flex : '01'}" placeholder="01" maxlength="2">
+id="product-flex-input" value="${product ? product.flex : '01'}" placeholder="01" maxlength="${digitConfig.flex}">
 </div>
 <div>
 <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
 <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
 </svg>
-Kategori (2 digit)
+Kategori (${digitConfig.category} digit)
 </div>
 <input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-catcode-input" value="${product ? product.catcode : '01'}" placeholder="01" maxlength="2">
+id="product-catcode-input" value="${product ? product.catcode : '01'}" placeholder="01" maxlength="${digitConfig.category}">
 </div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -1938,7 +1940,7 @@ document.getElementById('product-category-new').focus();
 newCategoryDiv.style.display = 'none';
 }
 }
-// Save Product - FIXED CATEGORY SAVING with duplicate check
+// Save Product - FIXED: Menggunakan digitConfig untuk padStart
 function saveProduct() {
 const name = document.getElementById('product-name-input').value.trim();
 const code = document.getElementById('product-code-input').value.trim();
@@ -1970,8 +1972,9 @@ if (!name || !code || !category) {
 showNotification('Isi nama, kode, dan kategori!', 'error');
 return;
 }
-if (code.length !== 4) {
-showNotification('Kode harus 4 digit!', 'error');
+// PERBAIKAN: Validasi panjang kode sesuai digitConfig
+if (code.length !== digitConfig.product) {
+showNotification(`Kode harus ${digitConfig.product} digit!`, 'error');
 return;
 }
 let imageData = '';
@@ -1983,13 +1986,14 @@ imageData = existingProduct ? existingProduct.image : '';
 } else {
 imageData = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f5f5f5'/%3E%3Crect x='50' y='80' width='200' height='140' fill='%23006B54' rx='15'/%3E%3Ccircle cx='150' cy='150' r='50' fill='%23d9d9d9'/%3E%3Cpath d='M130 140 L150 160 L180 120' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E";
 }
+// PERBAIKAN: Menggunakan digitConfig untuk padStart
 const productData = {
 id: editingProductId || Date.now(),
 name,
-code: code.padStart(4, '0'),
+code: code.padStart(digitConfig.product, '0'),
 category,
-flex: flex.padStart(2, '0'),
-catcode: catcode.padStart(2, '0'),
+flex: flex.padStart(digitConfig.flex, '0'),
+catcode: catcode.padStart(digitConfig.category, '0'),
 image: imageData
 };
 if (editingProductId) {
