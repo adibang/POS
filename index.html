@@ -1788,7 +1788,7 @@ id="product-flex-input" value="${flexValue}" placeholder="${flexPlaceholder}" ma
 <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
 </svg>
-Kode Kategori (${digitConfig.category} digit${digitConfig.category > 1 ? 's' : ''})
+Kategori (${digitConfig.category} digit${digitConfig.category > 1 ? 's' : ''})
 </div>
 <input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
 id="product-catcode-input" value="${catcodeValue}" placeholder="${catcodePlaceholder}" maxlength="${digitConfig.category}">
@@ -2234,12 +2234,12 @@ id="category-digits" value="${digitConfig.category}" min="1" max="5" onchange="v
 <div>
 <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Produk</div>
 <input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="product-digits" value="${digitConfig.product}" min="1" max="5" onchange="validateDigitInput('product-digits')">
+id="product-digits" value="${digitConfig.product}" min="1" max="6" onchange="validateDigitInput('product-digits')">
 </div>
 <div>
 <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Berat</div>
 <input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="weight-digits" value="${digitConfig.weight}" min="1" max="5" onchange="validateDigitInput('weight-digits')">
+id="weight-digits" value="${digitConfig.weight}" min="1" max="6" onchange="validateDigitInput('weight-digits')">
 </div>
 </div>
 <div class="digit-summary" style="background:${isValid ? '#f5f5f5' : '#ffe6e6'};border-color:${isValid ? '#d9d9d9' : '#ffcccc'};">
