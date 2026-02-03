@@ -735,7 +735,7 @@ select {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org2000/svg' width='12' height='12' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
     padding-right: 40px !important;
@@ -1316,71 +1316,75 @@ async function initDatabase() {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(DB_NAME, DB_VERSION);
         
-        request.onerror = () => {
-            console.error('Database error:', request.error);
-            reject(request.error);
+        request.onerror = (event) => {
+            console.error('Database error:', event.target.error);
+            reject(event.target.error);
         };
         
-        request.onsuccess = () => {
-            db = request.result;
+        request.onblocked = () => {
+            console.warn('Database blocked. Tutup tab lain yang menggunakan aplikasi ini.');
+        };
+        
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            
+            // Handle database errors
+            db.onerror = (event) => {
+                console.error('Database error:', event.target.error);
+            };
+            
             console.log('Database initialized');
             resolve();
         };
         
         request.onupgradeneeded = (event) => {
+            console.log('Upgrading database...');
             const db = event.target.result;
-            const oldVersion = event.oldVersion || 0;
             
-            // Create products store
-            if (!db.objectStoreNames.contains(STORES.PRODUCTS)) {
-                const productStore = db.createObjectStore(STORES.PRODUCTS, { 
-                    keyPath: 'id',
-                    autoIncrement: true 
-                });
-                productStore.createIndex('category', 'category', { unique: false });
-                productStore.createIndex('code', 'code', { unique: true });
-            } else if (oldVersion < 3) {
-                // If upgrading from old version, recreate the store to fix issues
+            // Hapus semua store yang ada jika ada
+            if (db.objectStoreNames.contains(STORES.PRODUCTS)) {
                 db.deleteObjectStore(STORES.PRODUCTS);
-                const productStore = db.createObjectStore(STORES.PRODUCTS, { 
-                    keyPath: 'id',
-                    autoIncrement: true 
-                });
-                productStore.createIndex('category', 'category', { unique: false });
-                productStore.createIndex('code', 'code', { unique: true });
+            }
+            if (db.objectStoreNames.contains(STORES.CATEGORIES)) {
+                db.deleteObjectStore(STORES.CATEGORIES);
+            }
+            if (db.objectStoreNames.contains(STORES.SETTINGS)) {
+                db.deleteObjectStore(STORES.SETTINGS);
+            }
+            if (db.objectStoreNames.contains(STORES.HISTORY)) {
+                db.deleteObjectStore(STORES.HISTORY);
+            }
+            if (db.objectStoreNames.contains(STORES.APP_STATE)) {
+                db.deleteObjectStore(STORES.APP_STATE);
             }
             
-            // Create categories store
-            if (!db.objectStoreNames.contains(STORES.CATEGORIES)) {
-                const categoryStore = db.createObjectStore(STORES.CATEGORIES, { 
-                    keyPath: 'id',
-                    autoIncrement: true 
-                });
-                categoryStore.createIndex('name', 'name', { unique: true });
-            }
+            // Buat store baru
+            const productStore = db.createObjectStore(STORES.PRODUCTS, { 
+                keyPath: 'id',
+                autoIncrement: true 
+            });
+            productStore.createIndex('category', 'category', { unique: false });
+            productStore.createIndex('code', 'code', { unique: true });
             
-            // Create settings store
-            if (!db.objectStoreNames.contains(STORES.SETTINGS)) {
-                const settingsStore = db.createObjectStore(STORES.SETTINGS, { 
-                    keyPath: 'key' 
-                });
-            }
+            const categoryStore = db.createObjectStore(STORES.CATEGORIES, { 
+                keyPath: 'id',
+                autoIncrement: true 
+            });
+            categoryStore.createIndex('name', 'name', { unique: true });
             
-            // Create history store
-            if (!db.objectStoreNames.contains(STORES.HISTORY)) {
-                const historyStore = db.createObjectStore(STORES.HISTORY, { 
-                    keyPath: 'id',
-                    autoIncrement: true 
-                });
-                historyStore.createIndex('timestamp', 'timestamp', { unique: false });
-            }
+            const settingsStore = db.createObjectStore(STORES.SETTINGS, { 
+                keyPath: 'key' 
+            });
             
-            // Create app state store (NEW - to track if dummy data has been added)
-            if (!db.objectStoreNames.contains(STORES.APP_STATE)) {
-                const appStateStore = db.createObjectStore(STORES.APP_STATE, { 
-                    keyPath: 'key' 
-                });
-            }
+            const historyStore = db.createObjectStore(STORES.HISTORY, { 
+                keyPath: 'id',
+                autoIncrement: true 
+            });
+            historyStore.createIndex('timestamp', 'timestamp', { unique: false });
+            
+            const appStateStore = db.createObjectStore(STORES.APP_STATE, { 
+                keyPath: 'key' 
+            });
         };
     });
 }
@@ -1652,34 +1656,47 @@ async function saveProduct(productData) {
             throw new Error(`Kode produk "${productData.code}" sudah digunakan oleh produk: ${duplicateProduct.name}`);
         }
         
+        // Prepare data for saving
+        const dataToSave = {
+            name: productData.name,
+            code: productData.code,
+            category: productData.category || 'Lainnya',
+            flex: productData.flex || '01',
+            catcode: productData.catcode || '01',
+            image: productData.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f5f5f5'/%3E%3C/svg%3E",
+            updatedAt: now
+        };
+        
         if (productData.id) {
-            productData.updatedAt = now;
-            await dbPut(STORES.PRODUCTS, productData);
+            // Editing existing product
+            dataToSave.id = productData.id;
+            dataToSave.createdAt = productData.createdAt || now;
+            await dbPut(STORES.PRODUCTS, dataToSave);
         } else {
-            productData.createdAt = now;
-            productData.updatedAt = now;
-            const newId = await dbAdd(STORES.PRODUCTS, productData);
-            productData.id = newId;
+            // Adding new product - let autoIncrement generate the id
+            dataToSave.createdAt = now;
+            const newId = await dbAdd(STORES.PRODUCTS, dataToSave);
+            dataToSave.id = newId;
         }
         
         // Add category if it doesn't exist
-        if (productData.category) {
+        if (dataToSave.category && dataToSave.category !== 'Lainnya') {
             const categories = await dbGetAll(STORES.CATEGORIES);
-            const categoryExists = categories.some(c => c.name === productData.category);
+            const categoryExists = categories.some(c => c.name === dataToSave.category);
             
             if (!categoryExists) {
                 try {
                     await dbAdd(STORES.CATEGORIES, {
-                        name: productData.category,
+                        name: dataToSave.category,
                         createdAt: now
                     });
                 } catch (error) {
-                    console.warn('Failed to add category:', productData.category, error);
+                    console.warn('Failed to add category:', dataToSave.category, error);
                 }
             }
         }
         
-        return productData;
+        return dataToSave;
     } catch (error) {
         console.error('Error saving product:', error);
         throw error;
@@ -2450,10 +2467,18 @@ async function saveProductHandler() {
         name,
         code: formattedCode,
         category,
-        flex: flex ? flex.padStart(digitConfig.flex, '0') : '01'.padStart(digitConfig.flex, '0'),
-        catcode: catcode ? catcode.padStart(digitConfig.category, '0') : '01'.padStart(digitConfig.category, '0'),
+        flex: flex ? flex.padStart(digitConfig.flex, '0') : '01',
+        catcode: catcode ? catcode.padStart(digitConfig.category, '0') : '01',
         image: imageData
     };
+    
+    // Jika edit, pertahankan createdAt
+    if (editingProductId) {
+        const existingProduct = products.find(p => p.id === editingProductId);
+        if (existingProduct) {
+            productData.createdAt = existingProduct.createdAt;
+        }
+    }
     
     try {
         const savedProduct = await saveProduct(productData);
@@ -2478,6 +2503,9 @@ async function saveProductHandler() {
         console.error('Error saving product:', error);
         if (error.name === 'ConstraintError') {
             showNotification('Kode produk sudah digunakan! Silakan gunakan kode lain.', 'error');
+        } else if (error.message.includes('key path')) {
+            showNotification('Database error. Coba reset aplikasi.', 'error');
+            console.error('Database error details:', error);
         } else {
             showNotification('Gagal menyimpan produk: ' + error.message, 'error');
         }
