@@ -1268,14 +1268,15 @@ input::placeholder, textarea::placeholder {
 <script>
 // ==================== DATABASE CONFIGURATION ====================
 const DB_NAME = 'POSBarcodeDB';
-const DB_VERSION = 3;
+const DB_VERSION = 4; // Changed from 3 to 4 to force upgrade and fix issues
 
 // Object store names
 const STORES = {
     PRODUCTS: 'products',
     CATEGORIES: 'categories',
     SETTINGS: 'settings',
-    HISTORY: 'printHistory'
+    HISTORY: 'printHistory',
+    APP_STATE: 'appState' // Added new store for app state
 };
 
 // ==================== GLOBAL VARIABLES ====================
@@ -1297,6 +1298,7 @@ let searchQuery = '';
 let longPressTimer = null;
 let longPressCategory = null;
 let isLongPress = false;
+let isFirstLoad = true;
 
 // Icon definitions
 const icons = {
@@ -1327,9 +1329,19 @@ async function initDatabase() {
         
         request.onupgradeneeded = (event) => {
             const db = event.target.result;
+            const oldVersion = event.oldVersion || 0;
             
             // Create products store
             if (!db.objectStoreNames.contains(STORES.PRODUCTS)) {
+                const productStore = db.createObjectStore(STORES.PRODUCTS, { 
+                    keyPath: 'id',
+                    autoIncrement: true 
+                });
+                productStore.createIndex('category', 'category', { unique: false });
+                productStore.createIndex('code', 'code', { unique: true });
+            } else if (oldVersion < 3) {
+                // If upgrading from old version, recreate the store to fix issues
+                db.deleteObjectStore(STORES.PRODUCTS);
                 const productStore = db.createObjectStore(STORES.PRODUCTS, { 
                     keyPath: 'id',
                     autoIncrement: true 
@@ -1361,6 +1373,13 @@ async function initDatabase() {
                     autoIncrement: true 
                 });
                 historyStore.createIndex('timestamp', 'timestamp', { unique: false });
+            }
+            
+            // Create app state store (NEW - to track if dummy data has been added)
+            if (!db.objectStoreNames.contains(STORES.APP_STATE)) {
+                const appStateStore = db.createObjectStore(STORES.APP_STATE, { 
+                    keyPath: 'key' 
+                });
             }
         };
     });
@@ -1410,7 +1429,10 @@ async function dbAdd(storeName, data) {
         const request = objectStore.add(data);
         
         request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
+        request.onerror = (e) => {
+            console.error('Error adding to', storeName, data, e.target.error);
+            reject(e.target.error);
+        };
     });
 }
 
@@ -1426,7 +1448,10 @@ async function dbPut(storeName, data) {
         const request = objectStore.put(data);
         
         request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
+        request.onerror = (e) => {
+            console.error('Error putting to', storeName, data, e.target.error);
+            reject(e.target.error);
+        };
     });
 }
 
@@ -1494,8 +1519,27 @@ async function loadProducts() {
     try {
         products = await dbGetAll(STORES.PRODUCTS);
         
-        // Validasi dan bersihkan data yang korup
+        // Check if this is the first load and dummy data hasn't been added yet
+        if (products.length === 0 && isFirstLoad) {
+            const appState = await dbGet(STORES.APP_STATE, 'dummyDataAdded');
+            
+            // Only add dummy data if it hasn't been added before
+            if (!appState) {
+                await addDummyProducts();
+                await dbPut(STORES.APP_STATE, {
+                    key: 'dummyDataAdded',
+                    value: true,
+                    addedAt: new Date().toISOString()
+                });
+                
+                // Reload products after adding dummy data
+                products = await dbGetAll(STORES.PRODUCTS);
+            }
+        }
+        
+        // Validate and clean up corrupted data
         products = products.filter(product => {
+            // Ensure product code is valid
             if (!product.code || typeof product.code !== 'string') {
                 console.warn('Produk dengan kode tidak valid ditemukan:', product);
                 return false;
@@ -1503,53 +1547,58 @@ async function loadProducts() {
             return true;
         });
         
-        if (products.length === 0) {
-            const sampleProducts = [
-                {
-                    name: "Beras Premium 5kg",
-                    code: "0001",
-                    category: "Sembako",
-                    flex: "01",
-                    catcode: "01",
-                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E",
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    name: "Gula Pasir 1kg",
-                    code: "0002",
-                    category: "Sembako",
-                    flex: "01",
-                    catcode: "01",
-                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='30' y='30' width='40' height='40' fill='%23fff' stroke='%23006B54' stroke-width='2'/%3E%3C/svg%3E",
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    name: "Minyak Goreng 2L",
-                    code: "0003",
-                    category: "Sembako",
-                    flex: "01",
-                    catcode: "02",
-                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='35' y='25' width='30' height='50' fill='%23d9d9d9'/%3E%3Ccircle cx='50' cy='80' r='8' fill='%23006B54'/%3E%3C/svg%3E",
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                }
-            ];
-            
-            for (const product of sampleProducts) {
-                try {
-                    await dbAdd(STORES.PRODUCTS, product);
-                } catch (error) {
-                    console.warn('Gagal menambahkan produk contoh:', error);
-                }
-            }
-            
-            products = await dbGetAll(STORES.PRODUCTS);
-        }
+        console.log('Products loaded:', products.length);
     } catch (error) {
         console.error('Error loading products:', error);
         products = [];
+    }
+}
+
+async function addDummyProducts() {
+    const dummyProducts = [
+        {
+            name: "Beras Premium 5kg",
+            code: "0001",
+            category: "Sembako",
+            flex: "01",
+            catcode: "01",
+            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        },
+        {
+            name: "Gula Pasir 1kg",
+            code: "0002",
+            category: "Sembako",
+            flex: "01",
+            catcode: "01",
+            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='30' y='30' width='40' height='40' fill='%23fff' stroke='%23006B54' stroke-width='2'/%3E%3C/svg%3E",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        },
+        {
+            name: "Minyak Goreng 2L",
+            code: "0003",
+            category: "Sembako",
+            flex: "01",
+            catcode: "02",
+            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='35' y='25' width='30' height='50' fill='%23d9d9d9'/%3E%3Ccircle cx='50' cy='80' r='8' fill='%23006B54'/%3E%3C/svg%3E",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }
+    ];
+    
+    for (const product of dummyProducts) {
+        try {
+            // Check if product code already exists
+            const existingProduct = products.find(p => p.code === product.code);
+            if (!existingProduct) {
+                await dbAdd(STORES.PRODUCTS, product);
+                console.log('Dummy product added:', product.code);
+            }
+        } catch (error) {
+            console.warn('Failed to add dummy product:', product.code, error);
+        }
     }
 }
 
@@ -1567,7 +1616,7 @@ async function loadCategories() {
                         createdAt: new Date().toISOString()
                     });
                 } catch (error) {
-                    console.warn('Gagal menambahkan kategori:', error);
+                    console.warn('Failed to add category:', categoryName, error);
                 }
             }
             
@@ -1586,6 +1635,23 @@ async function saveProduct(productData) {
     try {
         const now = new Date().toISOString();
         
+        // Validate product data
+        if (!productData.code || !productData.name) {
+            throw new Error('Kode dan nama produk harus diisi');
+        }
+        
+        // Ensure code is unique (case insensitive)
+        const existingProducts = await dbGetAll(STORES.PRODUCTS);
+        const duplicateProduct = existingProducts.find(p => {
+            // Skip the current product if editing
+            if (productData.id && p.id === productData.id) return false;
+            return p.code === productData.code;
+        });
+        
+        if (duplicateProduct) {
+            throw new Error(`Kode produk "${productData.code}" sudah digunakan oleh produk: ${duplicateProduct.name}`);
+        }
+        
         if (productData.id) {
             productData.updatedAt = now;
             await dbPut(STORES.PRODUCTS, productData);
@@ -1596,15 +1662,20 @@ async function saveProduct(productData) {
             productData.id = newId;
         }
         
+        // Add category if it doesn't exist
         if (productData.category) {
             const categories = await dbGetAll(STORES.CATEGORIES);
             const categoryExists = categories.some(c => c.name === productData.category);
             
             if (!categoryExists) {
-                await dbAdd(STORES.CATEGORIES, {
-                    name: productData.category,
-                    createdAt: now
-                });
+                try {
+                    await dbAdd(STORES.CATEGORIES, {
+                        name: productData.category,
+                        createdAt: now
+                    });
+                } catch (error) {
+                    console.warn('Failed to add category:', productData.category, error);
+                }
             }
         }
         
@@ -1764,10 +1835,12 @@ async function importData() {
                         throw new Error('Format data tidak valid');
                     }
                     
+                    // Clear existing data
                     await dbClear(STORES.PRODUCTS);
                     await dbClear(STORES.CATEGORIES);
                     await dbClear(STORES.SETTINGS);
                     
+                    // Import products
                     for (const product of importedData.products) {
                         try {
                             await dbAdd(STORES.PRODUCTS, product);
@@ -1776,6 +1849,7 @@ async function importData() {
                         }
                     }
                     
+                    // Import categories
                     if (importedData.categories && Array.isArray(importedData.categories)) {
                         for (const category of importedData.categories) {
                             try {
@@ -1786,6 +1860,7 @@ async function importData() {
                         }
                     }
                     
+                    // Import settings
                     if (importedData.settings && Array.isArray(importedData.settings)) {
                         for (const setting of importedData.settings) {
                             try {
@@ -1796,6 +1871,14 @@ async function importData() {
                         }
                     }
                     
+                    // Mark that dummy data shouldn't be added
+                    await dbPut(STORES.APP_STATE, {
+                        key: 'dummyDataAdded',
+                        value: true,
+                        updatedAt: new Date().toISOString()
+                    });
+                    
+                    // Reload data
                     await loadProducts();
                     await loadCategories();
                     await loadSettings();
@@ -1825,6 +1908,7 @@ async function clearAllData() {
             await dbClear(STORES.PRODUCTS);
             await dbClear(STORES.CATEGORIES);
             await dbClear(STORES.HISTORY);
+            await dbClear(STORES.APP_STATE);
             
             products = [];
             categories = ['all'];
@@ -1856,6 +1940,7 @@ async function initApp() {
         setupSearch();
         
         console.log('App initialized successfully');
+        isFirstLoad = false;
     } catch (error) {
         console.error('Error initializing app:', error);
         showNotification('Gagal memuat aplikasi. Silakan refresh halaman.', 'error');
@@ -2245,7 +2330,7 @@ function showProductModal(product = null) {
     
     document.getElementById('product-modal').style.display = 'flex';
     
-    // Jalankan validasi kode setelah form ditampilkan
+    // Run validation after form is displayed
     setTimeout(() => {
         checkDuplicateCode();
     }, 100);
@@ -2268,10 +2353,10 @@ function checkDuplicateCode() {
     
     const formattedCode = enteredCode.padStart(digitConfig.product, '0');
     
-    // Cek duplikasi dengan format yang benar
+    // Check for duplicate with correct format
     const duplicateProduct = products.find(p => {
         if (editingProductId && p.id === editingProductId) {
-            return false; // Abaikan produk yang sedang diedit
+            return false; // Ignore product being edited
         }
         return p.code === formattedCode || p.code === enteredCode;
     });
@@ -2315,7 +2400,7 @@ async function saveProductHandler() {
     const flex = document.getElementById('product-flex-input')?.value.trim();
     const catcode = document.getElementById('product-catcode-input')?.value.trim();
     
-    // Validasi input
+    // Input validation
     if (!name || !code || !category) {
         showNotification('Nama, kode, dan kategori harus diisi!', 'error');
         return;
@@ -2326,14 +2411,14 @@ async function saveProductHandler() {
         return;
     }
     
-    // Format kode dengan padding nol
+    // Format code with zero padding
     const formattedCode = code.padStart(digitConfig.product, '0');
     
-    // Cek duplikasi kode dengan lebih ketat
+    // Check for duplicate code more strictly
     const isDuplicate = products.some(p => {
-        // Jika mode edit, abaikan produk yang sedang diedit
+        // If in edit mode, ignore the product being edited
         if (editingProductId && p.id === editingProductId) return false;
-        // Cek apakah kode sama (dengan atau tanpa padding)
+        // Check if code is the same (with or without padding)
         return p.code === formattedCode || p.code === code;
     });
     
@@ -2342,7 +2427,7 @@ async function saveProductHandler() {
         return;
     }
     
-    // Validasi format kode (harus angka)
+    // Validate code format (must be numbers)
     if (!/^\d+$/.test(code)) {
         showNotification('Kode produk hanya boleh berisi angka!', 'error');
         return;
