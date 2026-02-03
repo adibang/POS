@@ -6,1124 +6,1280 @@
 <title>POS Barcode Generator</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 <style>
-/* Reset & Base */
+/* ==================== RESET & BASE STYLES ==================== */
 * {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
--webkit-tap-highlight-color: transparent;
-user-select: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
+
 body {
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-background: #FFFFFF;
-min-height: 100vh;
-color: #333333;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+    background: #FFFFFF;
+    min-height: 100vh;
+    color: #333333;
 }
-/* Header */
+
+/* ==================== HEADER ==================== */
 .app-header {
-background: #FFFFFF;
-color: #006B54;
-padding: 16px 20px;
-box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-position: sticky;
-top: 0;
-z-index: 100;
+    background: #FFFFFF;
+    color: #006B54;
+    padding: 16px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
+
 .header-content {
-max-width: 1200px;
-margin: 0 auto;
-display: flex;
-justify-content: space-between;
-align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
 .app-title {
-font-size: 1.2rem;
-font-weight: 600;
-display: flex;
-align-items: center;
-gap: 8px;
-color: #006B54;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #006B54;
 }
+
 .header-actions {
-display: flex;
-gap: 8px;
-align-items: center;
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
-/* Printer LED Indicator */
+
+/* ==================== PRINTER LED INDICATOR ==================== */
 .printer-led-container {
-display: flex;
-align-items: center;
-gap: 8px;
-margin-right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 10px;
 }
+
 .printer-led {
-width: 24px;
-height: 24px;
-border-radius: 50%;
-position: relative;
-transition: all 0.3s ease;
-box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
+
 .printer-led.connected {
-background-color: #28a745;
-box-shadow: 0 0 15px rgba(40, 167, 69, 0.7), 0 0 30px rgba(40, 167, 69, 0.4);
-animation: pulse-green 2s infinite;
+    background-color: #28a745;
+    box-shadow: 0 0 15px rgba(40, 167, 69, 0.7), 0 0 30px rgba(40, 167, 69, 0.4);
+    animation: pulse-green 2s infinite;
 }
+
 .printer-led.disconnected {
-background-color: #dc3545;
-box-shadow: 0 0 15px rgba(220, 53, 69, 0.7), 0 0 30px rgba(220, 53, 69, 0.4);
-animation: pulse-red 2s infinite;
+    background-color: #dc3545;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.7), 0 0 30px rgba(220, 53, 69, 0.4);
+    animation: pulse-red 2s infinite;
 }
+
 @keyframes pulse-green {
-0% { box-shadow: 0 0 10px rgba(40, 167, 69, 0.7); }
-50% { box-shadow: 0 0 20px rgba(40, 167, 69, 0.9), 0 0 40px rgba(40, 167, 69, 0.6); }
-100% { box-shadow: 0 0 10px rgba(40, 167, 69, 0.7); }
+    0% { box-shadow: 0 0 10px rgba(40, 167, 69, 0.7); }
+    50% { box-shadow: 0 0 20px rgba(40, 167, 69, 0.9), 0 0 40px rgba(40, 167, 69, 0.6); }
+    100% { box-shadow: 0 0 10px rgba(40, 167, 69, 0.7); }
 }
+
 @keyframes pulse-red {
-0% { box-shadow: 0 0 10px rgba(220, 53, 69, 0.7); }
-50% { box-shadow: 0 0 20px rgba(220, 53, 69, 0.9), 0 0 40px rgba(220, 53, 69, 0.6); }
-100% { box-shadow: 0 0 10px rgba(220, 53, 69, 0.7); }
+    0% { box-shadow: 0 0 10px rgba(220, 53, 69, 0.7); }
+    50% { box-shadow: 0 0 20px rgba(220, 53, 69, 0.9), 0 0 40px rgba(220, 53, 69, 0.6); }
+    100% { box-shadow: 0 0 10px rgba(220, 53, 69, 0.7); }
 }
+
 .printer-status-text {
-font-size: 0.75rem;
-font-weight: 500;
-color: #333333;
-white-space: nowrap;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #333333;
+    white-space: nowrap;
 }
 
-/* Search Container */
+/* ==================== SEARCH CONTAINER ==================== */
 .search-container {
-max-width: 1200px;
-margin: 20px auto 15px; /* TAMBAHAN: margin-top untuk jarak dari header */
-padding: 0 20px;
-}
-.search-input {
-width: 100%;
-padding: 14px 20px 14px 45px;
-border: 1px solid #333333;
-border-radius: 15px;
-font-size: 1rem;
-background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E") no-repeat 18px center;
-background-size: 16px;
-box-sizing: border-box;
-transition: all 0.2s;
-}
-.search-input:focus {
-outline: none;
-border-color: #006B54;
-box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E");
-}
-.search-input::placeholder {
-color: #999999;
+    max-width: 1200px;
+    margin: 20px auto 15px;
+    padding: 0 20px;
 }
 
-/* Main Content */
+.search-input {
+    width: 100%;
+    padding: 14px 20px 14px 45px;
+    border: 1px solid #333333;
+    border-radius: 15px;
+    font-size: 1rem;
+    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E") no-repeat 18px center;
+    background-size: 16px;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #006B54;
+    box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E");
+}
+
+.search-input::placeholder {
+    color: #999999;
+}
+
+/* ==================== MAIN CONTENT ==================== */
 .main-content {
-max-width: 1200px;
-margin: 0 auto;
-padding: 20px;
-padding-top: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-top: 0;
 }
-/* Category Tabs */
+
+/* ==================== CATEGORY TABS ==================== */
 .category-tabs {
-display: flex;
-gap: 8px;
-margin-bottom: 20px;
-padding: 0 5px;
-overflow-x: auto;
-white-space: nowrap;
-position: relative;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 0 5px;
+    overflow-x: auto;
+    white-space: nowrap;
+    position: relative;
 }
+
 .category-tab {
-padding: 8px 16px;
-background: white;
-border-radius: 15px;
-cursor: pointer;
-font-size: 0.85rem;
-transition: all 0.2s;
-border: 1px solid #333333;
-color: #333333;
-font-weight: 500;
-flex-shrink: 0;
-position: relative;
-touch-action: manipulation;
+    padding: 8px 16px;
+    background: white;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    border: 1px solid #333333;
+    color: #333333;
+    font-weight: 500;
+    flex-shrink: 0;
+    position: relative;
+    touch-action: manipulation;
 }
+
 .category-tab:hover {
-border-color: #006B54;
-color: #006B54;
+    border-color: #006B54;
+    color: #006B54;
 }
+
 .category-tab.active {
-background: #006B54;
-color: white;
-border-color: #006B54;
+    background: #006B54;
+    color: white;
+    border-color: #006B54;
 }
-/* Products Grid */
+
+/* ==================== PRODUCTS GRID ==================== */
 .products-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
 }
-/* Product Card */
+
+/* ==================== PRODUCT CARD ==================== */
 .product-card {
-background: white;
-border-radius: 15px;
-overflow: hidden;
-cursor: pointer;
-transition: all 0.2s;
-box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-border: 1px solid #e9ecef;
-position: relative;
-height: 260px;
-display: flex;
-flex-direction: column;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border: 1px solid #e9ecef;
+    position: relative;
+    height: 260px;
+    display: flex;
+    flex-direction: column;
 }
+
 .product-card:hover {
-transform: translateY(-3px);
-box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-border-color: #006B54;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    border-color: #006B54;
 }
+
 .product-card.selected {
-border: 2px solid #006B54;
+    border: 2px solid #006B54;
 }
+
 /* Product Image */
 .product-image {
-width: 100%;
-height: 160px;
-object-fit: cover;
-background: #f8f9fa;
-border-bottom: 1px solid #e9ecef;
-flex-shrink: 0;
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    flex-shrink: 0;
 }
+
 /* Product Info */
 .product-info {
-padding: 12px;
-flex-grow: 1;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
+    padding: 12px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
 .product-name {
-font-weight: 600;
-font-size: 0.85rem;
-color: #333333;
-margin-bottom: 5px;
-display: -webkit-box;
--webkit-line-clamp: 2;
--webkit-box-orient: vertical;
-overflow: hidden;
-height: 34px;
-line-height: 1.4;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #333333;
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 34px;
+    line-height: 1.4;
 }
+
 .product-code {
-font-size: 0.8rem;
-color: #6c757d;
-font-family: monospace;
-background: #f8f9fa;
-padding: 3px 8px;
-border-radius: 15px;
-display: inline-block;
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-family: monospace;
+    background: #f8f9fa;
+    padding: 3px 8px;
+    border-radius: 15px;
+    display: inline-block;
 }
+
 /* Product Actions */
 .product-actions {
-position: absolute;
-top: 8px;
-right: 8px;
-display: flex;
-gap: 5px;
-opacity: 0;
-transition: opacity 0.2s;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transition: opacity 0.2s;
 }
+
 .product-card:hover .product-actions {
-opacity: 1;
+    opacity: 1;
 }
+
 .action-btn {
-width: 26px;
-height: 26px;
-border-radius: 15px;
-border: none;
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-font-size: 11px;
-transition: all 0.2s;
-background: rgba(255, 255, 255, 0.9);
-backdrop-filter: blur(10px);
+    width: 26px;
+    height: 26px;
+    border-radius: 15px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
 }
+
 .edit-btn {
-color: #006B54;
-border: 1px solid #006B54;
+    color: #006B54;
+    border: 1px solid #006B54;
 }
+
 .edit-btn:hover {
-background: #006B54;
-color: white;
+    background: #006B54;
+    color: white;
 }
+
 .delete-btn {
-color: #ff6b6b;
-border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
 }
+
 .delete-btn:hover {
-background: #ff6b6b;
-color: white;
+    background: #ff6b6b;
+    color: white;
 }
-/* Add Product Card */
+
+/* ==================== ADD PRODUCT CARD ==================== */
 .add-product-card {
-background: white;
-border-radius: 15px;
-cursor: pointer;
-transition: all 0.2s;
-box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-border: 2px dashed #d9d9d9;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-height: 260px;
+    background: white;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border: 2px dashed #d9d9d9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 260px;
 }
+
 .add-product-card:hover {
-border-color: #006B54;
-transform: translateY(-3px);
-box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    border-color: #006B54;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
+
 .add-product-content {
-text-align: center;
-padding: 20px;
+    text-align: center;
+    padding: 20px;
 }
+
 .add-icon {
-font-size: 32px;
-color: #006B54;
-margin-bottom: 10px;
+    font-size: 32px;
+    color: #006B54;
+    margin-bottom: 10px;
 }
+
 .add-text {
-color: #006B54;
-font-weight: 600;
-font-size: 0.85rem;
+    color: #006B54;
+    font-weight: 600;
+    font-size: 0.85rem;
 }
-/* Modal Overlay */
+
+/* ==================== MODAL OVERLAY ==================== */
 .modal-overlay {
-display: none;
-position: fixed;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-background: rgba(0, 0, 0, 0.7);
-z-index: 1000;
-align-items: center;
-justify-content: center;
-padding: 15px;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
 }
-/* Modal Content */
+
+/* ==================== MODAL CONTENT ==================== */
 .modal-content {
-background: #FFFFFF;
-border-radius: 15px;
-width: 100%;
-max-width: 450px;
-max-height: 90vh;
-overflow: hidden;
-box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-animation: modalSlideIn 0.2s ease;
+    background: #FFFFFF;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 450px;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    animation: modalSlideIn 0.2s ease;
 }
+
 @keyframes modalSlideIn {
-from {
-opacity: 0;
-transform: translateY(20px);
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-to {
-opacity: 1;
-transform: translateY(0);
-}
-}
+
 /* Modal Header */
 .modal-header {
-padding: 12px 20px;
-color: #006B54;
-display: flex;
-justify-content: center;
-align-items: center;
-text-align: center;
-border-bottom: 1px solid rgba(0, 107, 84, 0.1);
-position: relative;
-background: #FFFFFF;
+    padding: 12px 20px;
+    color: #006B54;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 107, 84, 0.1);
+    position: relative;
+    background: #FFFFFF;
 }
+
 .modal-title {
-font-size: 1rem;
-font-weight: 600;
-display: flex;
-align-items: center;
-gap: 8px;
-color: #006B54;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #006B54;
 }
+
 .close-modal {
-display: none;
+    display: none;
 }
-/* TAMBAHAN: Jarak antara konten dan header pada modal */
+
+/* Modal Body */
 .modal-body {
-padding: 20px 20px; /* TAMBAHAN: padding-top untuk jarak dari header */
-max-height: calc(90vh - 60px);
-overflow-y: auto;
-background: #FFFFFF;
+    padding: 20px;
+    max-height: calc(90vh - 60px);
+    overflow-y: auto;
+    background: #FFFFFF;
 }
-/* Display Section */
+
+/* ==================== DISPLAY SECTION ==================== */
 .display-section {
-background: #f5f5f5;
-padding: 12px;
-margin-bottom: 15px;
-border-radius: 15px;
-text-align: right;
-font-family: monospace;
-font-size: 1.1em;
-color: #333333;
+    background: #f5f5f5;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    text-align: right;
+    font-family: monospace;
+    font-size: 1.1em;
+    color: #333333;
 }
+
 .display-row {
-margin-bottom: 5px;
-display: flex;
-justify-content: space-between;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
 }
+
 .display-row:last-child {
-margin-bottom: 0;
+    margin-bottom: 0;
 }
-/* Product Info Compact */
+
+/* ==================== PRODUCT INFO COMPACT ==================== */
 .product-info-section {
-background: #f5f5f5;
-padding: 12px;
-margin-bottom: 15px;
-border-radius: 15px;
-display: flex;
-gap: 12px;
-align-items: center;
-color: #333333;
+    background: #f5f5f5;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 15px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    color: #333333;
 }
+
 .product-thumbnail {
-width: 50px;
-height: 50px;
-border-radius: 15px;
-object-fit: cover;
-background: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    object-fit: cover;
+    background: white;
 }
+
 .product-details h4 {
-color: #333333;
-margin-bottom: 4px;
-font-size: 0.9rem;
-font-weight: 600;
+    color: #333333;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
+
 .product-details .code {
-color: #666666;
-font-family: monospace;
-font-size: 0.8rem;
+    color: #666666;
+    font-family: monospace;
+    font-size: 0.8rem;
 }
-/* Buttons Grid */
+
+/* ==================== BUTTONS GRID ==================== */
 .function-row, .buttons {
-display: grid;
-gap: 8px;
-margin-bottom: 8px;
+    display: grid;
+    gap: 8px;
+    margin-bottom: 8px;
 }
+
 .function-row {
-grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
+
 .buttons {
-grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
+
 button {
-padding: 14px 8px;
-border: 1px solid #333333;
-background: #FFFFFF;
-color: #333333;
-border-radius: 15px;
-cursor: pointer;
-font-size: 16px;
-min-height: 48px;
-touch-action: manipulation;
--webkit-tap-highlight-color: transparent;
-transition: all 0.2s;
-font-weight: 600;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
+    padding: 14px 8px;
+    border: 1px solid #333333;
+    background: #FFFFFF;
+    color: #333333;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    min-height: 48px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.2s;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
+
 button:active {
-transform: scale(0.98);
-border-color: #006B54;
-box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.3);
+    transform: scale(0.98);
+    border-color: #006B54;
+    box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.3);
 }
+
 /* Function Buttons */
 .function-btn {
-background: #FFFFFF;
-color: #006B54;
-font-weight: 600;
-border: 1px solid #333333;
+    background: #FFFFFF;
+    color: #006B54;
+    font-weight: 600;
+    border: 1px solid #333333;
 }
+
 .function-btn:active {
-background: #006B54;
-color: white;
-border-color: #006B54;
+    background: #006B54;
+    color: white;
+    border-color: #006B54;
 }
+
 .backspace-btn {
-background: #ff6b6b;
-color: white;
-border: 1px solid #ff6b6b;
+    background: #ff6b6b;
+    color: white;
+    border: 1px solid #ff6b6b;
 }
+
 .backspace-btn:active {
-background: #ff5252;
-border-color: #ff5252;
+    background: #ff5252;
+    border-color: #ff5252;
 }
+
 .print-btn {
-grid-column: span 3;
-background: #FFFFFF !important;
-color: #006B54;
-font-weight: 600;
-border: 1px solid #333333;
+    grid-column: span 3;
+    background: #FFFFFF !important;
+    color: #006B54;
+    font-weight: 600;
+    border: 1px solid #333333;
 }
+
 .print-btn:active {
-background: #006B54 !important;
-color: white;
-border-color: #006B54;
+    background: #006B54 !important;
+    color: white;
+    border-color: #006B54;
 }
+
 .active-mode {
-background: #006B54 !important;
-color: white;
-border-color: #006B54;
+    background: #006B54 !important;
+    color: white;
+    border-color: #006B54;
 }
-/* Barcode Preview */
+
+/* ==================== BARCODE PREVIEW ==================== */
 .barcode-preview {
-background: #f5f5f5;
-padding: 15px;
-border-radius: 15px;
-margin-top: 15px;
-text-align: center;
-font-size: 12px;
-color: #333333;
-min-height: 140px;
-display: flex;
-flex-direction: column;
-justify-content: center;
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 15px;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 12px;
+    color: #333333;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+
 .barcode-container {
-width: 100%;
-height: 100px;
-display: flex;
-align-items: center;
-justify-content: center;
-background: white;
-border-radius: 15px;
-margin: 10px 0;
-padding: 10px;
-overflow: hidden;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 15px;
+    margin: 10px 0;
+    padding: 10px;
+    overflow: hidden;
 }
+
 #barcode-svg {
-width: 100%;
-height: 80px;
+    width: 100%;
+    height: 80px;
 }
+
 .barcode-info {
-font-size: 0.9rem;
-color: #333333;
-margin-top: 5px;
-font-family: monospace;
-word-break: break-all;
-background: white;
-padding: 8px;
-border-radius: 15px;
+    font-size: 0.9rem;
+    color: #333333;
+    margin-top: 5px;
+    font-family: monospace;
+    word-break: break-all;
+    background: white;
+    padding: 8px;
+    border-radius: 15px;
 }
-/* Settings Modal */
+
+/* ==================== SETTINGS MODAL ==================== */
 .settings-modal .modal-content {
-background: white;
-max-width: 400px;
+    background: white;
+    max-width: 400px;
 }
+
 .settings-modal .modal-header {
-background: #FFFFFF;
+    background: #FFFFFF;
 }
+
 .settings-content {
-padding: 20px;
+    padding: 20px;
 }
+
 .setting-group {
-margin-bottom: 15px;
+    margin-bottom: 15px;
 }
+
 .setting-label {
-display: block;
-margin-bottom: 8px;
-color: #333333;
-font-weight: 500;
-font-size: 0.9rem;
+    display: block;
+    margin-bottom: 8px;
+    color: #333333;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
+
 .setting-input {
-width: 100%;
-padding: 12px;
-border: 1px solid #333333;
-border-radius: 15px;
-font-size: 1rem;
-text-align: center;
-background: #FFFFFF;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333333;
+    border-radius: 15px;
+    font-size: 1rem;
+    text-align: center;
+    background: #FFFFFF;
 }
+
 .setting-input:focus {
-outline: none;
-border-color: #006B54;
-box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
+    outline: none;
+    border-color: #006B54;
+    box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
 }
+
 .digit-summary {
-background: #f5f5f5;
-padding: 15px;
-border-radius: 15px;
-text-align: center;
-margin: 20px 0;
-border: 2px solid #d9d9d9;
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 20px 0;
+    border: 2px solid #d9d9d9;
 }
-/* Category Management */
+
+/* ==================== CATEGORY MANAGEMENT ==================== */
 .category-item {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 10px;
-background: #f8f9fa;
-border-radius: 15px;
-margin-bottom: 8px;
-border: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    border: 1px solid #e9ecef;
 }
+
 .category-item:last-child {
-margin-bottom: 0;
+    margin-bottom: 0;
 }
+
 .category-actions {
-display: flex;
-gap: 5px;
+    display: flex;
+    gap: 5px;
 }
-/* Category Context Menu */
+
+/* ==================== CATEGORY CONTEXT MENU ==================== */
 .category-context-menu {
-position: fixed;
-background: white;
-border-radius: 15px;
-box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-z-index: 1001;
-min-width: 180px;
-overflow: hidden;
-animation: fadeIn 0.2s ease;
+    position: fixed;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    z-index: 1001;
+    min-width: 180px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
 }
+
 @keyframes fadeIn {
-from { opacity: 0; transform: scale(0.95); }
-to { opacity: 1; transform: scale(1); }
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
+
 .context-menu-item {
-padding: 15px 20px;
-cursor: pointer;
-display: flex;
-align-items: center;
-gap: 10px;
-transition: background 0.2s;
-border-bottom: 1px solid #f1f3f5;
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f1f3f5;
 }
+
 .context-menu-item:last-child {
-border-bottom: none;
+    border-bottom: none;
 }
+
 .context-menu-item:hover {
-background: #f8f9fa;
+    background: #f8f9fa;
 }
+
 .context-menu-item.edit {
-color: #006B54;
+    color: #006B54;
 }
+
 .context-menu-item.delete {
-color: #ff6b6b;
+    color: #ff6b6b;
 }
-/* Notification */
+
+/* ==================== NOTIFICATION ==================== */
 #notification {
-position: fixed;
-top: 20px;
-left: 50%;
-transform: translateX(-50%);
-padding: 12px 20px;
-border-radius: 15px;
-display: none;
-color: white;
-background-color: #006B54;
-max-width: 90%;
-text-align: center;
-z-index: 1001;
-font-size: 14px;
-box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 15px;
+    display: none;
+    color: white;
+    background-color: #006B54;
+    max-width: 90%;
+    text-align: center;
+    z-index: 1001;
+    font-size: 14px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
-/* CSS untuk Dropdown */
+
+/* ==================== DROPDOWN STYLES ==================== */
 select {
-appearance: none;
--webkit-appearance: none;
--moz-appearance: none;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right 12px center;
-padding-right: 40px !important;
-cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px !important;
+    cursor: pointer;
 }
+
 select:focus {
-outline: none;
-border-color: #006B54;
-box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
+    outline: none;
+    border-color: #006B54;
+    box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
 }
-/* Tombol Settings di Header */
+
+/* ==================== HEADER BUTTONS ==================== */
 .header-actions button {
-background: #FFFFFF;
-color: #006B54;
-padding: 8px 12px;
-border-radius: 15px;
-border: 1px solid #006B54;
-font-size: 14px;
-font-weight: 600;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-gap: 6px;
+    background: #FFFFFF;
+    color: #006B54;
+    padding: 8px 12px;
+    border-radius: 15px;
+    border: 1px solid #006B54;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
+
 .header-actions button:hover {
-background: #006B54;
-color: white;
+    background: #006B54;
+    color: white;
 }
-/* Input Fields */
+
+/* ==================== INPUT FIELDS ==================== */
 input, textarea, select {
-background: #FFFFFF !important;
-border: 1px solid #333333 !important;
-border-radius: 15px !important;
-color: #333333 !important;
+    background: #FFFFFF !important;
+    border: 1px solid #333333 !important;
+    border-radius: 15px !important;
+    color: #333333 !important;
 }
+
 input:focus, textarea:focus, select:focus {
-border-color: #006B54 !important;
-outline: none !important;
-box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1) !important;
+    border-color: #006B54 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1) !important;
 }
+
 input::placeholder, textarea::placeholder {
-color: #999999 !important;
+    color: #999999 !important;
 }
-/* Modal tombol khusus untuk weight modal */
-#weight-modal button {
-background: #FFFFFF;
-border: 1px solid #333333;
-color: #333333;
-}
-#weight-modal button:active {
-border-color: #006B54;
-}
-#weight-modal .function-btn:active,
-#weight-modal .print-btn:active {
-background: #006B54;
-color: white;
-border-color: #006B54;
-}
-/* Responsive Grid untuk Tablet */
-@media (max-width: 768px) {
-.products-grid {
-grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-gap: 16px;
-}
-.product-card {
-height: 240px;
-}
-.product-image {
-height: 140px;
-}
-.modal-content {
-max-width: 95%;
-}
-.modal-header {
-padding: 10px 15px;
-}
-.modal-body {
-padding: 15px 15px; /* TAMBAHAN: padding-top untuk responsive */
-}
-button {
-padding: 12px 6px;
-font-size: 14px;
-min-height: 44px;
-}
-.printer-led {
-width: 20px;
-height: 20px;
-}
-.printer-status-text {
-font-size: 0.7rem;
-}
-.search-container {
-padding: 0 15px;
-margin-top: 15px; /* TAMBAHAN: margin-top untuk responsive */
-}
-.search-input {
-padding: 12px 18px 12px 42px;
-font-size: 0.95rem;
-}
-}
-/* Responsive Grid untuk Mobile */
-@media (max-width: 480px) {
-.products-grid {
-grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-gap: 12px;
-}
-.product-card {
-height: 220px;
-}
-.product-image {
-height: 130px;
-}
-.modal-header {
-padding: 8px 12px;
-}
-.modal-title {
-font-size: 0.95rem;
-}
-.modal-body {
-padding: 12px 12px; /* TAMBAHAN: padding-top untuk mobile */
-}
-button {
-padding: 10px 4px;
-font-size: 13px;
-min-height: 40px;
-}
-.printer-led {
-width: 18px;
-height: 18px;
-}
-.printer-status-text {
-display: none;
-}
-.header-actions button {
-padding: 6px 10px;
-font-size: 12px;
-}
-.search-container {
-padding: 0 12px;
-margin: 12px auto; /* TAMBAHAN: margin untuk mobile */
-}
-.search-input {
-padding: 10px 15px 10px 40px;
-font-size: 0.9rem;
-border-radius: 12px;
-}
-}
-/* Warna untuk input focus */
-input:focus, textarea:focus {
-outline: none;
-border-color: #006B54;
-box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
-}
-/* Warna untuk tombol dalam form */
+
+/* ==================== FORM BUTTONS ==================== */
 .form-button-primary {
-background: #006B54;
-color: white;
-border: 1px solid #006B54 !important;
+    background: #006B54;
+    color: white;
+    border: 1px solid #006B54 !important;
 }
+
 .form-button-primary:hover {
-background: #005a46;
+    background: #005a46;
 }
+
 .form-button-secondary {
-background: #d9d9d9;
-color: #333333;
-border: 1px solid #d9d9d9 !important;
+    background: #d9d9d9;
+    color: #333333;
+    border: 1px solid #d9d9d9 !important;
 }
+
 .form-button-secondary:hover {
-background: #cccccc;
+    background: #cccccc;
 }
-/* Long Press Indicator */
+
+/* ==================== LONG PRESS INDICATOR ==================== */
 .long-press-indicator {
-position: fixed;
-background: rgba(0, 0, 0, 0.7);
-color: white;
-padding: 8px 12px;
-border-radius: 15px;
-font-size: 12px;
-z-index: 9999;
-pointer-events: none;
-animation: pulse 1s infinite;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: pulse 1s infinite;
 }
+
 @keyframes pulse {
-0% { transform: scale(1); }
-50% { transform: scale(1.05); }
-100% { transform: scale(1); }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
-/* Form Inputs */
+
+/* ==================== FORM INPUTS ==================== */
 .form-input {
-width: 100%;
-padding: 12px;
-border: 1px solid #333333;
-border-radius: 15px;
-font-size: 1rem;
-box-sizing: border-box;
-background: #FFFFFF !important;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333333;
+    border-radius: 15px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: #FFFFFF !important;
 }
-/* Tombol Kecil */
-.small-button {
-padding: 5px 10px;
-border-radius: 15px;
-font-size: 12px;
-border: none;
-cursor: pointer;
-}
-/* Line Art Icons */
+
+/* ==================== ICON STYLES ==================== */
 .icon {
-width: 20px;
-height: 20px;
-stroke: currentColor;
-stroke-width: 1.5;
-stroke-linecap: round;
-stroke-linejoin: round;
-fill: none;
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
 }
+
 .icon-sm {
-width: 16px;
-height: 16px;
+    width: 16px;
+    height: 16px;
 }
+
 .icon-lg {
-width: 24px;
-height: 24px;
+    width: 24px;
+    height: 24px;
 }
+
 .icon-xl {
-width: 32px;
-height: 32px;
+    width: 32px;
+    height: 32px;
 }
+
 /* Icon Colors */
 .icon-primary {
-color: #006B54;
+    color: #006B54;
 }
+
 .icon-white {
-color: white;
+    color: white;
 }
+
 .icon-danger {
-color: #ff6b6b;
+    color: #ff6b6b;
 }
+
 .icon-success {
-color: #28a745;
+    color: #28a745;
 }
+
 /* Icon Container */
 .icon-container {
-display: inline-flex;
-align-items: center;
-justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
+
 /* Custom Icons for Specific Use */
 .box-icon {
-width: 22px;
-height: 22px;
+    width: 22px;
+    height: 22px;
 }
+
 .settings-icon {
-width: 18px;
-height: 18px;
+    width: 18px;
+    height: 18px;
 }
+
 .weight-icon {
-width: 20px;
-height: 20px;
+    width: 20px;
+    height: 20px;
 }
+
 .add-icon svg {
-width: 40px;
-height: 40px;
-stroke: #006B54;
+    width: 40px;
+    height: 40px;
+    stroke: #006B54;
 }
+
 /* Button with icon */
 .btn-with-icon {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* ==================== RESPONSIVE STYLES ==================== */
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+    }
+    
+    .product-card {
+        height: 240px;
+    }
+    
+    .product-image {
+        height: 140px;
+    }
+    
+    .modal-content {
+        max-width: 95%;
+    }
+    
+    .modal-header {
+        padding: 10px 15px;
+    }
+    
+    .modal-body {
+        padding: 15px;
+    }
+    
+    button {
+        padding: 12px 6px;
+        font-size: 14px;
+        min-height: 44px;
+    }
+    
+    .printer-led {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .printer-status-text {
+        font-size: 0.7rem;
+    }
+    
+    .search-container {
+        padding: 0 15px;
+        margin-top: 15px;
+    }
+    
+    .search-input {
+        padding: 12px 18px 12px 42px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    
+    .product-card {
+        height: 220px;
+    }
+    
+    .product-image {
+        height: 130px;
+    }
+    
+    .modal-header {
+        padding: 8px 12px;
+    }
+    
+    .modal-title {
+        font-size: 0.95rem;
+    }
+    
+    .modal-body {
+        padding: 12px;
+    }
+    
+    button {
+        padding: 10px 4px;
+        font-size: 13px;
+        min-height: 40px;
+    }
+    
+    .printer-led {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .printer-status-text {
+        display: none;
+    }
+    
+    .header-actions button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .search-container {
+        padding: 0 12px;
+        margin: 12px auto;
+    }
+    
+    .search-input {
+        padding: 10px 15px 10px 40px;
+        font-size: 0.9rem;
+        border-radius: 12px;
+    }
+}
+
+/* ==================== ADDITIONAL STYLES ==================== */
+#image-upload-area {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#image-upload-area:hover {
+    border-color: #006B54;
+    background: #f0f9f6;
+}
+
+#code-duplicate-warning {
+    transition: all 0.3s;
+}
+
+#save-product-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 </style>
 </head>
 <body>
-<!-- Header -->
+<!-- ==================== HEADER ==================== -->
 <header class="app-header">
-<div class="header-content">
-<div class="app-title">
-<div class="icon-container">
-<svg class="icon box-icon icon-primary" viewBox="0 0 24 24">
-<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-<polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-<line x1="12" y1="22.08" x2="12" y2="12"/>
-</svg>
-</div>
-<span>POS Barcode Generator</span>
-</div>
-<div class="header-actions">
-<div class="printer-led-container">
-<div class="printer-led disconnected" id="printer-led"></div>
-<div class="printer-status-text" id="printer-status-text">Printer Offline</div>
-</div>
-<button onclick="showSettingsModal()">
-<svg class="icon settings-icon icon-primary" viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="3"/>
-<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-</svg>
-Settings
-</button>
-</div>
-</div>
+    <div class="header-content">
+        <div class="app-title">
+            <div class="icon-container">
+                <svg class="icon box-icon icon-primary" viewBox="0 0 24 24">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                    <line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+            </div>
+            <span>POS Barcode Generator</span>
+        </div>
+        <div class="header-actions">
+            <div class="printer-led-container">
+                <div class="printer-led disconnected" id="printer-led"></div>
+                <div class="printer-status-text" id="printer-status-text">Printer Offline</div>
+            </div>
+            <button onclick="showSettingsModal()">
+                <svg class="icon settings-icon icon-primary" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                Settings
+            </button>
+        </div>
+    </div>
 </header>
-<!-- Main Content -->
+
+<!-- ==================== MAIN CONTENT ==================== -->
 <main class="main-content">
-<!-- Search Bar -->
-<div class="search-container">
-<input type="text" id="product-search" class="search-input" placeholder="Cari produk berdasarkan nama atau kode...">
-</div>
-<!-- Category Tabs -->
-<div class="category-tabs" id="category-tabs">
-<!-- Categories will be loaded here -->
-</div>
-<!-- Products Grid -->
-<div class="products-grid" id="products-grid">
-<!-- Products will be loaded here -->
-</div>
+    <!-- Search Bar -->
+    <div class="search-container">
+        <input type="text" id="product-search" class="search-input" placeholder="Cari produk berdasarkan nama atau kode...">
+    </div>
+    
+    <!-- Category Tabs -->
+    <div class="category-tabs" id="category-tabs">
+        <!-- Categories will be loaded here -->
+    </div>
+    
+    <!-- Products Grid -->
+    <div class="products-grid" id="products-grid">
+        <!-- Products will be loaded here -->
+    </div>
 </main>
-<!-- Weight Input Modal -->
+
+<!-- ==================== WEIGHT INPUT MODAL ==================== -->
 <div class="modal-overlay" id="weight-modal">
-<div class="modal-content">
-<div class="modal-header">
-<h2 class="modal-title">
-<svg class="icon weight-icon icon-primary" viewBox="0 0 24 24">
-<path d="M3 6h18"/>
-<path d="M3 10h18"/>
-<path d="M12 6v8"/>
-<path d="M12 14v4"/>
-<path d="M7 18h10"/>
-</svg>
-Input Berat
-</h2>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">
+                <svg class="icon weight-icon icon-primary" viewBox="0 0 24 24">
+                    <path d="M3 6h18"/>
+                    <path d="M3 10h18"/>
+                    <path d="M12 6v8"/>
+                    <path d="M12 14v4"/>
+                    <path d="M7 18h10"/>
+                </svg>
+                Input Berat
+            </h2>
+        </div>
+        <div class="modal-body">
+            <!-- Product Info -->
+            <div class="product-info-section" id="selected-product-info">
+                <!-- Product info will be loaded here -->
+            </div>
+            
+            <!-- Display -->
+            <div class="display-section">
+                <div class="display-row">
+                    <span>PRODUK:</span>
+                    <span id="display-product-code">-</span>
+                </div>
+                <div class="display-row">
+                    <span>BERAT:</span>
+                    <span id="display-weight">0</span> <span style="font-size:0.9em">gram</span>
+                </div>
+                <div class="display-row">
+                    <span>BARCODE:</span>
+                    <span id="display-barcode">-</span>
+                </div>
+            </div>
+            
+            <!-- Function Row -->
+            <div class="function-row">
+                <button id="clear-btn" class="function-btn" onclick="clearWeight()">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <path d="M3 6h18"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    CLEAR
+                </button>
+                <button id="generate-btn" class="function-btn" onclick="generateBarcode()">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <path d="M12 2v4"/>
+                        <path d="m5 5 2 2"/>
+                        <path d="M19 5l-2 2"/>
+                        <path d="M2 12h4"/>
+                        <path d="m5 19 2-2"/>
+                        <path d="M22 12h-4"/>
+                        <path d="m12 22-2-4h4l-2 4z"/>
+                        <circle cx="12" cy="12" r="4"/>
+                    </svg>
+                    GENERATE
+                </button>
+                <button id="connect-btn" class="function-btn" onclick="togglePrinterConnection()">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                    CONNECT
+                </button>
+            </div>
+            
+            <!-- Number Buttons -->
+            <div class="buttons">
+                <button onclick="appendNumber('7')">7</button>
+                <button onclick="appendNumber('8')">8</button>
+                <button onclick="appendNumber('9')">9</button>
+                <button onclick="appendNumber('4')">4</button>
+                <button onclick="appendNumber('5')">5</button>
+                <button onclick="appendNumber('6')">6</button>
+                <button onclick="appendNumber('1')">1</button>
+                <button onclick="appendNumber('2')">2</button>
+                <button onclick="appendNumber('3')">3</button>
+                <button onclick="appendNumber('0')">0</button>
+                <button onclick="appendNumber('00')">00</button>
+                <button class="backspace-btn" onclick="backspaceWeight()">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
+                        <line x1="18" y1="9" x2="12" y2="15"/>
+                        <line x1="12" y1="9" x2="18" y2="15"/>
+                    </svg>
+                </button>
+                <button class="print-btn function-btn" onclick="printBarcode()">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2 2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    PRINT
+                </button>
+            </div>
+            
+            <!-- Barcode Preview -->
+            <div class="barcode-preview">
+                <div style="font-weight:600;color:#333333;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+                    <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;color:#006B54;">
+                        <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>
+                        <path d="M8 7V5"/>
+                        <path d="M16 7V5"/>
+                        <path d="M8 12h8"/>
+                        <path d="M8 17h5"/>
+                    </svg>
+                    PREVIEW BARCODE
+                </div>
+                <div class="barcode-container">
+                    <svg id="barcode-svg"></svg>
+                </div>
+                <div class="barcode-info" id="current-barcode">Klik GENERATE untuk membuat barcode</div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="modal-body">
-<!-- Product Info -->
-<div class="product-info-section" id="selected-product-info">
-<!-- Product info will be loaded here -->
-</div>
-<!-- Display -->
-<div class="display-section">
-<div class="display-row">
-<span>PRODUK:</span>
-<span id="display-product-code">-</span>
-</div>
-<div class="display-row">
-<span>BERAT:</span>
-<span id="display-weight">0</span> <span style="font-size:0.9em">gram</span>
-</div>
-<div class="display-row">
-<span>BARCODE:</span>
-<span id="display-barcode">-</span>
-</div>
-</div>
-<!-- Function Row -->
-<div class="function-row">
-<button id="clear-btn" class="function-btn" onclick="clearWeight()">
-<svg class="icon icon-sm" viewBox="0 0 24 24">
-<path d="M3 6h18"/>
-<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-</svg>
-CLEAR
-</button>
-<button id="generate-btn" class="function-btn" onclick="generateBarcode()">
-<svg class="icon icon-sm" viewBox="0 0 24 24">
-<path d="M12 2v4"/>
-<path d="m5 5 2 2"/>
-<path d="M19 5l-2 2"/>
-<path d="M2 12h4"/>
-<path d="m5 19 2-2"/>
-<path d="M22 12h-4"/>
-<path d="m12 22-2-4h4l-2 4z"/>
-<circle cx="12" cy="12" r="4"/>
-</svg>
-GENERATE
-</button>
-<button id="connect-btn" class="function-btn" onclick="togglePrinterConnection()">
-<svg class="icon icon-sm" viewBox="0 0 24 24">
-<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-</svg>
-CONNECT
-</button>
-</div>
-<!-- Number Buttons -->
-<div class="buttons">
-<button onclick="appendNumber('7')">7</button>
-<button onclick="appendNumber('8')">8</button>
-<button onclick="appendNumber('9')">9</button>
-<button onclick="appendNumber('4')">4</button>
-<button onclick="appendNumber('5')">5</button>
-<button onclick="appendNumber('6')">6</button>
-<button onclick="appendNumber('1')">1</button>
-<button onclick="appendNumber('2')">2</button>
-<button onclick="appendNumber('3')">3</button>
-<button onclick="appendNumber('0')">0</button>
-<button onclick="appendNumber('00')">00</button>
-<button class="backspace-btn" onclick="backspaceWeight()">
-<svg class="icon icon-sm" viewBox="0 0 24 24">
-<path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
-<line x1="18" y1="9" x2="12" y2="15"/>
-<line x1="12" y1="9" x2="18" y2="15"/>
-</svg>
-</button>
-<button class="print-btn function-btn" onclick="printBarcode()">
-<svg class="icon icon-sm" viewBox="0 0 24 24">
-<polyline points="6 9 6 2 18 2 18 9"/>
-<path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2 2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-<rect x="6" y="14" width="12" height="8"/>
-</svg>
-PRINT
-</button>
-</div>
-<!-- Barcode Preview -->
-<div class="barcode-preview">
-<div style="font-weight:600;color:#333333;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
-<svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;color:#006B54;">
-<path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>
-<path d="M8 7V5"/>
-<path d="M16 7V5"/>
-<path d="M8 12h8"/>
-<path d="M8 17h5"/>
-</svg>
-PREVIEW BARCODE
-</div>
-<div class="barcode-container">
-<svg id="barcode-svg"></svg>
-</div>
-<div class="barcode-info" id="current-barcode">Klik GENERATE untuk membuat barcode</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Add/Edit Product Modal -->
+
+<!-- ==================== ADD/EDIT PRODUCT MODAL ==================== -->
 <div class="modal-overlay" id="product-modal">
-<div class="modal-content" style="background:white;">
-<div class="modal-header" style="background:#FFFFFF;">
-<h2 class="modal-title" id="product-modal-title" style="color:#006B54;">
-<svg class="icon icon-primary" viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="10"/>
-<line x1="12" y1="8" x2="12" y2="16"/>
-<line x1="8" y1="12" x2="16" y2="12"/>
-</svg>
-Tambah Produk
-</h2>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title" id="product-modal-title">
+                <svg class="icon icon-primary" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+                Tambah Produk
+            </h2>
+        </div>
+        <div class="modal-body">
+            <div id="product-form-content">
+                <!-- Form will be loaded here -->
+            </div>
+        </div>
+    </div>
 </div>
-<div class="modal-body">
-<div id="product-form-content">
-<!-- Form will be loaded here -->
-</div>
-</div>
-</div>
-</div>
-<!-- Settings Modal -->
+
+<!-- ==================== SETTINGS MODAL ==================== -->
 <div class="modal-overlay" id="settings-modal">
-<div class="modal-content" style="background:white;">
-<div class="modal-header" style="background:#FFFFFF;">
-<h2 class="modal-title" style="color:#006B54;">
-<svg class="icon icon-primary settings-icon" viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="3"/>
-<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-</svg>
-Pengaturan
-</h2>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">
+                <svg class="icon icon-primary settings-icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                Pengaturan
+            </h2>
+        </div>
+        <div class="modal-body">
+            <div id="settings-content">
+                <!-- Settings will be loaded here -->
+            </div>
+        </div>
+    </div>
 </div>
-<div class="modal-body">
-<div id="settings-content">
-<!-- Settings will be loaded here -->
-</div>
-</div>
-</div>
-</div>
-<!-- Category Context Menu -->
+
+<!-- ==================== CATEGORY CONTEXT MENU ==================== -->
 <div id="category-context-menu" class="category-context-menu" style="display:none;"></div>
-<!-- Long Press Indicator -->
+
+<!-- ==================== LONG PRESS INDICATOR ==================== -->
 <div id="long-press-indicator" class="long-press-indicator" style="display:none;">Tahan untuk edit/hapus</div>
-<!-- Notification -->
+
+<!-- ==================== NOTIFICATION ==================== -->
 <div id="notification"></div>
+
 <script>
-// Global Variables
+// ==================== DATABASE CONFIGURATION ====================
+const DB_NAME = 'POSBarcodeDB';
+const DB_VERSION = 3;
+
+// Object store names
+const STORES = {
+    PRODUCTS: 'products',
+    CATEGORIES: 'categories',
+    SETTINGS: 'settings',
+    HISTORY: 'printHistory'
+};
+
+// ==================== GLOBAL VARIABLES ====================
+let db = null;
 let products = [];
 let categories = [];
 let currentProduct = null;
@@ -1137,1396 +1293,1804 @@ let isPrinterConnected = false;
 let currentBarcodeData = '';
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 3;
-let searchQuery = ''; // Variable untuk pencarian produk
-// Variables for long press handling
+let searchQuery = '';
 let longPressTimer = null;
 let longPressCategory = null;
 let isLongPress = false;
+
 // Icon definitions
 const icons = {
-edit: `<svg class="icon" viewBox="0 0 24 24">
-<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-</svg>`,
-delete: `<svg class="icon" viewBox="0 0 24 24">
-<polyline points="3 6 5 6 21 6"/>
-<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-<line x1="10" y1="11" x2="10" y2="17"/>
-<line x1="14" y1="11" x2="14" y2="17"/>
-</svg>`,
-add: `<svg class="icon" viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="10"/>
-<line x1="12" y1="8" x2="12" y2="16"/>
-<line x1="8" y1="12" x2="16" y2="12"/>
-</svg>`,
-upload: `<svg class="icon" viewBox="0 0 24 24">
-<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-<polyline points="17 8 12 3 7 8"/>
-<line x1="12" y1="3" x2="12" y2="15"/>
-</svg>`,
-download: `<svg class="icon" viewBox="0 0 24 24">
-<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-<polyline points="7 10 12 15 17 10"/>
-<line x1="12" y1="15" x2="12" y2="3"/>
-</svg>`,
-category: `<svg class="icon" viewBox="0 0 24 24">
-<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-<path d="M10 2v20"/>
-</svg>`,
-camera: `<svg class="icon" viewBox="0 0 24 24">
-<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-<circle cx="12" cy="13" r="4"/>
-</svg>`
+    edit: `<svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+    delete: `<svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`,
+    add: `<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`,
+    upload: `<svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+    download: `<svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+    category: `<svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M10 2v20"/></svg>`,
+    camera: `<svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`
 };
-// Initialize App
-function initApp() {
-loadSettings();
-loadProducts();
-loadCategories();
-renderCategories();
-renderProducts();
-// Initialize printer connection
-initPrinterConnection();
-// Initialize long press events
-initLongPressEvents();
-// Setup search functionality
-setupSearch();
+
+// ==================== DATABASE FUNCTIONS ====================
+async function initDatabase() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        
+        request.onerror = () => {
+            console.error('Database error:', request.error);
+            reject(request.error);
+        };
+        
+        request.onsuccess = () => {
+            db = request.result;
+            console.log('Database initialized');
+            resolve();
+        };
+        
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            
+            // Create products store
+            if (!db.objectStoreNames.contains(STORES.PRODUCTS)) {
+                const productStore = db.createObjectStore(STORES.PRODUCTS, { 
+                    keyPath: 'id',
+                    autoIncrement: true 
+                });
+                productStore.createIndex('category', 'category', { unique: false });
+                productStore.createIndex('code', 'code', { unique: true });
+            }
+            
+            // Create categories store
+            if (!db.objectStoreNames.contains(STORES.CATEGORIES)) {
+                const categoryStore = db.createObjectStore(STORES.CATEGORIES, { 
+                    keyPath: 'id',
+                    autoIncrement: true 
+                });
+                categoryStore.createIndex('name', 'name', { unique: true });
+            }
+            
+            // Create settings store
+            if (!db.objectStoreNames.contains(STORES.SETTINGS)) {
+                const settingsStore = db.createObjectStore(STORES.SETTINGS, { 
+                    keyPath: 'key' 
+                });
+            }
+            
+            // Create history store
+            if (!db.objectStoreNames.contains(STORES.HISTORY)) {
+                const historyStore = db.createObjectStore(STORES.HISTORY, { 
+                    keyPath: 'id',
+                    autoIncrement: true 
+                });
+                historyStore.createIndex('timestamp', 'timestamp', { unique: false });
+            }
+        };
+    });
 }
-// Setup search functionality
+
+async function dbGetAll(storeName) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error('Database not initialized'));
+            return;
+        }
+        
+        const transaction = db.transaction([storeName], 'readonly');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.getAll();
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function dbGet(storeName, key) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error('Database not initialized'));
+            return;
+        }
+        
+        const transaction = db.transaction([storeName], 'readonly');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.get(key);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function dbAdd(storeName, data) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error('Database not initialized'));
+            return;
+        }
+        
+        const transaction = db.transaction([storeName], 'readwrite');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.add(data);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function dbPut(storeName, data) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error('Database not initialized'));
+            return;
+        }
+        
+        const transaction = db.transaction([storeName], 'readwrite');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.put(data);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function dbDelete(storeName, key) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error('Database not initialized'));
+            return;
+        }
+        
+        const transaction = db.transaction([storeName], 'readwrite');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.delete(key);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function dbClear(storeName) {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            reject(new Error('Database not initialized'));
+            return;
+        }
+        
+        const transaction = db.transaction([storeName], 'readwrite');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.clear();
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// ==================== APPLICATION DATABASE FUNCTIONS ====================
+async function loadSettings() {
+    try {
+        const savedConfig = await dbGet(STORES.SETTINGS, 'barcodeConfig');
+        if (savedConfig) {
+            digitConfig = savedConfig.value;
+        } else {
+            digitConfig = { flex: 2, category: 2, product: 4, weight: 5 };
+            await saveSettings();
+        }
+    } catch (error) {
+        console.error('Error loading settings:', error);
+        digitConfig = { flex: 2, category: 2, product: 4, weight: 5 };
+    }
+}
+
+async function saveSettings() {
+    try {
+        await dbPut(STORES.SETTINGS, {
+            key: 'barcodeConfig',
+            value: digitConfig,
+            updatedAt: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Error saving settings:', error);
+    }
+}
+
+async function loadProducts() {
+    try {
+        products = await dbGetAll(STORES.PRODUCTS);
+        
+        if (products.length === 0) {
+            const sampleProducts = [
+                {
+                    name: "Beras Premium 5kg",
+                    code: "0001",
+                    category: "Sembako",
+                    flex: "01",
+                    catcode: "01",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E",
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    name: "Gula Pasir 1kg",
+                    code: "0002",
+                    category: "Sembako",
+                    flex: "01",
+                    catcode: "01",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='30' y='30' width='40' height='40' fill='%23fff' stroke='%23006B54' stroke-width='2'/%3E%3C/svg%3E",
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    name: "Minyak Goreng 2L",
+                    code: "0003",
+                    category: "Sembako",
+                    flex: "01",
+                    catcode: "02",
+                    image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='35' y='25' width='30' height='50' fill='%23d9d9d9'/%3E%3Ccircle cx='50' cy='80' r='8' fill='%23006B54'/%3E%3C/svg%3E",
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+            
+            for (const product of sampleProducts) {
+                await dbAdd(STORES.PRODUCTS, product);
+            }
+            
+            products = await dbGetAll(STORES.PRODUCTS);
+        }
+    } catch (error) {
+        console.error('Error loading products:', error);
+        products = [];
+    }
+}
+
+async function loadCategories() {
+    try {
+        const dbCategories = await dbGetAll(STORES.CATEGORIES);
+        
+        if (dbCategories.length === 0) {
+            const uniqueCategories = [...new Set(products.map(p => p.category).filter(Boolean))];
+            
+            for (const categoryName of uniqueCategories) {
+                await dbAdd(STORES.CATEGORIES, {
+                    name: categoryName,
+                    createdAt: new Date().toISOString()
+                });
+            }
+            
+            categories = ['all', ...uniqueCategories];
+        } else {
+            const categoryNames = dbCategories.map(c => c.name);
+            categories = ['all', ...categoryNames];
+        }
+    } catch (error) {
+        console.error('Error loading categories:', error);
+        categories = ['all'];
+    }
+}
+
+async function saveProduct(productData) {
+    try {
+        const now = new Date().toISOString();
+        
+        if (productData.id) {
+            productData.updatedAt = now;
+            await dbPut(STORES.PRODUCTS, productData);
+        } else {
+            productData.createdAt = now;
+            productData.updatedAt = now;
+            const newId = await dbAdd(STORES.PRODUCTS, productData);
+            productData.id = newId;
+        }
+        
+        if (productData.category) {
+            const categories = await dbGetAll(STORES.CATEGORIES);
+            const categoryExists = categories.some(c => c.name === productData.category);
+            
+            if (!categoryExists) {
+                await dbAdd(STORES.CATEGORIES, {
+                    name: productData.category,
+                    createdAt: now
+                });
+            }
+        }
+        
+        return productData;
+    } catch (error) {
+        console.error('Error saving product:', error);
+        throw error;
+    }
+}
+
+async function deleteProductFromDB(productId) {
+    try {
+        await dbDelete(STORES.PRODUCTS, productId);
+        return true;
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        throw error;
+    }
+}
+
+async function saveCategoryToDB(categoryName) {
+    try {
+        const categories = await dbGetAll(STORES.CATEGORIES);
+        const existingCategory = categories.find(c => c.name === categoryName);
+        
+        if (!existingCategory) {
+            await dbAdd(STORES.CATEGORIES, {
+                name: categoryName,
+                createdAt: new Date().toISOString()
+            });
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error saving category:', error);
+        throw error;
+    }
+}
+
+async function updateCategoryInDB(oldName, newName) {
+    try {
+        const categories = await dbGetAll(STORES.CATEGORIES);
+        const categoryToUpdate = categories.find(c => c.name === oldName);
+        
+        if (categoryToUpdate) {
+            categoryToUpdate.name = newName;
+            categoryToUpdate.updatedAt = new Date().toISOString();
+            await dbPut(STORES.CATEGORIES, categoryToUpdate);
+            
+            const productsToUpdate = products.filter(p => p.category === oldName);
+            for (const product of productsToUpdate) {
+                product.category = newName;
+                product.updatedAt = new Date().toISOString();
+                await dbPut(STORES.PRODUCTS, product);
+            }
+            
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error updating category:', error);
+        throw error;
+    }
+}
+
+async function deleteCategoryFromDB(categoryName) {
+    try {
+        const categories = await dbGetAll(STORES.CATEGORIES);
+        const categoryToDelete = categories.find(c => c.name === categoryName);
+        
+        if (categoryToDelete) {
+            await dbDelete(STORES.CATEGORIES, categoryToDelete.id);
+            
+            const productsToUpdate = products.filter(p => p.category === categoryName);
+            for (const product of productsToUpdate) {
+                product.category = "Lainnya";
+                product.updatedAt = new Date().toISOString();
+                await dbPut(STORES.PRODUCTS, product);
+            }
+            
+            const lainnyaExists = categories.some(c => c.name === "Lainnya");
+            if (!lainnyaExists) {
+                await saveCategoryToDB("Lainnya");
+            }
+            
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        throw error;
+    }
+}
+
+async function savePrintHistory(barcodeData, productName, weight) {
+    try {
+        await dbAdd(STORES.HISTORY, {
+            barcode: barcodeData,
+            productName: productName,
+            weight: weight,
+            timestamp: new Date().toISOString(),
+            printedAt: new Date().toLocaleString('id-ID')
+        });
+    } catch (error) {
+        console.error('Error saving print history:', error);
+    }
+}
+
+async function exportData() {
+    try {
+        const exportData = {
+            products: await dbGetAll(STORES.PRODUCTS),
+            categories: await dbGetAll(STORES.CATEGORIES),
+            settings: await dbGetAll(STORES.SETTINGS),
+            exportDate: new Date().toISOString(),
+            version: DB_VERSION
+        };
+        
+        const dataStr = JSON.stringify(exportData, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        const exportFileName = `pos-backup-${new Date().toISOString().split('T')[0]}.json`;
+        
+        const link = document.createElement('a');
+        link.href = dataUri;
+        link.download = exportFileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showNotification('Data berhasil dieksport!', 'success');
+    } catch (error) {
+        console.error('Error exporting data:', error);
+        showNotification('Gagal mengeksport data: ' + error.message, 'error');
+    }
+}
+
+async function importData() {
+    return new Promise((resolve) => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                resolve(false);
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = async (event) => {
+                try {
+                    const importedData = JSON.parse(event.target.result);
+                    
+                    if (!importedData.products || !Array.isArray(importedData.products)) {
+                        throw new Error('Format data tidak valid');
+                    }
+                    
+                    await dbClear(STORES.PRODUCTS);
+                    await dbClear(STORES.CATEGORIES);
+                    await dbClear(STORES.SETTINGS);
+                    
+                    for (const product of importedData.products) {
+                        await dbAdd(STORES.PRODUCTS, product);
+                    }
+                    
+                    if (importedData.categories && Array.isArray(importedData.categories)) {
+                        for (const category of importedData.categories) {
+                            await dbAdd(STORES.CATEGORIES, category);
+                        }
+                    }
+                    
+                    if (importedData.settings && Array.isArray(importedData.settings)) {
+                        for (const setting of importedData.settings) {
+                            await dbAdd(STORES.SETTINGS, setting);
+                        }
+                    }
+                    
+                    await loadProducts();
+                    await loadCategories();
+                    await loadSettings();
+                    
+                    renderCategories();
+                    renderProducts();
+                    
+                    showNotification('Data berhasil diimport!', 'success');
+                    resolve(true);
+                } catch (error) {
+                    console.error('Error importing data:', error);
+                    showNotification('Gagal mengimport data: ' + error.message, 'error');
+                    resolve(false);
+                }
+            };
+            
+            reader.readAsText(file);
+        };
+        
+        input.click();
+    });
+}
+
+async function clearAllData() {
+    if (confirm('Apakah Anda yakin ingin menghapus SEMUA data?\nTindakan ini tidak dapat dibatalkan!')) {
+        try {
+            await dbClear(STORES.PRODUCTS);
+            await dbClear(STORES.CATEGORIES);
+            await dbClear(STORES.HISTORY);
+            
+            products = [];
+            categories = ['all'];
+            selectedCategory = 'all';
+            
+            renderCategories();
+            renderProducts();
+            
+            showNotification('Semua data berhasil dihapus!', 'success');
+        } catch (error) {
+            console.error('Error clearing data:', error);
+            showNotification('Gagal menghapus data: ' + error.message, 'error');
+        }
+    }
+}
+
+// ==================== APPLICATION INITIALIZATION ====================
+async function initApp() {
+    try {
+        await initDatabase();
+        await loadSettings();
+        await loadProducts();
+        await loadCategories();
+        
+        renderCategories();
+        renderProducts();
+        initPrinterConnection();
+        initLongPressEvents();
+        setupSearch();
+        
+        console.log('App initialized successfully');
+    } catch (error) {
+        console.error('Error initializing app:', error);
+        showNotification('Gagal memuat aplikasi. Silakan refresh halaman.', 'error');
+    }
+}
+
+// ==================== UI FUNCTIONS ====================
 function setupSearch() {
-const searchInput = document.getElementById('product-search');
-if (searchInput) {
-searchInput.addEventListener('input', function(e) {
-searchQuery = e.target.value.trim().toLowerCase();
-renderProducts();
-});
+    const searchInput = document.getElementById('product-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            searchQuery = e.target.value.trim().toLowerCase();
+            renderProducts();
+        });
+    }
 }
-}
-// Initialize printer connection
-function initPrinterConnection() {
-// Load previous connection status from localStorage
-const savedConnection = localStorage.getItem('printerConnection');
-if (savedConnection) {
-try {
-const connectionData = JSON.parse(savedConnection);
-// Check if connection was recent (within 5 minutes)
-const savedTime = new Date(connectionData.timestamp);
-const currentTime = new Date();
-const minutesDifference = (currentTime - savedTime) / (1000 * 60);
-// If connection was recent, try to reconnect automatically
-if (connectionData.isPrinterConnected && minutesDifference < 5) {
-// Set status to connected but note that we need to reconnect
-isPrinterConnected = false; // Will be set to true if reconnection succeeds
-updatePrinterLED(false);
-updatePrinterButton();
-// Try to reconnect automatically
-setTimeout(() => {
-autoReconnectPrinter();
-}, 1000);
-} else {
-// Connection too old, reset to disconnected
-isPrinterConnected = false;
-updatePrinterLED(false);
-updatePrinterButton();
-localStorage.removeItem('printerConnection');
-}
-} catch (e) {
-console.error('Error loading printer connection:', e);
-isPrinterConnected = false;
-updatePrinterLED(false);
-updatePrinterButton();
-}
-} else {
-isPrinterConnected = false;
-updatePrinterLED(false);
-updatePrinterButton();
-}
-}
-// Try to auto-reconnect to printer
-async function autoReconnectPrinter() {
-if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-return;
-}
-try {
-// Check if Web Serial API is available
-if (!("serial" in navigator)) {
-return;
-}
-// Get previously granted ports
-const ports = await navigator.serial.getPorts();
-if (ports.length === 0) {
-// No ports available, show notification
-showNotification('Printer perlu dihubungkan kembali setelah refresh halaman', 'info');
-return;
-}
-// Try to reconnect to the first available port
-port = ports[0];
-// Check if port is already open
-if (port.readable || port.writable) {
-// Port is already open, try to get writer
-writer = port.writable.getWriter();
-isPrinterConnected = true;
-reconnectAttempts = 0;
-updatePrinterLED(true);
-updatePrinterButton();
-savePrinterConnection();
-showNotification('Printer berhasil terhubung ulang!', 'success');
-// Set up disconnect listener
-port.addEventListener('disconnect', handlePrinterDisconnect);
-return;
-}
-// Try to open the port
-await port.open({ baudRate: 9600 });
-writer = port.writable.getWriter();
-isPrinterConnected = true;
-reconnectAttempts = 0;
-updatePrinterLED(true);
-updatePrinterButton();
-savePrinterConnection();
-showNotification('Printer berhasil terhubung ulang!', 'success');
-// Set up disconnect listener
-port.addEventListener('disconnect', handlePrinterDisconnect);
-} catch (error) {
-console.error("Auto-reconnect error:", error);
-reconnectAttempts++;
-if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-// Try again after delay
-setTimeout(() => {
-autoReconnectPrinter();
-}, 2000);
-} else {
-// Show notification that reconnection failed
-showNotification('Gagal menghubungkan ulang ke printer. Silakan hubungkan manual.', 'error');
-isPrinterConnected = false;
-updatePrinterLED(false);
-updatePrinterButton();
-}
-}
-}
-// Handle printer disconnect event
-function handlePrinterDisconnect() {
-isPrinterConnected = false;
-port = null;
-writer = null;
-updatePrinterLED(false);
-updatePrinterButton();
-savePrinterConnection();
-showNotification('Printer terputus!', 'error');
-}
-// Save printer connection status to localStorage
-function savePrinterConnection() {
-const connectionData = {
-isPrinterConnected: isPrinterConnected,
-timestamp: new Date().toISOString()
-};
-localStorage.setItem('printerConnection', JSON.stringify(connectionData));
-}
-// Update printer LED indicator
-function updatePrinterLED(connected) {
-const printerLED = document.getElementById('printer-led');
-const statusText = document.getElementById('printer-status-text');
-if (printerLED) {
-if (connected) {
-printerLED.className = 'printer-led connected';
-if (statusText) statusText.textContent = 'Printer Online';
-} else {
-printerLED.className = 'printer-led disconnected';
-if (statusText) statusText.textContent = 'Printer Offline';
-}
-}
-}
-// Update printer button text and icon
-function updatePrinterButton() {
-const connectBtn = document.getElementById('connect-btn');
-if (!connectBtn) return;
-if (isPrinterConnected) {
-connectBtn.innerHTML = `
-<svg class="icon icon-sm" viewBox="0 0 24 24">
-<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-</svg>
-DISCONNECT
-`;
-connectBtn.onclick = disconnectFromPrinter;
-} else {
-connectBtn.innerHTML = `
-<svg class="icon icon-sm" viewBox="0 0 24 24">
-<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-</svg>
-CONNECT
-`;
-connectBtn.onclick = connectToPrinter;
-}
-}
-// Toggle printer connection (for backward compatibility)
-function togglePrinterConnection() {
-if (isPrinterConnected) {
-disconnectFromPrinter();
-} else {
-connectToPrinter();
-}
-}
-// Initialize long press events
-function initLongPressEvents() {
-document.addEventListener('touchstart', handleTouchStart, { passive: true });
-document.addEventListener('touchend', handleTouchEnd);
-document.addEventListener('touchcancel', handleTouchEnd);
-document.addEventListener('mousedown', handleMouseDown);
-document.addEventListener('mouseup', handleMouseUp);
-}
-// Load Settings
-function loadSettings() {
-const savedConfig = localStorage.getItem('barcodeConfig');
-if (savedConfig) {
-digitConfig = JSON.parse(savedConfig);
-}
-}
-// Save Settings
-function saveSettings() {
-localStorage.setItem('barcodeConfig', JSON.stringify(digitConfig));
-}
-// Load Products
-function loadProducts() {
-const saved = localStorage.getItem('posProducts');
-if (saved) {
-products = JSON.parse(saved);
-} else {
-// Sample products
-products = [
-{
-id: 1,
-name: "Beras Premium 5kg",
-code: "0001",
-category: "Sembako",
-flex: "01",
-catcode: "01",
-image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E"
-},
-{
-id: 2,
-name: "Gula Pasir 1kg",
-code: "0002",
-category: "Sembako",
-flex: "01",
-catcode: "01",
-image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='30' y='30' width='40' height='40' fill='%23fff' stroke='%23006B54' stroke-width='2'/%3E%3C/svg%3E"
-},
-{
-id: 3,
-name: "Minyak Goreng 2L",
-code: "0003",
-category: "Sembako",
-flex: "01",
-catcode: "02",
-image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='35' y='25' width='30' height='50' fill='%23d9d9d9'/%3E%3Ccircle cx='50' cy='80' r='8' fill='%23006B54'/%3E%3C/svg%3E"
-}
-];
-saveProducts();
-}
-}
-// Load Categories
-function loadCategories() {
-const saved = localStorage.getItem('posCategories');
-if (saved) {
-categories = JSON.parse(saved);
-} else {
-// Extract unique categories from products and add "all"
-const allCategories = ['all'];
-products.forEach(product => {
-if (product.category && !allCategories.includes(product.category)) {
-allCategories.push(product.category);
-}
-});
-categories = allCategories;
-saveCategories();
-}
-}
-// Save Categories
-function saveCategories() {
-localStorage.setItem('posCategories', JSON.stringify(categories));
-}
-// Save Products
-function saveProducts() {
-localStorage.setItem('posProducts', JSON.stringify(products));
-loadCategories();
-renderCategories();
-renderProducts();
-}
-// Render Categories with long press support
+
 function renderCategories() {
-const container = document.getElementById('category-tabs');
-container.innerHTML = '';
-categories.forEach(category => {
-const tab = document.createElement('div');
-tab.className = `category-tab ${selectedCategory === category ? 'active' : ''}`;
-// Add icon for non-"all" categories
-if (category !== 'all') {
-tab.innerHTML = `
-<div style="display:flex;align-items:center;gap:6px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="width:14px;height:14px;opacity:0.7;color:${selectedCategory === category ? 'white' : '#006B54'}">
-<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-<path d="M10 2v20"/>
-</svg>
-${category}
-</div>
-`;
-} else {
-tab.innerHTML = `
-<div style="display:flex;align-items:center;gap:6px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="width:14px;height:14px;opacity:0.7;color:${selectedCategory === category ? 'white' : '#006B54'}">
-<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-<line x1="3" y1="9" x2="21" y2="9"/>
-<line x1="9" y1="21" x2="9" y2="9"/>
-</svg>
-Semua Produk
-</div>
-`;
+    const container = document.getElementById('category-tabs');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    categories.forEach(category => {
+        const tab = document.createElement('div');
+        tab.className = `category-tab ${selectedCategory === category ? 'active' : ''}`;
+        tab.dataset.category = category;
+        
+        if (category !== 'all') {
+            tab.innerHTML = `
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="width:14px;height:14px;opacity:0.7;color:${selectedCategory === category ? 'white' : '#006B54'}">
+                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                        <path d="M10 2v20"/>
+                    </svg>
+                    ${category}
+                </div>
+            `;
+        } else {
+            tab.innerHTML = `
+                <div style="display:flex;align-items:center;gap:6px;">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="width:14px;height:14px;opacity:0.7;color:${selectedCategory === category ? 'white' : '#006B54'}">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                    Semua Produk
+                </div>
+            `;
+        }
+        
+        tab.onclick = () => {
+            if (!isLongPress) {
+                const searchInput = document.getElementById('product-search');
+                if (searchInput && searchInput.value.trim() !== '') {
+                    searchInput.value = '';
+                    searchQuery = '';
+                }
+                selectedCategory = category;
+                renderCategories();
+                renderProducts();
+            }
+            isLongPress = false;
+        };
+        
+        container.appendChild(tab);
+    });
 }
-tab.dataset.category = category;
-// Regular click for category selection
-tab.onclick = () => {
-if (!isLongPress) {
-// Clear search when switching categories
-const searchInput = document.getElementById('product-search');
-if (searchInput && searchInput.value.trim() !== '') {
-searchInput.value = '';
-searchQuery = '';
-}
-selectedCategory = category;
-renderCategories();
-renderProducts();
-}
-isLongPress = false;
-};
-container.appendChild(tab);
-});
-}
-// Handle touch start for long press
-function handleTouchStart(e) {
-const categoryTab = e.target.closest('.category-tab');
-if (categoryTab && categoryTab.dataset.category !== 'all') {
-longPressCategory = categoryTab.dataset.category;
-// Show indicator
-const indicator = document.getElementById('long-press-indicator');
-indicator.style.display = 'block';
-indicator.style.left = e.touches[0].clientX + 'px';
-indicator.style.top = e.touches[0].clientY + 'px';
-// Start long press timer
-longPressTimer = setTimeout(() => {
-isLongPress = true;
-showCategoryContextMenu(longPressCategory, e.touches[0].clientX, e.touches[0].clientY);
-indicator.style.display = 'none';
-}, 800); // 800ms for long press
-e.preventDefault();
-}
-}
-// Handle touch end
-function handleTouchEnd() {
-clearTimeout(longPressTimer);
-document.getElementById('long-press-indicator').style.display = 'none';
-}
-// Handle mouse down for long press
-function handleMouseDown(e) {
-if (e.button !== 0) return; // Only left click
-const categoryTab = e.target.closest('.category-tab');
-if (categoryTab && categoryTab.dataset.category !== 'all') {
-longPressCategory = categoryTab.dataset.category;
-// Show indicator
-const indicator = document.getElementById('long-press-indicator');
-indicator.style.display = 'block';
-indicator.style.left = e.clientX + 'px';
-indicator.style.top = e.clientY + 'px';
-// Start long press timer
-longPressTimer = setTimeout(() => {
-isLongPress = true;
-showCategoryContextMenu(longPressCategory, e.clientX, e.clientY);
-indicator.style.display = 'none';
-}, 800);
-}
-}
-// Handle mouse up
-function handleMouseUp() {
-clearTimeout(longPressTimer);
-document.getElementById('long-press-indicator').style.display = 'none';
-}
-// Show category context menu
-function showCategoryContextMenu(category, x, y) {
-const menu = document.getElementById('category-context-menu');
-menu.innerHTML = '';
-const editItem = document.createElement('div');
-editItem.className = 'context-menu-item edit';
-editItem.innerHTML = `
-${icons.edit}
-Edit Kategori
-`;
-editItem.onclick = () => {
-editCategory(category);
-menu.style.display = 'none';
-};
-const deleteItem = document.createElement('div');
-deleteItem.className = 'context-menu-item delete';
-deleteItem.innerHTML = `
-${icons.delete}
-Hapus Kategori
-`;
-deleteItem.onclick = () => {
-deleteCategory(category);
-menu.style.display = 'none';
-};
-menu.appendChild(editItem);
-menu.appendChild(deleteItem);
-// Position menu
-menu.style.left = x + 'px';
-menu.style.top = y + 'px';
-menu.style.display = 'block';
-// Close menu when clicking outside
-setTimeout(() => {
-document.addEventListener('click', function closeMenu(e) {
-if (!menu.contains(e.target)) {
-menu.style.display = 'none';
-document.removeEventListener('click', closeMenu);
-}
-});
-}, 100);
-}
-// Edit category
-function editCategory(oldCategory) {
-if (oldCategory === 'all') return;
-const newCategory = prompt('Edit nama kategori:', oldCategory);
-if (newCategory && newCategory.trim() && newCategory !== oldCategory) {
-// Update category in categories array
-const index = categories.indexOf(oldCategory);
-if (index !== -1) {
-categories[index] = newCategory;
-}
-// Update category in all products
-products.forEach(product => {
-if (product.category === oldCategory) {
-product.category = newCategory;
-}
-});
-// Update selected category if it's the edited one
-if (selectedCategory === oldCategory) {
-selectedCategory = newCategory;
-}
-saveCategories();
-saveProducts();
-renderCategories();
-renderProducts();
-showNotification('Kategori berhasil diubah!');
-}
-}
-// Delete category
-function deleteCategory(category) {
-if (category === 'all') return;
-if (!confirm(`Hapus kategori "${category}"?
-Produk dalam kategori ini akan dipindahkan ke kategori "Lainnya".`)) {
-return;
-}
-// Move products to default category or uncategorized
-products.forEach(product => {
-if (product.category === category) {
-product.category = "Lainnya";
-}
-});
-// Remove category from categories array
-categories = categories.filter(cat => cat !== category);
-// Add "Lainnya" category if it doesn't exist
-if (!categories.includes("Lainnya")) {
-categories.push("Lainnya");
-}
-// Update selected category if it's the deleted one
-if (selectedCategory === category) {
-selectedCategory = 'all';
-}
-saveCategories();
-saveProducts();
-renderCategories();
-renderProducts();
-showNotification('Kategori berhasil dihapus!');
-}
-// Render Products - MODIFIED TO SUPPORT SEARCH
+
 function renderProducts() {
-const container = document.getElementById('products-grid');
-container.innerHTML = '';
-// Filter products based on search query or selected category
-let filteredProducts;
-if (searchQuery) {
-// Search across all products when query exists
-filteredProducts = products.filter(p => 
-p.name.toLowerCase().includes(searchQuery) || 
-p.code.toLowerCase().includes(searchQuery)
-);
-} else {
-// Filter by selected category when no search query
-filteredProducts = selectedCategory === 'all'
-? products
-: products.filter(p => p.category === selectedCategory);
+    const container = document.getElementById('products-grid');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    let filteredProducts;
+    if (searchQuery) {
+        filteredProducts = products.filter(p => 
+            p.name.toLowerCase().includes(searchQuery) || 
+            p.code.toLowerCase().includes(searchQuery)
+        );
+    } else {
+        filteredProducts = selectedCategory === 'all'
+            ? products
+            : products.filter(p => p.category === selectedCategory);
+    }
+    
+    filteredProducts.forEach(product => {
+        const card = document.createElement('div');
+        card.className = `product-card ${currentProduct?.id === product.id ? 'selected' : ''}`;
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-actions">
+                <button class="action-btn edit-btn">${icons.edit}</button>
+                <button class="action-btn delete-btn">${icons.delete}</button>
+            </div>
+            <div class="product-info">
+                <div class="product-name">${product.name}</div>
+                <div class="product-code">${product.code}</div>
+            </div>
+        `;
+        
+        const editBtn = card.querySelector('.edit-btn');
+        const deleteBtn = card.querySelector('.delete-btn');
+        
+        editBtn.onclick = (event) => {
+            event.stopPropagation();
+            editProduct(product.id);
+        };
+        
+        deleteBtn.onclick = (event) => {
+            event.stopPropagation();
+            deleteProductHandler(product.id);
+        };
+        
+        card.onclick = () => {
+            currentProduct = product;
+            showWeightModal();
+        };
+        
+        container.appendChild(card);
+    });
+    
+    const addCard = document.createElement('div');
+    addCard.className = 'add-product-card';
+    addCard.innerHTML = `
+        <div class="add-product-content">
+            <div class="add-icon">
+                <svg class="icon" viewBox="0 0 24 24" style="width:40px;height:40px;color:#006B54;">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+            </div>
+            <div class="add-text">Tambah Produk</div>
+        </div>
+    `;
+    
+    addCard.onclick = () => showProductModal();
+    container.appendChild(addCard);
 }
-filteredProducts.forEach(product => {
-const card = document.createElement('div');
-card.className = `product-card ${currentProduct?.id === product.id ? 'selected' : ''}`;
-card.innerHTML = `
-<img src="${product.image}" alt="${product.name}" class="product-image">
-<div class="product-actions">
-<button class="action-btn edit-btn">${icons.edit}</button>
-<button class="action-btn delete-btn">${icons.delete}</button>
-</div>
-<div class="product-info">
-<div class="product-name">${product.name}</div>
-<div class="product-code">${product.code}</div>
-</div>
-`;
-// Add event listeners for action buttons
-const editBtn = card.querySelector('.edit-btn');
-const deleteBtn = card.querySelector('.delete-btn');
-editBtn.onclick = (event) => {
-event.stopPropagation();
-editProduct(product.id);
-};
-deleteBtn.onclick = (event) => {
-event.stopPropagation();
-deleteProduct(product.id);
-};
-card.onclick = () => {
-currentProduct = product;
-showWeightModal();
-};
-container.appendChild(card);
-});
-const addCard = document.createElement('div');
-addCard.className = 'add-product-card';
-addCard.innerHTML = `
-<div class="add-product-content">
-<div class="add-icon">
-<svg class="icon" viewBox="0 0 24 24" style="width:40px;height:40px;color:#006B54;">
-<circle cx="12" cy="12" r="10"/>
-<line x1="12" y1="8" x2="12" y2="16"/>
-<line x1="8" y1="12" x2="16" y2="12"/>
-</svg>
-</div>
-<div class="add-text">Tambah Produk</div>
-</div>
-`;
-addCard.onclick = () => showProductModal();
-container.appendChild(addCard);
+
+async function editProduct(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    editingProductId = productId;
+    showProductModal(product);
 }
-// Edit Product
-function editProduct(productId) {
-const product = products.find(p => p.id === productId);
-if (!product) return;
-editingProductId = productId;
-showProductModal(product);
+
+async function deleteProductHandler(productId) {
+    if (!confirm('Hapus produk ini?')) return;
+    
+    try {
+        await deleteProductFromDB(productId);
+        products = products.filter(p => p.id !== productId);
+        
+        if (currentProduct && currentProduct.id === productId) {
+            currentProduct = null;
+        }
+        
+        renderProducts();
+        showNotification('Produk berhasil dihapus!', 'success');
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        showNotification('Gagal menghapus produk: ' + error.message, 'error');
+    }
 }
-// Delete Product
-function deleteProduct(productId) {
-if (!confirm('Hapus produk ini?')) return;
-products = products.filter(p => p.id !== productId);
-saveProducts();
-showNotification('Produk dihapus!');
-if (currentProduct && currentProduct.id === productId) {
-currentProduct = null;
-}
-}
-// Show Product Modal (Add/Edit) - FIXED: Menggunakan digitConfig untuk maxlength
+
 function showProductModal(product = null) {
-const isEdit = !!product;
-const modalTitle = document.getElementById('product-modal-title');
-modalTitle.innerHTML = isEdit ? `
-<svg class="icon icon-primary" viewBox="0 0 24 24">
-<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-</svg>
-Edit Produk
-` : `
-<svg class="icon icon-primary" viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="10"/>
-<line x1="12" y1="8" x2="12" y2="16"/>
-<line x1="8" y1="12" x2="16" y2="12"/>
-</svg>
-Tambah Produk
-`;
-// Get existing categories (excluding "all")
-const existingCategories = categories.filter(cat => cat !== 'all');
-let categoryOptions = existingCategories.map(cat => {
-const selected = product && product.category === cat ? 'selected' : '';
-return `<option value="${cat}" ${selected}>${cat}</option>`;
-}).join('');
-const formContent = document.getElementById('product-form-content');
-formContent.innerHTML = `
-<div style="margin-bottom:15px;">
-<div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
-${icons.camera}
-Gambar Produk
-</div>
-<div style="border:2px dashed #d9d9d9;border-radius:15px;padding:20px;text-align:center;cursor:pointer;background:#f5f5f5;"
-onclick="document.getElementById('product-image-input').click()" id="image-upload-area">
-${product && product.image ?
-`<img src="${product.image}" style="max-width:100%;max-height:140px;border-radius:15px;object-fit:cover;" id="image-preview">` :
-`<div style="color:#666;">
-<div style="margin-bottom:5px;">
-<svg class="icon" viewBox="0 0 24 24" style="width:40px;height:40px;color:#006B54;">
-<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-<circle cx="12" cy="13" r="4"/>
-</svg>
-</div>
-<div>Klik untuk upload gambar</div>
-<div style="font-size:12px;margin-top:5px;color:#999;">Rekomendasi: 300x300px</div>
-</div>`
+    const isEdit = !!product;
+    const modalTitle = document.getElementById('product-modal-title');
+    
+    modalTitle.innerHTML = isEdit ? `
+        <svg class="icon icon-primary" viewBox="0 0 24 24">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Produk
+    ` : `
+        <svg class="icon icon-primary" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        Tambah Produk
+    `;
+    
+    const existingCategories = categories.filter(cat => cat !== 'all');
+    let categoryOptions = existingCategories.map(cat => {
+        const selected = product && product.category === cat ? 'selected' : '';
+        return `<option value="${cat}" ${selected}>${cat}</option>`;
+    }).join('');
+    
+    const formContent = document.getElementById('product-form-content');
+    formContent.innerHTML = `
+        <div style="margin-bottom:15px;">
+            <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                ${icons.camera}
+                Gambar Produk
+            </div>
+            <div style="border:2px dashed #d9d9d9;border-radius:15px;padding:20px;text-align:center;cursor:pointer;background:#f5f5f5;"
+                onclick="document.getElementById('product-image-input').click()" id="image-upload-area">
+                ${product && product.image ?
+                    `<img src="${product.image}" style="max-width:100%;max-height:140px;border-radius:15px;object-fit:cover;" id="image-preview">` :
+                    `<div style="color:#666;">
+                        <div style="margin-bottom:5px;">
+                            <svg class="icon" viewBox="0 0 24 24" style="width:40px;height:40px;color:#006B54;">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                        </div>
+                        <div>Klik untuk upload gambar</div>
+                        <div style="font-size:12px;margin-top:5px;color:#999;">Rekomendasi: 300x300px</div>
+                    </div>`
+                }
+            </div>
+            <input type="file" id="product-image-input" accept="image/*" style="display:none">
+        </div>
+        
+        <div style="margin-bottom:15px;">
+            <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Nama Produk
+            </div>
+            <input type="text" class="form-input" id="product-name-input" 
+                value="${product ? product.name : ''}" placeholder="Nama produk" required>
+        </div>
+        
+        <div style="margin-bottom:15px;">
+            <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                Kode Produk (${digitConfig.product} digit)
+            </div>
+            <input type="text" class="form-input" id="product-code-input" 
+                value="${product ? product.code : ''}" placeholder="Contoh: 0001" 
+                maxlength="${digitConfig.product}" required>
+            <div id="code-duplicate-warning" style="color:#dc3545;font-size:0.8rem;margin-top:5px;display:none;">
+                ⚠ Kode produk sudah digunakan!
+            </div>
+        </div>
+        
+        <div style="margin-bottom:15px;">
+            <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                    <path d="M10 2v20"/>
+                </svg>
+                Kategori
+            </div>
+            <div style="display:flex;gap:10px;">
+                <select class="form-input" id="product-category-select" onchange="handleCategorySelect()" style="padding-right:40px;">
+                    <option value="">-- Pilih Kategori --</option>
+                    ${categoryOptions}
+                    <option value="_new">${icons.add} Tambah Kategori Baru</option>
+                </select>
+            </div>
+            <div id="new-category-input" style="margin-top:10px;display:none;">
+                <input type="text" class="form-input" id="product-category-new" placeholder="Nama kategori baru">
+            </div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+            <div>
+                <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="9" y1="9" x2="15" y2="15"/>
+                        <line x1="15" y1="9" x2="9" y2="15"/>
+                    </svg>
+                    Flex Code (${digitConfig.flex} digit)
+                </div>
+                <input type="text" class="form-input" id="product-flex-input" 
+                    value="${product ? product.flex : '01'}" placeholder="01" maxlength="${digitConfig.flex}">
+            </div>
+            <div>
+                <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                    Kategori (${digitConfig.category} digit)
+                </div>
+                <input type="text" class="form-input" id="product-catcode-input" 
+                    value="${product ? product.catcode : '01'}" placeholder="01" maxlength="${digitConfig.category}">
+            </div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <button class="form-button-secondary" onclick="closeProductModal()">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#333333;">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                BATAL
+            </button>
+            <button class="form-button-primary" onclick="saveProductHandler()" id="save-product-btn">
+                <svg class="icon icon-sm icon-white" viewBox="0 0 24 24">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                ${isEdit ? 'UPDATE' : 'SIMPAN'}
+            </button>
+        </div>
+    `;
+    
+    const imageInput = document.getElementById('product-image-input');
+    const imageUploadArea = document.getElementById('image-upload-area');
+    const codeInput = document.getElementById('product-code-input');
+    const warningDiv = document.getElementById('code-duplicate-warning');
+    
+    if (codeInput) {
+        codeInput.addEventListener('input', checkDuplicateCode);
+    }
+    
+    if (imageInput) {
+        imageInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (!file.type.match('image.*')) {
+                showNotification('File harus gambar!', 'error');
+                return;
+            }
+            
+            if (file.size > 2 * 1024 * 1024) {
+                showNotification('Maksimal 2MB!', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                imageUploadArea.innerHTML = `<img src="${event.target.result}" style="max-width:100%;max-height:140px;border-radius:15px;object-fit:cover;" id="image-preview">`;
+            };
+            reader.readAsDataURL(file);
+        };
+    }
+    
+    if (product && product.category) {
+        setTimeout(() => {
+            const select = document.getElementById('product-category-select');
+            if (select) select.value = product.category;
+        }, 10);
+    }
+    
+    document.getElementById('product-modal').style.display = 'flex';
 }
-</div>
-<input type="file" id="product-image-input" accept="image/*" style="display:none">
-</div>
-<div style="margin-bottom:15px;">
-<div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-<circle cx="12" cy="7" r="4"/>
-</svg>
-Nama Produk
-</div>
-<input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-name-input" value="${product ? product.name : ''}" placeholder="Nama produk" required>
-</div>
-<div style="margin-bottom:15px;">
-<div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-<path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-</svg>
-Kode Produk (${digitConfig.product} digit)
-</div>
-<input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-code-input" value="${product ? product.code : ''}" placeholder="Contoh: 0001" maxlength="${digitConfig.product}" required>
-<div id="code-duplicate-warning" style="color:#dc3545;font-size:0.8rem;margin-top:5px;display:none;">
-⚠ Kode produk sudah digunakan!
-</div>
-</div>
-<div style="margin-bottom:15px;">
-<div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-<path d="M10 2v20"/>
-</svg>
-Kategori
-</div>
-<div style="display:flex;gap:10px;">
-<select style="flex:1;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-category-select" onchange="handleCategorySelect()">
-<option value="">-- Pilih Kategori --</option>
-${categoryOptions}
-<option value="_new">${icons.add} Tambah Kategori Baru</option>
-</select>
-</div>
-<div id="new-category-input" style="margin-top:10px;display:none;">
-<input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-category-new" placeholder="Nama kategori baru">
-</div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-<div>
-<div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-<line x1="9" y1="9" x2="15" y2="15"/>
-<line x1="15" y1="9" x2="9" y2="15"/>
-</svg>
-Flex Code (${digitConfig.flex} digit)
-</div>
-<input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-flex-input" value="${product ? product.flex : '01'}" placeholder="01" maxlength="${digitConfig.flex}">
-</div>
-<div>
-<div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-</svg>
-Kategori (${digitConfig.category} digit)
-</div>
-<input type="text" style="width:100%;padding:12px;border:1px solid #333333;border-radius:15px;font-size:1rem;background:#FFFFFF;"
-id="product-catcode-input" value="${product ? product.catcode : '01'}" placeholder="01" maxlength="${digitConfig.category}">
-</div>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-<button style="padding:14px;border:none;border-radius:15px;background:#d9d9d9;color:#333333;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #d9d9d9;" onclick="closeProductModal()">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#333333;">
-<line x1="18" y1="6" x2="6" y2="18"/>
-<line x1="6" y1="6" x2="18" y2="18"/>
-</svg>
-BATAL
-</button>
-<button style="padding:14px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #006B54;" onclick="saveProduct()" id="save-product-btn">
-<svg class="icon icon-sm icon-white" viewBox="0 0 24 24">
-<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-<polyline points="17 21 17 13 7 13 7 21"/>
-<polyline points="7 3 7 8 15 8"/>
-</svg>
-${isEdit ? 'UPDATE' : 'SIMPAN'}
-</button>
-</div>
-`;
-const imageInput = document.getElementById('product-image-input');
-const imageUploadArea = document.getElementById('image-upload-area');
-const codeInput = document.getElementById('product-code-input');
-const warningDiv = document.getElementById('code-duplicate-warning');
-// Add event listener to check for duplicate code
-if (codeInput) {
-codeInput.addEventListener('input', checkDuplicateCode);
-}
-imageInput.onchange = function(e) {
-const file = e.target.files[0];
-if (!file) return;
-if (!file.type.match('image.*')) {
-showNotification('File harus gambar!', 'error');
-return;
-}
-if (file.size > 2 * 1024 * 1024) {
-showNotification('Maksimal 2MB!', 'error');
-return;
-}
-const reader = new FileReader();
-reader.onload = function(event) {
-imageUploadArea.innerHTML = `<img src="${event.target.result}" style="max-width:100%;max-height:140px;border-radius:15px;object-fit:cover;" id="image-preview">`;
-};
-reader.readAsDataURL(file);
-};
-if (product && product.category) {
-setTimeout(() => {
-const select = document.getElementById('product-category-select');
-if (select) select.value = product.category;
-}, 10);
-}
-document.getElementById('product-modal').style.display = 'flex';
-}
-// Check for duplicate product code
+
 function checkDuplicateCode() {
-const codeInput = document.getElementById('product-code-input');
-const warningDiv = document.getElementById('code-duplicate-warning');
-const saveButton = document.getElementById('save-product-btn');
-if (!codeInput || !warningDiv || !saveButton) return;
-const enteredCode = codeInput.value.trim();
-if (enteredCode.length === 0) {
-warningDiv.style.display = 'none';
-saveButton.disabled = false;
-saveButton.style.opacity = '1';
-return;
+    const codeInput = document.getElementById('product-code-input');
+    const warningDiv = document.getElementById('code-duplicate-warning');
+    const saveButton = document.getElementById('save-product-btn');
+    
+    if (!codeInput || !warningDiv || !saveButton) return;
+    
+    const enteredCode = codeInput.value.trim();
+    if (enteredCode.length === 0) {
+        warningDiv.style.display = 'none';
+        saveButton.disabled = false;
+        saveButton.style.opacity = '1';
+        return;
+    }
+    
+    const duplicateProduct = products.find(p => {
+        if (editingProductId && p.id === editingProductId) {
+            return false;
+        }
+        return p.code === enteredCode;
+    });
+    
+    if (duplicateProduct) {
+        warningDiv.style.display = 'block';
+        saveButton.disabled = true;
+        saveButton.style.opacity = '0.6';
+    } else {
+        warningDiv.style.display = 'none';
+        saveButton.disabled = false;
+        saveButton.style.opacity = '1';
+    }
 }
-// Check if code already exists (excluding the current product being edited)
-const duplicateProduct = products.find(p => {
-// If editing, exclude the current product from the check
-if (editingProductId && p.id === editingProductId) {
-return false;
-}
-return p.code === enteredCode;
-});
-if (duplicateProduct) {
-warningDiv.style.display = 'block';
-saveButton.disabled = true;
-saveButton.style.opacity = '0.6';
-} else {
-warningDiv.style.display = 'none';
-saveButton.disabled = false;
-saveButton.style.opacity = '1';
-}
-}
-// Handle category selection
+
 function handleCategorySelect() {
-const select = document.getElementById('product-category-select');
-const newCategoryDiv = document.getElementById('new-category-input');
-if (select.value === '_new') {
-newCategoryDiv.style.display = 'block';
-if (document.getElementById('product-category-new')) {
-document.getElementById('product-category-new').focus();
+    const select = document.getElementById('product-category-select');
+    const newCategoryDiv = document.getElementById('new-category-input');
+    
+    if (select.value === '_new') {
+        newCategoryDiv.style.display = 'block';
+        if (document.getElementById('product-category-new')) {
+            document.getElementById('product-category-new').focus();
+        }
+    } else {
+        newCategoryDiv.style.display = 'none';
+    }
 }
-} else {
-newCategoryDiv.style.display = 'none';
+
+async function saveProductHandler() {
+    const name = document.getElementById('product-name-input')?.value.trim();
+    const code = document.getElementById('product-code-input')?.value.trim();
+    const categorySelect = document.getElementById('product-category-select');
+    let category = categorySelect?.value;
+    
+    if (category === '_new') {
+        category = document.getElementById('product-category-new')?.value.trim();
+    }
+    
+    const flex = document.getElementById('product-flex-input')?.value.trim();
+    const catcode = document.getElementById('product-catcode-input')?.value.trim();
+    
+    if (!name || !code || !category) {
+        showNotification('Isi nama, kode, dan kategori!', 'error');
+        return;
+    }
+    
+    if (code.length !== digitConfig.product) {
+        showNotification(`Kode harus ${digitConfig.product} digit!`, 'error');
+        return;
+    }
+    
+    const duplicateProduct = products.find(p => {
+        if (editingProductId && p.id === editingProductId) return false;
+        return p.code === code;
+    });
+    
+    if (duplicateProduct) {
+        showNotification('Kode produk sudah digunakan!', 'error');
+        return;
+    }
+    
+    const imagePreview = document.getElementById('image-preview');
+    let imageData = '';
+    
+    if (imagePreview && imagePreview.src) {
+        imageData = imagePreview.src;
+    } else if (editingProductId) {
+        const existingProduct = products.find(p => p.id === editingProductId);
+        imageData = existingProduct ? existingProduct.image : '';
+    } else {
+        imageData = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f5f5f5'/%3E%3Crect x='50' y='80' width='200' height='140' fill='%23006B54' rx='15'/%3E%3Ccircle cx='150' cy='150' r='50' fill='%23d9d9d9'/%3E%3Cpath d='M130 140 L150 160 L180 120' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E";
+    }
+    
+    const productData = {
+        id: editingProductId || undefined,
+        name,
+        code: code.padStart(digitConfig.product, '0'),
+        category,
+        flex: flex.padStart(digitConfig.flex, '0'),
+        catcode: catcode.padStart(digitConfig.category, '0'),
+        image: imageData
+    };
+    
+    try {
+        const savedProduct = await saveProduct(productData);
+        
+        if (editingProductId) {
+            const index = products.findIndex(p => p.id === editingProductId);
+            if (index !== -1) {
+                products[index] = savedProduct;
+            }
+        } else {
+            products.push(savedProduct);
+        }
+        
+        await loadCategories();
+        renderCategories();
+        renderProducts();
+        
+        showNotification(editingProductId ? 'Produk diperbarui!' : 'Produk ditambahkan!', 'success');
+        closeProductModal();
+    } catch (error) {
+        console.error('Error saving product:', error);
+        showNotification('Gagal menyimpan produk: ' + error.message, 'error');
+    }
 }
-}
-// Save Product - FIXED: Menggunakan digitConfig untuk padStart
-function saveProduct() {
-const name = document.getElementById('product-name-input').value.trim();
-const code = document.getElementById('product-code-input').value.trim();
-// Check for duplicate code (final check)
-const duplicateProduct = products.find(p => {
-if (editingProductId && p.id === editingProductId) {
-return false;
-}
-return p.code === code;
-});
-if (duplicateProduct) {
-showNotification('Kode produk sudah digunakan! Gunakan kode yang berbeda.', 'error');
-return;
-}
-const categorySelect = document.getElementById('product-category-select');
-let category = categorySelect.value;
-if (category === '_new') {
-category = document.getElementById('product-category-new').value.trim();
-// Add new category to categories array if it doesn't exist
-if (category && !categories.includes(category) && category !== 'all') {
-categories.push(category);
-saveCategories();
-}
-}
-const flex = document.getElementById('product-flex-input').value.trim();
-const catcode = document.getElementById('product-catcode-input').value.trim();
-const imagePreview = document.getElementById('image-preview');
-if (!name || !code || !category) {
-showNotification('Isi nama, kode, dan kategori!', 'error');
-return;
-}
-// PERBAIKAN: Validasi panjang kode sesuai digitConfig
-if (code.length !== digitConfig.product) {
-showNotification(`Kode harus ${digitConfig.product} digit!`, 'error');
-return;
-}
-let imageData = '';
-if (imagePreview && imagePreview.src) {
-imageData = imagePreview.src;
-} else if (editingProductId) {
-const existingProduct = products.find(p => p.id === editingProductId);
-imageData = existingProduct ? existingProduct.image : '';
-} else {
-imageData = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f5f5f5'/%3E%3Crect x='50' y='80' width='200' height='140' fill='%23006B54' rx='15'/%3E%3Ccircle cx='150' cy='150' r='50' fill='%23d9d9d9'/%3E%3Cpath d='M130 140 L150 160 L180 120' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E";
-}
-// PERBAIKAN: Menggunakan digitConfig untuk padStart
-const productData = {
-id: editingProductId || Date.now(),
-name,
-code: code.padStart(digitConfig.product, '0'),
-category,
-flex: flex.padStart(digitConfig.flex, '0'),
-catcode: catcode.padStart(digitConfig.category, '0'),
-image: imageData
-};
-if (editingProductId) {
-const index = products.findIndex(p => p.id === editingProductId);
-if (index !== -1) {
-products[index] = productData;
-}
-} else {
-products.push(productData);
-}
-saveProducts();
-showNotification(editingProductId ? 'Produk diperbarui!' : 'Produk ditambahkan!');
-closeProductModal();
-}
-// Close Product Modal
+
 function closeProductModal() {
-document.getElementById('product-modal').style.display = 'none';
-editingProductId = null;
+    document.getElementById('product-modal').style.display = 'none';
+    editingProductId = null;
 }
-// Show Weight Modal
+
+// ==================== WEIGHT MODAL FUNCTIONS ====================
 function showWeightModal() {
-if (!currentProduct) return;
-const productInfo = document.getElementById('selected-product-info');
-productInfo.innerHTML = `
-<img src="${currentProduct.image}" alt="${currentProduct.name}" class="product-thumbnail">
-<div class="product-details">
-<h4>${currentProduct.name}</h4>
-<div class="code">${currentProduct.code} | ${currentProduct.category}</div>
-</div>
-`;
-document.getElementById('display-product-code').textContent = currentProduct.code;
-weightValue = '';
-document.getElementById('display-weight').textContent = '0';
-document.getElementById('display-barcode').textContent = '-';
-const barcodeSvg = document.getElementById('barcode-svg');
-barcodeSvg.innerHTML = '';
-document.getElementById('current-barcode').textContent = 'Klik GENERATE untuk membuat barcode';
-currentBarcodeData = '';
-updatePrinterButton();
-document.getElementById('weight-modal').style.display = 'flex';
+    if (!currentProduct) return;
+    
+    const productInfo = document.getElementById('selected-product-info');
+    productInfo.innerHTML = `
+        <img src="${currentProduct.image}" alt="${currentProduct.name}" class="product-thumbnail">
+        <div class="product-details">
+            <h4>${currentProduct.name}</h4>
+            <div class="code">${currentProduct.code} | ${currentProduct.category}</div>
+        </div>
+    `;
+    
+    document.getElementById('display-product-code').textContent = currentProduct.code;
+    weightValue = '';
+    document.getElementById('display-weight').textContent = '0';
+    document.getElementById('display-barcode').textContent = '-';
+    const barcodeSvg = document.getElementById('barcode-svg');
+    barcodeSvg.innerHTML = '';
+    document.getElementById('current-barcode').textContent = 'Klik GENERATE untuk membuat barcode';
+    currentBarcodeData = '';
+    updatePrinterButton();
+    
+    document.getElementById('weight-modal').style.display = 'flex';
 }
-// Close Weight Modal
+
 function closeWeightModal() {
-document.getElementById('weight-modal').style.display = 'none';
-currentProduct = null;
-weightValue = '';
-document.querySelectorAll('.product-card.selected').forEach(c => {
-c.classList.remove('selected');
-});
+    document.getElementById('weight-modal').style.display = 'none';
+    currentProduct = null;
+    weightValue = '';
+    document.querySelectorAll('.product-card.selected').forEach(c => {
+        c.classList.remove('selected');
+    });
 }
-// Number Pad Functions
+
 function appendNumber(num) {
-if (num === '00') {
-if (weightValue.length <= digitConfig.weight - 2) {
-weightValue += '00';
+    if (num === '00') {
+        if (weightValue.length <= digitConfig.weight - 2) {
+            weightValue += '00';
+        }
+    } else if (weightValue.length < digitConfig.weight) {
+        weightValue += num;
+    }
+    const displayWeight = weightValue || '0';
+    document.getElementById('display-weight').textContent = displayWeight;
 }
-} else if (weightValue.length < digitConfig.weight) {
-weightValue += num;
-}
-const displayWeight = weightValue || '0';
-document.getElementById('display-weight').textContent = displayWeight;
-}
+
 function clearWeight() {
-weightValue = '';
-document.getElementById('display-weight').textContent = '0';
+    weightValue = '';
+    document.getElementById('display-weight').textContent = '0';
 }
+
 function backspaceWeight() {
-if (weightValue.length > 0) {
-weightValue = weightValue.slice(0, -1);
+    if (weightValue.length > 0) {
+        weightValue = weightValue.slice(0, -1);
+    }
+    const displayWeight = weightValue || '0';
+    document.getElementById('display-weight').textContent = displayWeight;
 }
-const displayWeight = weightValue || '0';
-document.getElementById('display-weight').textContent = displayWeight;
+
+// ==================== PRINTER FUNCTIONS ====================
+function initPrinterConnection() {
+    const savedConnection = localStorage.getItem('printerConnection');
+    if (savedConnection) {
+        try {
+            const connectionData = JSON.parse(savedConnection);
+            const savedTime = new Date(connectionData.timestamp);
+            const currentTime = new Date();
+            const minutesDifference = (currentTime - savedTime) / (1000 * 60);
+            
+            if (connectionData.isPrinterConnected && minutesDifference < 5) {
+                isPrinterConnected = false;
+                updatePrinterLED(false);
+                updatePrinterButton();
+                setTimeout(() => {
+                    autoReconnectPrinter();
+                }, 1000);
+            } else {
+                isPrinterConnected = false;
+                updatePrinterLED(false);
+                updatePrinterButton();
+                localStorage.removeItem('printerConnection');
+            }
+        } catch (e) {
+            console.error('Error loading printer connection:', e);
+            isPrinterConnected = false;
+            updatePrinterLED(false);
+            updatePrinterButton();
+        }
+    } else {
+        isPrinterConnected = false;
+        updatePrinterLED(false);
+        updatePrinterButton();
+    }
 }
-// Printer Functions
+
+async function autoReconnectPrinter() {
+    if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        return;
+    }
+    
+    try {
+        if (!("serial" in navigator)) {
+            return;
+        }
+        
+        const ports = await navigator.serial.getPorts();
+        if (ports.length === 0) {
+            showNotification('Printer perlu dihubungkan kembali setelah refresh halaman', 'info');
+            return;
+        }
+        
+        port = ports[0];
+        
+        if (port.readable || port.writable) {
+            writer = port.writable.getWriter();
+            isPrinterConnected = true;
+            reconnectAttempts = 0;
+            updatePrinterLED(true);
+            updatePrinterButton();
+            savePrinterConnection();
+            showNotification('Printer berhasil terhubung ulang!', 'success');
+            port.addEventListener('disconnect', handlePrinterDisconnect);
+            return;
+        }
+        
+        await port.open({ baudRate: 9600 });
+        writer = port.writable.getWriter();
+        isPrinterConnected = true;
+        reconnectAttempts = 0;
+        updatePrinterLED(true);
+        updatePrinterButton();
+        savePrinterConnection();
+        showNotification('Printer berhasil terhubung ulang!', 'success');
+        port.addEventListener('disconnect', handlePrinterDisconnect);
+    } catch (error) {
+        console.error("Auto-reconnect error:", error);
+        reconnectAttempts++;
+        if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+            setTimeout(() => {
+                autoReconnectPrinter();
+            }, 2000);
+        } else {
+            showNotification('Gagal menghubungkan ulang ke printer. Silakan hubungkan manual.', 'error');
+            isPrinterConnected = false;
+            updatePrinterLED(false);
+            updatePrinterButton();
+        }
+    }
+}
+
+function handlePrinterDisconnect() {
+    isPrinterConnected = false;
+    port = null;
+    writer = null;
+    updatePrinterLED(false);
+    updatePrinterButton();
+    savePrinterConnection();
+    showNotification('Printer terputus!', 'error');
+}
+
+function savePrinterConnection() {
+    const connectionData = {
+        isPrinterConnected: isPrinterConnected,
+        timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('printerConnection', JSON.stringify(connectionData));
+}
+
+function updatePrinterLED(connected) {
+    const printerLED = document.getElementById('printer-led');
+    const statusText = document.getElementById('printer-status-text');
+    if (printerLED) {
+        if (connected) {
+            printerLED.className = 'printer-led connected';
+            if (statusText) statusText.textContent = 'Printer Online';
+        } else {
+            printerLED.className = 'printer-led disconnected';
+            if (statusText) statusText.textContent = 'Printer Offline';
+        }
+    }
+}
+
+function updatePrinterButton() {
+    const connectBtn = document.getElementById('connect-btn');
+    if (!connectBtn) return;
+    
+    if (isPrinterConnected) {
+        connectBtn.innerHTML = `
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+            DISCONNECT
+        `;
+        connectBtn.onclick = disconnectFromPrinter;
+    } else {
+        connectBtn.innerHTML = `
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+            CONNECT
+        `;
+        connectBtn.onclick = connectToPrinter;
+    }
+}
+
+function togglePrinterConnection() {
+    if (isPrinterConnected) {
+        disconnectFromPrinter();
+    } else {
+        connectToPrinter();
+    }
+}
+
 async function connectToPrinter() {
-try {
-if (!("serial" in navigator)) {
-showNotification("Browser tidak mendukung Web Serial API. Gunakan Chrome/Edge.", 'error');
-return false;
+    try {
+        if (!("serial" in navigator)) {
+            showNotification("Browser tidak mendukung Web Serial API. Gunakan Chrome/Edge.", 'error');
+            return false;
+        }
+        
+        showNotification("Memilih printer...");
+        port = await navigator.serial.requestPort();
+        showNotification("Membuka koneksi...");
+        await port.open({ baudRate: 9600 });
+        writer = port.writable.getWriter();
+        isPrinterConnected = true;
+        reconnectAttempts = 0;
+        updatePrinterLED(true);
+        updatePrinterButton();
+        savePrinterConnection();
+        showNotification('Printer Connected!', 'success');
+        port.addEventListener('disconnect', handlePrinterDisconnect);
+        return true;
+    } catch (error) {
+        console.error("Connection error:", error);
+        if (error.name === 'NotFoundError') {
+            showNotification("Tidak ada printer yang dipilih", 'error');
+        } else if (error.name === 'InvalidStateError') {
+            showNotification("Printer sudah terhubung", 'error');
+        } else {
+            showNotification("Gagal terhubung ke printer: " + error.message, 'error');
+        }
+        isPrinterConnected = false;
+        updatePrinterLED(false);
+        updatePrinterButton();
+        return false;
+    }
 }
-showNotification("Memilih printer...");
-port = await navigator.serial.requestPort();
-showNotification("Membuka koneksi...");
-await port.open({ baudRate: 9600 });
-writer = port.writable.getWriter();
-isPrinterConnected = true;
-reconnectAttempts = 0;
-updatePrinterLED(true);
-updatePrinterButton();
-savePrinterConnection();
-showNotification('Printer Connected!', 'success');
-// Listen for disconnect events
-port.addEventListener('disconnect', handlePrinterDisconnect);
-return true;
-} catch (error) {
-console.error("Connection error:", error);
-if (error.name === 'NotFoundError') {
-showNotification("Tidak ada printer yang dipilih", 'error');
-} else if (error.name === 'InvalidStateError') {
-showNotification("Printer sudah terhubung", 'error');
-} else {
-showNotification("Gagal terhubung ke printer: " + error.message, 'error');
-}
-isPrinterConnected = false;
-updatePrinterLED(false);
-updatePrinterButton();
-return false;
-}
-}
-// Disconnect from printer
+
 async function disconnectFromPrinter() {
-try {
-if (writer) {
-writer.releaseLock();
-writer = null;
+    try {
+        if (writer) {
+            writer.releaseLock();
+            writer = null;
+        }
+        if (port) {
+            await port.close();
+            port = null;
+        }
+        isPrinterConnected = false;
+        reconnectAttempts = 0;
+        updatePrinterLED(false);
+        updatePrinterButton();
+        savePrinterConnection();
+        showNotification('Printer disconnected', 'success');
+    } catch (error) {
+        console.error("Disconnection error:", error);
+        isPrinterConnected = false;
+        updatePrinterLED(false);
+        updatePrinterButton();
+        savePrinterConnection();
+        showNotification('Printer disconnected', 'success');
+    }
 }
-if (port) {
-await port.close();
-port = null;
-}
-isPrinterConnected = false;
-reconnectAttempts = 0;
-updatePrinterLED(false);
-updatePrinterButton();
-savePrinterConnection();
-showNotification('Printer disconnected', 'success');
-} catch (error) {
-console.error("Disconnection error:", error);
-isPrinterConnected = false;
-updatePrinterLED(false);
-updatePrinterButton();
-savePrinterConnection();
-showNotification('Printer disconnected', 'success');
-}
-}
-// Generate Barcode
+
+// ==================== BARCODE FUNCTIONS ====================
 function generateBarcode() {
-if (!currentProduct) {
-showNotification('Pilih produk terlebih dahulu!', 'error');
-return;
+    if (!currentProduct) {
+        showNotification('Pilih produk terlebih dahulu!', 'error');
+        return;
+    }
+    
+    if (!weightValue || weightValue === '0') {
+        showNotification('Masukkan berat terlebih dahulu!', 'error');
+        return;
+    }
+    
+    currentBarcodeData =
+        currentProduct.flex.padStart(digitConfig.flex, '0') +
+        currentProduct.catcode.padStart(digitConfig.category, '0') +
+        currentProduct.code.padStart(digitConfig.product, '0') +
+        weightValue.padStart(digitConfig.weight, '0');
+    
+    const totalDigits = digitConfig.flex + digitConfig.category + digitConfig.product + digitConfig.weight;
+    if (currentBarcodeData.length !== totalDigits) {
+        showNotification(`Pastikan semua field terisi. Total harus ${totalDigits} digit`, 'error');
+        return;
+    }
+    
+    const barcodeSvg = document.getElementById('barcode-svg');
+    barcodeSvg.innerHTML = '';
+    try {
+        JsBarcode("#barcode-svg", currentBarcodeData, {
+            format: "CODE128",
+            displayValue: true,
+            fontSize: 16,
+            height: 60,
+            margin: 10,
+            background: "white",
+            lineColor: "#000000",
+            width: 2
+        });
+        document.getElementById('display-barcode').textContent = currentBarcodeData;
+        document.getElementById('current-barcode').textContent = currentBarcodeData;
+        showNotification('Barcode berhasil digenerate!', 'success');
+    } catch (error) {
+        console.error("Barcode generation error:", error);
+        showNotification('Gagal membuat barcode: ' + error.message, 'error');
+    }
 }
-if (!weightValue || weightValue === '0') {
-showNotification('Masukkan berat terlebih dahulu!', 'error');
-return;
-}
-currentBarcodeData =
-currentProduct.flex.padStart(digitConfig.flex, '0') +
-currentProduct.catcode.padStart(digitConfig.category, '0') +
-currentProduct.code.padStart(digitConfig.product, '0') +
-weightValue.padStart(digitConfig.weight, '0');
-const totalDigits = digitConfig.flex + digitConfig.category + digitConfig.product + digitConfig.weight;
-if (currentBarcodeData.length !== totalDigits) {
-showNotification(`Pastikan semua field terisi. Total harus ${totalDigits} digit`, 'error');
-return;
-}
-const barcodeSvg = document.getElementById('barcode-svg');
-barcodeSvg.innerHTML = '';
-try {
-JsBarcode("#barcode-svg", currentBarcodeData, {
-format: "CODE128",
-displayValue: true,
-fontSize: 16,
-height: 60,
-margin: 10,
-background: "white",
-lineColor: "#000000",
-width: 2
-});
-document.getElementById('display-barcode').textContent = currentBarcodeData;
-document.getElementById('current-barcode').textContent = currentBarcodeData;
-showNotification('Barcode berhasil digenerate!', 'success');
-} catch (error) {
-console.error("Barcode generation error:", error);
-showNotification('Gagal membuat barcode: ' + error.message, 'error');
-}
-}
-// Print Barcode
+
 async function printBarcode() {
-try {
-if (!currentProduct || !weightValue) {
-showNotification('Harap isi berat terlebih dahulu dan generate barcode', 'error');
-return;
+    try {
+        if (!currentProduct || !weightValue) {
+            showNotification('Harap isi berat terlebih dahulu dan generate barcode', 'error');
+            return;
+        }
+        
+        if (!currentBarcodeData) {
+            showNotification('Generate barcode terlebih dahulu!', 'error');
+            return;
+        }
+        
+        if (!isPrinterConnected || !writer) {
+            showNotification('Printer belum terhubung. Klik CONNECT dulu.', 'error');
+            return;
+        }
+        
+        showNotification("Mengirim data ke printer...");
+        
+        const esc = '\x1B';
+        const gs = '\x1D';
+        const lf = '\x0A';
+        
+        let data = esc + '@';
+        data += esc + 'a' + '\x01';
+        data += `[${currentProduct.flex.padStart(digitConfig.flex, '0')}][${currentProduct.catcode.padStart(digitConfig.category, '0')}]` +
+                `[${currentProduct.code.padStart(digitConfig.product, '0')}][${weightValue.padStart(digitConfig.weight, '0')}]${lf}`;
+        data += lf;
+        data += esc + 'a' + '\x01';
+        data += gs + 'h' + '\x50';
+        data += gs + 'w' + '\x02';
+        data += gs + 'k' + '\x49';
+        data += String.fromCharCode(currentBarcodeData.length);
+        data += currentBarcodeData;
+        data += lf;
+        data += lf + lf;
+        data += gs + 'V' + '\x41' + '\x00';
+        
+        const encoder = new TextEncoder();
+        const encodedData = encoder.encode(data);
+        await writer.write(encodedData);
+        
+        await savePrintHistory(currentBarcodeData, currentProduct.name, weightValue);
+        showNotification('Barcode berhasil dicetak!', 'success');
+    } catch (error) {
+        console.error("Print error:", error);
+        showNotification("Gagal mengirim ke printer: " + error.message, 'error');
+        if (error.message.includes("closed") || error.message.includes("disconnected") || error.name === 'NetworkError') {
+            handlePrinterDisconnect();
+        }
+    }
 }
-if (!currentBarcodeData) {
-showNotification('Generate barcode terlebih dahulu!', 'error');
-return;
-}
-if (!isPrinterConnected || !writer) {
-showNotification('Printer belum terhubung. Klik CONNECT dulu.', 'error');
-return;
-}
-showNotification("Mengirim data ke printer...");
-const esc = '\x1B';
-const gs = '\x1D';
-const lf = '\x0A';
-let data = esc + '@';
-data += esc + 'a' + '\x01';
-data += `[${currentProduct.flex.padStart(digitConfig.flex, '0')}][${currentProduct.catcode.padStart(digitConfig.category, '0')}]` +
-`[${currentProduct.code.padStart(digitConfig.product, '0')}][${weightValue.padStart(digitConfig.weight, '0')}]${lf}`;
-data += lf;
-data += esc + 'a' + '\x01';
-data += gs + 'h' + '\x50';
-data += gs + 'w' + '\x02';
-data += gs + 'k' + '\x49';
-data += String.fromCharCode(currentBarcodeData.length);
-data += currentBarcodeData;
-data += lf;
-data += lf + lf;
-data += gs + 'V' + '\x41' + '\x00';
-const encoder = new TextEncoder();
-const encodedData = encoder.encode(data);
-await writer.write(encodedData);
-showNotification('Barcode berhasil dicetak!', 'success');
-} catch (error) {
-console.error("Print error:", error);
-showNotification("Gagal mengirim ke printer: " + error.message, 'error');
-if (error.message.includes("closed") || error.message.includes("disconnected") || error.name === 'NetworkError') {
-handlePrinterDisconnect();
-}
-}
-}
-// Settings Modal - IMPROVED CATEGORY MANAGEMENT
+
+// ==================== SETTINGS MODAL FUNCTIONS ====================
 function showSettingsModal() {
-const settingsContent = document.getElementById('settings-content');
-const uniqueCategories = categories.filter(c => c !== 'all');
-const totalDigits = digitConfig.flex + digitConfig.category + digitConfig.product + digitConfig.weight;
-const isValid = totalDigits === 13;
-let categoryListHTML = '';
-if (uniqueCategories.length > 0) {
-uniqueCategories.forEach(cat => {
-categoryListHTML += `
-<div class="category-item">
-<span style="font-weight:500;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="width:14px;height:14px;opacity:0.7;color:#006B54;">
-<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-<path d="M10 2v20"/>
-</svg>
-${cat}
-</span>
-<div class="category-actions">
-<button style="padding:5px 10px;border:none;border-radius:15px;background:#006B54;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;border:1px solid #006B54;"
-onclick="editCategory('${cat}')">
-${icons.edit}
-Edit
-</button>
-<button style="padding:5px 10px;border:none;border-radius:15px;background:#ff6b6b;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;border:1px solid #ff6b6b;"
-onclick="deleteCategory('${cat}')">
-${icons.delete}
-Hapus
-</button>
-</div>
-</div>
-`;
-});
-} else {
-categoryListHTML = '<div style="text-align:center;color:#999;padding:10px;">Belum ada kategori</div>';
+    const settingsContent = document.getElementById('settings-content');
+    const uniqueCategories = categories.filter(c => c !== 'all');
+    const totalDigits = digitConfig.flex + digitConfig.category + digitConfig.product + digitConfig.weight;
+    const isValid = totalDigits === 13;
+    
+    let categoryListHTML = '';
+    if (uniqueCategories.length > 0) {
+        uniqueCategories.forEach(cat => {
+            categoryListHTML += `
+                <div class="category-item">
+                    <span style="font-weight:500;display:flex;align-items:center;gap:8px;">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="width:14px;height:14px;opacity:0.7;color:#006B54;">
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                            <path d="M10 2v20"/>
+                        </svg>
+                        ${cat}
+                    </span>
+                    <div class="category-actions">
+                        <button style="padding:5px 10px;border:none;border-radius:15px;background:#006B54;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;border:1px solid #006B54;"
+                            onclick="editCategoryHandler('${cat}')">
+                            ${icons.edit}
+                            Edit
+                        </button>
+                        <button style="padding:5px 10px;border:none;border-radius:15px;background:#ff6b6b;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;border:1px solid #ff6b6b;"
+                            onclick="deleteCategoryHandler('${cat}')">
+                            ${icons.delete}
+                            Hapus
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        categoryListHTML = '<div style="text-align:center;color:#999;padding:10px;">Belum ada kategori</div>';
+    }
+    
+    settingsContent.innerHTML = `
+        <div style="margin-bottom:20px;">
+            <div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
+                Konfigurasi Digit Barcode
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
+                <div>
+                    <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Flex</div>
+                    <input type="number" class="setting-input" id="flex-digits" value="${digitConfig.flex}" min="1" max="5">
+                </div>
+                <div>
+                    <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Kategori</div>
+                    <input type="number" class="setting-input" id="category-digits" value="${digitConfig.category}" min="1" max="5">
+                </div>
+                <div>
+                    <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Produk</div>
+                    <input type="number" class="setting-input" id="product-digits" value="${digitConfig.product}" min="1" max="5">
+                </div>
+                <div>
+                    <div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Berat</div>
+                    <input type="number" class="setting-input" id="weight-digits" value="${digitConfig.weight}" min="1" max="5">
+                </div>
+            </div>
+            <div class="digit-summary" style="background:${isValid ? '#f5f5f5' : '#ffe6e6'};border-color:${isValid ? '#d9d9d9' : '#ffcccc'};">
+                <div style="font-weight:600;margin-bottom:5px;color:${isValid ? '#155724' : '#721c24'}">
+                    Total Digit: ${totalDigits}
+                </div>
+                <div style="font-size:0.9rem;color:${isValid ? '#155724' : '#721c24'}">
+                    ${isValid ? '✓ Format barcode valid (13 digit)' : '⚠ Harus tepat 13 digit!'}
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom:20px;">
+            <div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                    <path d="M10 2v20"/>
+                </svg>
+                Manajemen Kategori
+            </div>
+            <div style="background:#f5f5f5;padding:15px;border-radius:15px;margin-bottom:10px;">
+                <div style="display:flex;gap:10px;margin-bottom:10px;">
+                    <input type="text" class="form-input" id="new-category-input-settings" placeholder="Nama kategori baru">
+                    <button style="padding:10px 15px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;border:1px solid #006B54;"
+                        onclick="addNewCategoryFromSettings()">
+                        ${icons.add}
+                        Tambah
+                    </button>
+                </div>
+                <div style="max-height:200px;overflow-y:auto;margin-top:10px;" id="categories-list">
+                    ${categoryListHTML}
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-bottom:20px;">
+            <div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Manajemen Data
+            </div>
+            <button style="width:100%;padding:12px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #006B54;"
+                onclick="exportData()">
+                ${icons.upload}
+                Export Data Produk
+            </button>
+            <button style="width:100%;padding:12px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #006B54;"
+                onclick="importData()">
+                ${icons.download}
+                Import Data Produk
+            </button>
+            <button style="width:100%;padding:12px;border:none;border-radius:15px;background:#ff6b6b;color:white;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #ff6b6b;"
+                onclick="clearAllData()">
+                ${icons.delete}
+                Hapus Semua Data
+            </button>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <button class="form-button-secondary" onclick="closeSettingsModal()">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#333333;">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                BATAL
+            </button>
+            <button class="form-button-primary" onclick="saveSettingsConfig()">
+                <svg class="icon icon-sm icon-white" viewBox="0 0 24 24">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                SIMPAN
+            </button>
+        </div>
+    `;
+    
+    const inputs = ['flex-digits', 'category-digits', 'product-digits', 'weight-digits'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateDigitSummary);
+    });
+    
+    document.getElementById('settings-modal').style.display = 'flex';
 }
-settingsContent.innerHTML = `
-<div style="margin-bottom:20px;">
-<div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-<path d="M12 20h9"/>
-<path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-</svg>
-Konfigurasi Digit Barcode
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
-<div>
-<div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Flex</div>
-<input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="flex-digits" value="${digitConfig.flex}" min="1" max="5">
-</div>
-<div>
-<div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Kategori</div>
-<input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="category-digits" value="${digitConfig.category}" min="1" max="5">
-</div>
-<div>
-<div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Produk</div>
-<input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="product-digits" value="${digitConfig.product}" min="1" max="5">
-</div>
-<div>
-<div style="color:#333333;margin-bottom:5px;font-weight:500;">Digit Berat</div>
-<input type="number" style="width:100%;padding:10px;border:1px solid #333333;border-radius:15px;text-align:center;background:#FFFFFF;"
-id="weight-digits" value="${digitConfig.weight}" min="1" max="5">
-</div>
-</div>
-<div class="digit-summary" style="background:${isValid ? '#f5f5f5' : '#ffe6e6'};border-color:${isValid ? '#d9d9d9' : '#ffcccc'};">
-<div style="font-weight:600;margin-bottom:5px;color:${isValid ? '#155724' : '#721c24'}">
-Total Digit: ${totalDigits}
-</div>
-<div style="font-size:0.9rem;color:${isValid ? '#155724' : '#721c24'}">
-${isValid ? '✓ Format barcode valid (13 digit)' : '⚠ Harus tepat 13 digit!'}
-</div>
-</div>
-</div>
-<div style="margin-bottom:20px;">
-<div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-<path d="M10 2v20"/>
-</svg>
-Manajemen Kategori
-</div>
-<div style="background:#f5f5f5;padding:15px;border-radius:15px;margin-bottom:10px;">
-<div style="display:flex;gap:10px;margin-bottom:10px;">
-<input type="text" style="flex:1;padding:10px;border:1px solid #333333;border-radius:15px;background:#FFFFFF;"
-id="new-category-input-settings" placeholder="Nama kategori baru">
-<button style="padding:10px 15px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;border:1px solid #006B54;"
-onclick="addNewCategoryFromSettings()">
-${icons.add}
-Tambah
-</button>
-</div>
-<div style="max-height:200px;overflow-y:auto;margin-top:10px;" id="categories-list">
-${categoryListHTML}
-</div>
-</div>
-</div>
-<div style="margin-bottom:20px;">
-<div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-<polyline points="17 8 12 3 7 8"/>
-<line x1="12" y1="3" x2="12" y2="15"/>
-</svg>
-Manajemen Data
-</div>
-<button style="width:100%;padding:12px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #006B54;"
-onclick="exportData()">
-${icons.upload}
-Export Data Produk
-</button>
-<button style="width:100%;padding:12px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #006B54;"
-onclick="importData()">
-${icons.download}
-Import Data Produk
-</button>
-<button style="width:100%;padding:12px;border:none;border-radius:15px;background:#ff6b6b;color:white;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #ff6b6b;"
-onclick="clearAllData()">
-${icons.delete}
-Hapus Semua Data
-</button>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-<button style="padding:14px;border:none;border-radius:15px;background:#d9d9d9;color:#333333;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #d9d9d9;"
-onclick="closeSettingsModal()">
-<svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#333333;">
-<line x1="18" y1="6" x2="6" y2="18"/>
-<line x1="6" y1="6" x2="18" y2="18"/>
-</svg>
-BATAL
-</button>
-<button style="padding:14px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #006B54;"
-onclick="saveSettingsConfig()">
-<svg class="icon icon-sm icon-white" viewBox="0 0 24 24">
-<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-<polyline points="17 21 17 13 7 13 7 21"/>
-<polyline points="7 3 7 8 15 8"/>
-</svg>
-SIMPAN
-</button>
-</div>
-`;
-const inputs = ['flex-digits', 'category-digits', 'product-digits', 'weight-digits'];
-inputs.forEach(id => {
-const el = document.getElementById(id);
-if (el) el.addEventListener('input', updateDigitSummary);
-});
-document.getElementById('settings-modal').style.display = 'flex';
+
+async function addNewCategoryFromSettings() {
+    const input = document.getElementById('new-category-input-settings');
+    const category = input.value.trim();
+    
+    if (!category) {
+        showNotification('Masukkan nama kategori!', 'error');
+        return;
+    }
+    
+    try {
+        await saveCategoryToDB(category);
+        await loadCategories();
+        renderCategories();
+        
+        input.value = '';
+        showNotification(`Kategori "${category}" ditambahkan!`, 'success');
+        showSettingsModal();
+    } catch (error) {
+        console.error('Error adding category:', error);
+        showNotification('Gagal menambahkan kategori: ' + error.message, 'error');
+    }
 }
-// Add new category from settings
-function addNewCategoryFromSettings() {
-const input = document.getElementById('new-category-input-settings');
-const category = input.value.trim();
-if (!category) {
-showNotification('Masukkan nama kategori!', 'error');
-return;
+
+async function editCategoryHandler(oldCategory) {
+    if (oldCategory === 'all') return;
+    
+    const newCategory = prompt('Edit nama kategori:', oldCategory);
+    if (newCategory && newCategory.trim() && newCategory !== oldCategory) {
+        try {
+            await updateCategoryInDB(oldCategory, newCategory);
+            
+            await loadProducts();
+            await loadCategories();
+            
+            if (selectedCategory === oldCategory) {
+                selectedCategory = newCategory;
+            }
+            
+            renderCategories();
+            renderProducts();
+            showNotification('Kategori berhasil diubah!', 'success');
+        } catch (error) {
+            console.error('Error updating category:', error);
+            showNotification('Gagal mengubah kategori: ' + error.message, 'error');
+        }
+    }
 }
-if (categories.includes(category)) {
-showNotification('Kategori sudah ada!', 'error');
-return;
+
+async function deleteCategoryHandler(category) {
+    if (category === 'all') return;
+    
+    if (!confirm(`Hapus kategori "${category}"?\nProduk dalam kategori ini akan dipindahkan ke kategori "Lainnya".`)) {
+        return;
+    }
+    
+    try {
+        await deleteCategoryFromDB(category);
+        
+        await loadProducts();
+        await loadCategories();
+        
+        if (selectedCategory === category) {
+            selectedCategory = 'all';
+        }
+        
+        renderCategories();
+        renderProducts();
+        showNotification('Kategori berhasil dihapus!', 'success');
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        showNotification('Gagal menghapus kategori: ' + error.message, 'error');
+    }
 }
-categories.push(category);
-saveCategories();
-renderCategories();
-showNotification(`Kategori "${category}" ditambahkan!`, 'success');
-input.value = '';
-// Refresh settings modal
-showSettingsModal();
-}
+
 function updateDigitSummary() {
-const flex = parseInt(document.getElementById('flex-digits').value) || 0;
-const category = parseInt(document.getElementById('category-digits').value) || 0;
-const product = parseInt(document.getElementById('product-digits').value) || 0;
-const weight = parseInt(document.getElementById('weight-digits').value) || 0;
-const total = flex + category + product + weight;
-const isValid = total === 13;
-const summary = document.querySelector('.digit-summary');
-if (summary) {
-summary.innerHTML = `
-<div style="font-weight:600;margin-bottom:5px;color:${isValid ? '#155724' : '#721c24'}">
-Total Digit: ${total}
-</div>
-<div style="font-size:0.9rem;color:${isValid ? '#155724' : '#721c24'}">
-${isValid ? '✓ Format barcode valid (13 digit)' : '⚠ Harus tepat 13 digit!'}
-</div>
-`;
-summary.style.background = isValid ? '#f5f5f5' : '#ffe6e6';
-summary.style.borderColor = isValid ? '#d9d9d9' : '#ffcccc';
+    const flex = parseInt(document.getElementById('flex-digits').value) || 0;
+    const category = parseInt(document.getElementById('category-digits').value) || 0;
+    const product = parseInt(document.getElementById('product-digits').value) || 0;
+    const weight = parseInt(document.getElementById('weight-digits').value) || 0;
+    const total = flex + category + product + weight;
+    const isValid = total === 13;
+    
+    const summary = document.querySelector('.digit-summary');
+    if (summary) {
+        summary.innerHTML = `
+            <div style="font-weight:600;margin-bottom:5px;color:${isValid ? '#155724' : '#721c24'}">
+                Total Digit: ${total}
+            </div>
+            <div style="font-size:0.9rem;color:${isValid ? '#155724' : '#721c24'}">
+                ${isValid ? '✓ Format barcode valid (13 digit)' : '⚠ Harus tepat 13 digit!'}
+            </div>
+        `;
+        summary.style.background = isValid ? '#f5f5f5' : '#ffe6e6';
+        summary.style.borderColor = isValid ? '#d9d9d9' : '#ffcccc';
+    }
 }
-}
+
 function closeSettingsModal() {
-document.getElementById('settings-modal').style.display = 'none';
+    document.getElementById('settings-modal').style.display = 'none';
 }
-function saveSettingsConfig() {
-const flex = parseInt(document.getElementById('flex-digits').value) || 2;
-const category = parseInt(document.getElementById('category-digits').value) || 2;
-const product = parseInt(document.getElementById('product-digits').value) || 4;
-const weight = parseInt(document.getElementById('weight-digits').value) || 5;
-const total = flex + category + product + weight;
-if (total !== 13) {
-showNotification('Total digit harus 13!', 'error');
-return;
+
+async function saveSettingsConfig() {
+    const flex = parseInt(document.getElementById('flex-digits').value) || 2;
+    const category = parseInt(document.getElementById('category-digits').value) || 2;
+    const product = parseInt(document.getElementById('product-digits').value) || 4;
+    const weight = parseInt(document.getElementById('weight-digits').value) || 5;
+    
+    const total = flex + category + product + weight;
+    if (total !== 13) {
+        showNotification('Total digit harus 13!', 'error');
+        return;
+    }
+    
+    digitConfig = { flex, category, product, weight };
+    
+    try {
+        await saveSettings();
+        showNotification('Pengaturan berhasil disimpan!', 'success');
+        closeSettingsModal();
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        showNotification('Gagal menyimpan pengaturan: ' + error.message, 'error');
+    }
 }
-digitConfig = { flex, category, product, weight };
-saveSettings();
-showNotification('Pengaturan berhasil disimpan!', 'success');
-closeSettingsModal();
+
+// ==================== LONG PRESS HANDLING ====================
+function initLongPressEvents() {
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd);
+    document.addEventListener('touchcancel', handleTouchEnd);
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
 }
-// Data Management
-function exportData() {
-const dataStr = JSON.stringify(products, null, 2);
-const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-const exportFileDefaultName = `produk-data-${new Date().toISOString().split('T')[0]}.json`;
-const linkElement = document.createElement('a');
-linkElement.setAttribute('href', dataUri);
-linkElement.setAttribute('download', exportFileDefaultName);
-linkElement.click();
-showNotification('Data berhasil diexport!', 'success');
+
+function handleTouchStart(e) {
+    const categoryTab = e.target.closest('.category-tab');
+    if (categoryTab && categoryTab.dataset.category !== 'all') {
+        longPressCategory = categoryTab.dataset.category;
+        const indicator = document.getElementById('long-press-indicator');
+        indicator.style.display = 'block';
+        indicator.style.left = e.touches[0].clientX + 'px';
+        indicator.style.top = e.touches[0].clientY + 'px';
+        
+        longPressTimer = setTimeout(() => {
+            isLongPress = true;
+            showCategoryContextMenu(longPressCategory, e.touches[0].clientX, e.touches[0].clientY);
+            indicator.style.display = 'none';
+        }, 800);
+        e.preventDefault();
+    }
 }
-function importData() {
-const input = document.createElement('input');
-input.type = 'file';
-input.accept = '.json';
-input.onchange = function(e) {
-const file = e.target.files[0];
-if (!file) return;
-const reader = new FileReader();
-reader.onload = function(event) {
-try {
-const importedData = JSON.parse(event.target.result);
-if (!Array.isArray(importedData)) {
-throw new Error('Format data tidak valid');
+
+function handleTouchEnd() {
+    clearTimeout(longPressTimer);
+    document.getElementById('long-press-indicator').style.display = 'none';
 }
-// Check for duplicate codes in imported data
-const codeSet = new Set();
-const duplicates = [];
-importedData.forEach(product => {
-if (codeSet.has(product.code)) {
-duplicates.push(product.code);
-} else {
-codeSet.add(product.code);
+
+function handleMouseDown(e) {
+    if (e.button !== 0) return;
+    const categoryTab = e.target.closest('.category-tab');
+    if (categoryTab && categoryTab.dataset.category !== 'all') {
+        longPressCategory = categoryTab.dataset.category;
+        const indicator = document.getElementById('long-press-indicator');
+        indicator.style.display = 'block';
+        indicator.style.left = e.clientX + 'px';
+        indicator.style.top = e.clientY + 'px';
+        
+        longPressTimer = setTimeout(() => {
+            isLongPress = true;
+            showCategoryContextMenu(longPressCategory, e.clientX, e.clientY);
+            indicator.style.display = 'none';
+        }, 800);
+    }
 }
-});
-if (duplicates.length > 0) {
-showNotification(`Data mengandung ${duplicates.length} kode duplikat. Duplikat akan diabaikan.`, 'warning');
+
+function handleMouseUp() {
+    clearTimeout(longPressTimer);
+    document.getElementById('long-press-indicator').style.display = 'none';
 }
-// Remove duplicates from imported data
-const uniqueProducts = [];
-const seenCodes = new Set();
-importedData.forEach(product => {
-if (!seenCodes.has(product.code)) {
-seenCodes.add(product.code);
-uniqueProducts.push(product);
+
+function showCategoryContextMenu(category, x, y) {
+    const menu = document.getElementById('category-context-menu');
+    menu.innerHTML = '';
+    
+    const editItem = document.createElement('div');
+    editItem.className = 'context-menu-item edit';
+    editItem.innerHTML = `
+        ${icons.edit}
+        Edit Kategori
+    `;
+    editItem.onclick = () => {
+        editCategoryHandler(category);
+        menu.style.display = 'none';
+    };
+    
+    const deleteItem = document.createElement('div');
+    deleteItem.className = 'context-menu-item delete';
+    deleteItem.innerHTML = `
+        ${icons.delete}
+        Hapus Kategori
+    `;
+    deleteItem.onclick = () => {
+        deleteCategoryHandler(category);
+        menu.style.display = 'none';
+    };
+    
+    menu.appendChild(editItem);
+    menu.appendChild(deleteItem);
+    
+    menu.style.left = x + 'px';
+    menu.style.top = y + 'px';
+    menu.style.display = 'block';
+    
+    setTimeout(() => {
+        document.addEventListener('click', function closeMenu(e) {
+            if (!menu.contains(e.target)) {
+                menu.style.display = 'none';
+                document.removeEventListener('click', closeMenu);
+            }
+        });
+    }, 100);
 }
-});
-products = uniqueProducts;
-saveProducts();
-showNotification('Data berhasil diimport!', 'success');
-} catch (error) {
-showNotification('Gagal mengimport data: ' + error.message, 'error');
-}
-};
-reader.readAsText(file);
-};
-input.click();
-}
-function clearAllData() {
-if (confirm('Apakah Anda yakin ingin menghapus SEMUA data produk?')) {
-products = [];
-categories = ['all'];
-saveProducts();
-saveCategories();
-selectedCategory = 'all';
-renderCategories();
-renderProducts();
-showNotification('Semua data berhasil dihapus!', 'success');
-closeSettingsModal();
-}
-}
-// Notification System
+
+// ==================== NOTIFICATION SYSTEM ====================
 function showNotification(message, type = 'success') {
-const notification = document.getElementById('notification');
-notification.textContent = message;
-notification.style.background = type === 'error' ? '#ff6b6b' :
-type === 'warning' ? '#ffc107' :
-type === 'info' ? '#17a2b8' :
-'#006B54';
-notification.style.display = 'block';
-setTimeout(() => {
-notification.style.display = 'none';
-}, 3000);
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.style.background = type === 'error' ? '#ff6b6b' :
+                                  type === 'warning' ? '#ffc107' :
+                                  type === 'info' ? '#17a2b8' :
+                                  '#006B54';
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
 }
-// Initialize app
+
+// ==================== EVENT LISTENERS ====================
 document.addEventListener('DOMContentLoaded', initApp);
-// Close modals when clicking outside
+
 window.onclick = function(event) {
-if (event.target.classList.contains('modal-overlay')) {
-event.target.style.display = 'none';
-if (event.target.id === 'weight-modal') {
-currentProduct = null;
-weightValue = '';
-document.querySelectorAll('.product-card.selected').forEach(c => {
-c.classList.remove('selected');
-});
-} else if (event.target.id === 'product-modal') {
-editingProductId = null;
-} else if (event.target.id === 'settings-modal') {
-// Nothing special for settings
-}
-}
+    if (event.target.classList.contains('modal-overlay')) {
+        event.target.style.display = 'none';
+        if (event.target.id === 'weight-modal') {
+            currentProduct = null;
+            weightValue = '';
+            document.querySelectorAll('.product-card.selected').forEach(c => {
+                c.classList.remove('selected');
+            });
+        } else if (event.target.id === 'product-modal') {
+            editingProductId = null;
+        }
+    }
 };
 </script>
 </body>
