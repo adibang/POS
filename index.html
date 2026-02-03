@@ -1494,6 +1494,15 @@ async function loadProducts() {
     try {
         products = await dbGetAll(STORES.PRODUCTS);
         
+        // Validasi dan bersihkan data yang korup
+        products = products.filter(product => {
+            if (!product.code || typeof product.code !== 'string') {
+                console.warn('Produk dengan kode tidak valid ditemukan:', product);
+                return false;
+            }
+            return true;
+        });
+        
         if (products.length === 0) {
             const sampleProducts = [
                 {
@@ -1529,7 +1538,11 @@ async function loadProducts() {
             ];
             
             for (const product of sampleProducts) {
-                await dbAdd(STORES.PRODUCTS, product);
+                try {
+                    await dbAdd(STORES.PRODUCTS, product);
+                } catch (error) {
+                    console.warn('Gagal menambahkan produk contoh:', error);
+                }
             }
             
             products = await dbGetAll(STORES.PRODUCTS);
@@ -1548,10 +1561,14 @@ async function loadCategories() {
             const uniqueCategories = [...new Set(products.map(p => p.category).filter(Boolean))];
             
             for (const categoryName of uniqueCategories) {
-                await dbAdd(STORES.CATEGORIES, {
-                    name: categoryName,
-                    createdAt: new Date().toISOString()
-                });
+                try {
+                    await dbAdd(STORES.CATEGORIES, {
+                        name: categoryName,
+                        createdAt: new Date().toISOString()
+                    });
+                } catch (error) {
+                    console.warn('Gagal menambahkan kategori:', error);
+                }
             }
             
             categories = ['all', ...uniqueCategories];
@@ -1752,18 +1769,30 @@ async function importData() {
                     await dbClear(STORES.SETTINGS);
                     
                     for (const product of importedData.products) {
-                        await dbAdd(STORES.PRODUCTS, product);
+                        try {
+                            await dbAdd(STORES.PRODUCTS, product);
+                        } catch (error) {
+                            console.warn('Gagal mengimport produk:', product, error);
+                        }
                     }
                     
                     if (importedData.categories && Array.isArray(importedData.categories)) {
                         for (const category of importedData.categories) {
-                            await dbAdd(STORES.CATEGORIES, category);
+                            try {
+                                await dbAdd(STORES.CATEGORIES, category);
+                            } catch (error) {
+                                console.warn('Gagal mengimport kategori:', category, error);
+                            }
                         }
                     }
                     
                     if (importedData.settings && Array.isArray(importedData.settings)) {
                         for (const setting of importedData.settings) {
-                            await dbAdd(STORES.SETTINGS, setting);
+                            try {
+                                await dbAdd(STORES.SETTINGS, setting);
+                            } catch (error) {
+                                console.warn('Gagal mengimport setting:', setting, error);
+                            }
                         }
                     }
                     
@@ -1996,6 +2025,41 @@ async function deleteProductHandler(productId) {
     }
 }
 
+function resetProductForm() {
+    const formContent = document.getElementById('product-form-content');
+    if (!formContent) return;
+    
+    const nameInput = document.getElementById('product-name-input');
+    const codeInput = document.getElementById('product-code-input');
+    const categorySelect = document.getElementById('product-category-select');
+    const flexInput = document.getElementById('product-flex-input');
+    const catcodeInput = document.getElementById('product-catcode-input');
+    const imageUploadArea = document.getElementById('image-upload-area');
+    
+    if (nameInput) nameInput.value = '';
+    if (codeInput) codeInput.value = '';
+    if (categorySelect) categorySelect.value = '';
+    if (flexInput) flexInput.value = '01';
+    if (catcodeInput) catcodeInput.value = '01';
+    
+    if (imageUploadArea) {
+        imageUploadArea.innerHTML = `
+            <div style="color:#666;">
+                <div style="margin-bottom:5px;">
+                    <svg class="icon" viewBox="0 0 24 24" style="width:40px;height:40px;color:#006B54;">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                </div>
+                <div>Klik untuk upload gambar</div>
+                <div style="font-size:12px;margin-top:5px;color:#999;">Rekomendasi: 300x300px</div>
+            </div>
+        `;
+    }
+    
+    editingProductId = null;
+}
+
 function showProductModal(product = null) {
     const isEdit = !!product;
     const modalTitle = document.getElementById('product-modal-title');
@@ -2068,7 +2132,8 @@ function showProductModal(product = null) {
             </div>
             <input type="text" class="form-input" id="product-code-input" 
                 value="${product ? product.code : ''}" placeholder="Contoh: 0001" 
-                maxlength="${digitConfig.product}" required>
+                maxlength="${digitConfig.product}" required
+                oninput="checkDuplicateCode()">
             <div id="code-duplicate-warning" style="color:#dc3545;font-size:0.8rem;margin-top:5px;display:none;">
                 ⚠ Kode produk sudah digunakan!
             </div>
@@ -2142,6 +2207,7 @@ function showProductModal(product = null) {
     const imageUploadArea = document.getElementById('image-upload-area');
     const codeInput = document.getElementById('product-code-input');
     const warningDiv = document.getElementById('code-duplicate-warning');
+    const saveButton = document.getElementById('save-product-btn');
     
     if (codeInput) {
         codeInput.addEventListener('input', checkDuplicateCode);
@@ -2178,6 +2244,11 @@ function showProductModal(product = null) {
     }
     
     document.getElementById('product-modal').style.display = 'flex';
+    
+    // Jalankan validasi kode setelah form ditampilkan
+    setTimeout(() => {
+        checkDuplicateCode();
+    }, 100);
 }
 
 function checkDuplicateCode() {
@@ -2195,15 +2266,19 @@ function checkDuplicateCode() {
         return;
     }
     
+    const formattedCode = enteredCode.padStart(digitConfig.product, '0');
+    
+    // Cek duplikasi dengan format yang benar
     const duplicateProduct = products.find(p => {
         if (editingProductId && p.id === editingProductId) {
-            return false;
+            return false; // Abaikan produk yang sedang diedit
         }
-        return p.code === enteredCode;
+        return p.code === formattedCode || p.code === enteredCode;
     });
     
     if (duplicateProduct) {
         warningDiv.style.display = 'block';
+        warningDiv.innerHTML = `⚠ Kode produk "${formattedCode}" sudah digunakan oleh: ${duplicateProduct.name}`;
         saveButton.disabled = true;
         saveButton.style.opacity = '0.6';
     } else {
@@ -2240,8 +2315,9 @@ async function saveProductHandler() {
     const flex = document.getElementById('product-flex-input')?.value.trim();
     const catcode = document.getElementById('product-catcode-input')?.value.trim();
     
+    // Validasi input
     if (!name || !code || !category) {
-        showNotification('Isi nama, kode, dan kategori!', 'error');
+        showNotification('Nama, kode, dan kategori harus diisi!', 'error');
         return;
     }
     
@@ -2250,13 +2326,25 @@ async function saveProductHandler() {
         return;
     }
     
-    const duplicateProduct = products.find(p => {
+    // Format kode dengan padding nol
+    const formattedCode = code.padStart(digitConfig.product, '0');
+    
+    // Cek duplikasi kode dengan lebih ketat
+    const isDuplicate = products.some(p => {
+        // Jika mode edit, abaikan produk yang sedang diedit
         if (editingProductId && p.id === editingProductId) return false;
-        return p.code === code;
+        // Cek apakah kode sama (dengan atau tanpa padding)
+        return p.code === formattedCode || p.code === code;
     });
     
-    if (duplicateProduct) {
-        showNotification('Kode produk sudah digunakan!', 'error');
+    if (isDuplicate) {
+        showNotification(`Kode produk "${formattedCode}" sudah digunakan!`, 'error');
+        return;
+    }
+    
+    // Validasi format kode (harus angka)
+    if (!/^\d+$/.test(code)) {
+        showNotification('Kode produk hanya boleh berisi angka!', 'error');
         return;
     }
     
@@ -2275,10 +2363,10 @@ async function saveProductHandler() {
     const productData = {
         id: editingProductId || undefined,
         name,
-        code: code.padStart(digitConfig.product, '0'),
+        code: formattedCode,
         category,
-        flex: flex.padStart(digitConfig.flex, '0'),
-        catcode: catcode.padStart(digitConfig.category, '0'),
+        flex: flex ? flex.padStart(digitConfig.flex, '0') : '01'.padStart(digitConfig.flex, '0'),
+        catcode: catcode ? catcode.padStart(digitConfig.category, '0') : '01'.padStart(digitConfig.category, '0'),
         image: imageData
     };
     
@@ -2300,15 +2388,20 @@ async function saveProductHandler() {
         
         showNotification(editingProductId ? 'Produk diperbarui!' : 'Produk ditambahkan!', 'success');
         closeProductModal();
+        resetProductForm();
     } catch (error) {
         console.error('Error saving product:', error);
-        showNotification('Gagal menyimpan produk: ' + error.message, 'error');
+        if (error.name === 'ConstraintError') {
+            showNotification('Kode produk sudah digunakan! Silakan gunakan kode lain.', 'error');
+        } else {
+            showNotification('Gagal menyimpan produk: ' + error.message, 'error');
+        }
     }
 }
 
 function closeProductModal() {
     document.getElementById('product-modal').style.display = 'none';
-    editingProductId = null;
+    resetProductForm();
 }
 
 // ==================== WEIGHT MODAL FUNCTIONS ====================
@@ -3088,7 +3181,7 @@ window.onclick = function(event) {
                 c.classList.remove('selected');
             });
         } else if (event.target.id === 'product-modal') {
-            editingProductId = null;
+            resetProductForm();
         }
     }
 };
