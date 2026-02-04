@@ -94,7 +94,7 @@ body {
 @keyframes pulse-red {
     0% { box-shadow: 0 0 10px rgba(220, 53, 69, 0.7); }
     50% { box-shadow: 0 0 20px rgba(220, 53, 69, 0.9), 0 0 40px rgba(220, 53, 69, 0.6); }
-    100% { box-shadow: 0 0 10px rgba(220, 53, 69, 0.7); }
+    100% { box-shadow: 0 0 10px rgba(220, 53,69, 0.7); }
 }
 
 .printer-status-text {
@@ -1746,6 +1746,13 @@ async function dbClear(storeName) {
     });
 }
 
+// ==================== UTILITY FUNCTIONS ====================
+function generateExampleCode(digitCount) {
+    if (digitCount <= 0) return '';
+    // Generate example like "01" for 2 digits, "001" for 3 digits, etc.
+    return '0'.repeat(digitCount - 1) + '1';
+}
+
 // ==================== APPLICATION DATABASE FUNCTIONS ====================
 async function loadSettings() {
     try {
@@ -2559,8 +2566,8 @@ function resetProductForm() {
     if (nameInput) nameInput.value = '';
     if (codeInput) codeInput.value = '';
     if (categorySelect) categorySelect.value = '';
-    if (flexInput) flexInput.value = '01';
-    if (catcodeInput) catcodeInput.value = '01';
+    if (flexInput) flexInput.value = '';
+    if (catcodeInput) catcodeInput.value = '';
     
     if (imageUploadArea) {
         imageUploadArea.innerHTML = `
@@ -2598,6 +2605,11 @@ function showProductModal(product = null) {
         </svg>
         Tambah Produk
     `;
+    
+    // Generate example codes based on current digitConfig
+    const productExample = generateExampleCode(digitConfig.product);
+    const flexExample = generateExampleCode(digitConfig.flex);
+    const catcodeExample = generateExampleCode(digitConfig.category);
     
     const existingCategories = categories.filter(cat => cat !== 'all');
     let categoryOptions = existingCategories.map(cat => {
@@ -2651,7 +2663,7 @@ function showProductModal(product = null) {
                 Kode Produk (${digitConfig.product} digit)
             </div>
             <input type="text" class="form-input" id="product-code-input" 
-                value="${product ? product.code : ''}" placeholder="Contoh: 0001" 
+                value="${product ? product.code : ''}" placeholder="Contoh: ${productExample}" 
                 maxlength="${digitConfig.product}" required
                 oninput="checkDuplicateCode()">
             <div id="code-duplicate-warning" style="color:#dc3545;font-size:0.8rem;margin-top:5px;display:none;">
@@ -2690,7 +2702,10 @@ function showProductModal(product = null) {
                     Flex Code (${digitConfig.flex} digit)
                 </div>
                 <input type="text" class="form-input" id="product-flex-input" 
-                    value="${product ? product.flex : '01'}" placeholder="01" maxlength="${digitConfig.flex}">
+                    value="${product ? product.flex : ''}" 
+                    placeholder="Contoh: ${flexExample}" 
+                    maxlength="${digitConfig.flex}"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
             <div>
                 <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
@@ -2700,7 +2715,10 @@ function showProductModal(product = null) {
                     Kategori (${digitConfig.category} digit)
                 </div>
                 <input type="text" class="form-input" id="product-catcode-input" 
-                    value="${product ? product.catcode : '01'}" placeholder="01" maxlength="${digitConfig.category}">
+                    value="${product ? product.catcode : ''}" 
+                    placeholder="Contoh: ${catcodeExample}" 
+                    maxlength="${digitConfig.category}"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
         </div>
         
@@ -2838,8 +2856,8 @@ async function saveProductHandler() {
         return;
     }
     
-    if (code.length !== digitConfig.product) {
-        showNotification(`Kode harus ${digitConfig.product} digit!`, 'error');
+    if (code.length > digitConfig.product) {
+        showNotification(`Kode maksimal ${digitConfig.product} digit!`, 'error');
         return;
     }
     
@@ -2860,6 +2878,28 @@ async function saveProductHandler() {
         return;
     }
     
+    // Validasi flex code
+    if (flex && flex.length > digitConfig.flex) {
+        showNotification(`Flex code maksimal ${digitConfig.flex} digit!`, 'error');
+        return;
+    }
+    
+    if (flex && !/^\d+$/.test(flex)) {
+        showNotification('Flex code hanya boleh berisi angka!', 'error');
+        return;
+    }
+    
+    // Validasi catcode
+    if (catcode && catcode.length > digitConfig.category) {
+        showNotification(`Kode kategori maksimal ${digitConfig.category} digit!`, 'error');
+        return;
+    }
+    
+    if (catcode && !/^\d+$/.test(catcode)) {
+        showNotification('Kode kategori hanya boleh berisi angka!', 'error');
+        return;
+    }
+    
     const imagePreview = document.getElementById('image-preview');
     let imageData = '';
     
@@ -2872,13 +2912,17 @@ async function saveProductHandler() {
         imageData = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f5f5f5'/%3E%3Crect x='50' y='80' width='200' height='140' fill='%23006B54' rx='15'/%3E%3Ccircle cx='150' cy='150' r='50' fill='%23d9d9d9'/%3E%3Cpath d='M130 140 L150 160 L180 120' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E";
     }
     
+    // Jika flex atau catcode kosong, gunakan default "01"
+    const finalFlex = flex ? flex.padStart(digitConfig.flex, '0') : '01';
+    const finalCatcode = catcode ? catcode.padStart(digitConfig.category, '0') : '01';
+    
     const productData = {
         id: editingProductId || undefined,
         name,
         code: formattedCode,
         category,
-        flex: flex ? flex.padStart(digitConfig.flex, '0') : '01',
-        catcode: catcode ? catcode.padStart(digitConfig.category, '0') : '01',
+        flex: finalFlex,
+        catcode: finalCatcode,
         image: imageData
     };
     
