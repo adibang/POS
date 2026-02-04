@@ -104,11 +104,21 @@ body {
     white-space: nowrap;
 }
 
+/* ==================== STATIC SEARCH AND CATEGORY CONTAINER ==================== */
+.sticky-search-category-container {
+    position: sticky;
+    top: 70px; /* Height of header */
+    z-index: 99;
+    background: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
 /* ==================== SEARCH CONTAINER ==================== */
 .search-container {
     max-width: 1200px;
-    margin: 20px auto 15px;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 15px 20px 5px;
 }
 
 .search-input {
@@ -137,8 +147,8 @@ body {
 /* ==================== CATEGORY DROPDOWN BUTTON ==================== */
 .category-dropdown-container {
     max-width: 1200px;
-    margin: 0 auto 10px;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 5px 20px 15px;
     display: none; /* Hidden by default on desktop */
 }
 
@@ -1147,7 +1157,8 @@ input::placeholder, textarea::placeholder {
     
     .search-container {
         padding: 0 15px;
-        margin-top: 15px;
+        padding-top: 15px;
+        padding-bottom: 5px;
     }
     
     .search-input {
@@ -1157,7 +1168,7 @@ input::placeholder, textarea::placeholder {
     
     .category-dropdown-container {
         display: block;
-        margin-bottom: 15px;
+        padding: 5px 15px 15px;
     }
     
     .category-switcher {
@@ -1221,7 +1232,8 @@ input::placeholder, textarea::placeholder {
     
     .search-container {
         padding: 0 12px;
-        margin: 12px auto;
+        padding-top: 12px;
+        padding-bottom: 5px;
     }
     
     .search-input {
@@ -1231,8 +1243,7 @@ input::placeholder, textarea::placeholder {
     }
     
     .category-dropdown-container {
-        padding: 0 12px;
-        margin-bottom: 12px;
+        padding: 5px 12px 12px;
     }
     
     .category-modal {
@@ -1295,8 +1306,8 @@ input::placeholder, textarea::placeholder {
     </div>
 </header>
 
-<!-- ==================== MAIN CONTENT ==================== -->
-<main class="main-content">
+<!-- ==================== STATIC SEARCH AND CATEGORY CONTAINER ==================== -->
+<div class="sticky-search-category-container">
     <!-- Search Bar -->
     <div class="search-container">
         <input type="text" id="product-search" class="search-input" placeholder="Cari produk berdasarkan nama atau kode...">
@@ -1310,19 +1321,6 @@ input::placeholder, textarea::placeholder {
                 <path d="M6 9l6 6 6-6"/>
             </svg>
         </button>
-    </div>
-    
-    <!-- Category Modal -->
-    <div class="category-modal-overlay" id="category-modal">
-        <div class="category-modal">
-            <div class="category-modal-header">
-                <span>Pilih Kategori</span>
-                <button class="category-modal-close" onclick="closeCategoryModal()">×</button>
-            </div>
-            <div class="category-modal-list" id="category-modal-list">
-                <!-- Categories will be loaded here -->
-            </div>
-        </div>
     </div>
     
     <!-- Category Switcher (Visible on Desktop) -->
@@ -1341,6 +1339,22 @@ input::placeholder, textarea::placeholder {
             </svg>
             Pilih Dropdown
         </button>
+    </div>
+</div>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<main class="main-content">
+    <!-- Category Modal -->
+    <div class="category-modal-overlay" id="category-modal">
+        <div class="category-modal">
+            <div class="category-modal-header">
+                <span>Pilih Kategori</span>
+                <button class="category-modal-close" onclick="closeCategoryModal()">×</button>
+            </div>
+            <div class="category-modal-list" id="category-modal-list">
+                <!-- Categories will be loaded here -->
+            </div>
+        </div>
     </div>
     
     <!-- Category Tabs -->
@@ -2324,12 +2338,16 @@ function showCategoryTabs() {
     
     const tabs = document.getElementById('category-tabs');
     const dropdownContainer = document.querySelector('.category-dropdown-container');
+    const switcher = document.querySelector('.category-switcher');
     
     if (tabs) {
         tabs.style.display = 'flex';
     }
     if (dropdownContainer) {
         dropdownContainer.style.display = 'none';
+    }
+    if (switcher) {
+        switcher.style.display = 'flex';
     }
 }
 
@@ -2342,12 +2360,16 @@ function showCategoryDropdown() {
     
     const tabs = document.getElementById('category-tabs');
     const dropdownContainer = document.querySelector('.category-dropdown-container');
+    const switcher = document.querySelector('.category-switcher');
     
     if (tabs) {
         tabs.style.display = 'none';
     }
     if (dropdownContainer) {
         dropdownContainer.style.display = 'block';
+    }
+    if (switcher) {
+        switcher.style.display = 'flex';
     }
 }
 
