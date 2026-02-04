@@ -117,7 +117,7 @@ body {
     border: 1px solid #333333;
     border-radius: 15px;
     font-size: 1rem;
-    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E") no-repeat 18px center;
+    background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 a5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 a5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E") no-repeat 18px center;
     background-size: 16px;
     box-sizing: border-box;
     transition: all 0.2s;
@@ -127,11 +127,208 @@ body {
     outline: none;
     border-color: #006B54;
     box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398c.862.344 1.616.983 2.048 1.785a5.5 5.5 0 0 0 1.333-6.076 a5.5 5.5 0 0 0-6.075 1.333c.793.429 1.43.977 1.775 1.846a.25.25 0 0 1-.448.194c-.36-.903-.99-1.532-1.834-1.985a5.5 5.5 0 1 0-8.25 4.768 a5.5 5.5 0 0 0 4.767-8.25A5.5 5.5 0 0 0 1.5 7.75a.75.75 0 0 1-1.5 0 7 7 0 1 1 11.695 4.696l.006-.007.005.007a.75.75 0 1 1-1.398 1.397l-.007-.005-.007.005z'/%3E%3C/svg%3E");
 }
 
 .search-input::placeholder {
     color: #999999;
+}
+
+/* ==================== CATEGORY DROPDOWN BUTTON ==================== */
+.category-dropdown-container {
+    max-width: 1200px;
+    margin: 0 auto 10px;
+    padding: 0 20px;
+    display: none; /* Hidden by default on desktop */
+}
+
+.category-dropdown-button {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #006B54;
+    border-radius: 15px;
+    font-size: 0.95rem;
+    background: #FFFFFF;
+    cursor: pointer;
+    color: #006B54;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+}
+
+.category-dropdown-button:hover {
+    border-color: #005a46;
+    background-color: #f0f9f6;
+}
+
+.category-dropdown-button:focus {
+    outline: none;
+    border-color: #006B54;
+    box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.15);
+}
+
+.category-dropdown-icon {
+    transition: transform 0.3s ease;
+}
+
+.category-dropdown-button.active .category-dropdown-icon {
+    transform: rotate(180deg);
+}
+
+/* ==================== CATEGORY MODAL ==================== */
+.category-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 15px;
+    padding-top: 80px;
+}
+
+.category-modal {
+    background: #FFFFFF;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 60vh; /* Batasi tinggi agar tidak memenuhi layar */
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    animation: modalSlideIn 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.category-modal-header {
+    padding: 15px 20px;
+    background: #006B54;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.category-modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.category-modal-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.category-modal-list {
+    max-height: calc(60vh - 60px); /* Sesuaikan dengan tinggi modal */
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+.category-modal-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333333;
+    font-weight: 500;
+}
+
+.category-modal-item:last-child {
+    border-bottom: none;
+}
+
+.category-modal-item:hover {
+    background-color: #f0f9f6;
+    color: #006B54;
+}
+
+.category-modal-item.active {
+    background-color: #006B54;
+    color: white;
+}
+
+.category-modal-item.active:hover {
+    background-color: #005a46;
+    color: white;
+}
+
+.category-modal-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.7;
+}
+
+.category-modal-item.active .category-modal-icon {
+    opacity: 1;
+    color: white;
+}
+
+/* ==================== CATEGORY SWITCHER ==================== */
+.category-switcher {
+    max-width: 1200px;
+    margin: 0 auto 10px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-toggle-btn {
+    padding: 8px 16px;
+    background: #FFFFFF;
+    border: 1px solid #006B54;
+    border-radius: 15px;
+    color: #006B54;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.category-toggle-btn:hover {
+    background: #f0f9f6;
+}
+
+.category-toggle-btn.active {
+    background: #006B54;
+    color: #FFFFFF;
 }
 
 /* ==================== MAIN CONTENT ==================== */
@@ -366,17 +563,6 @@ body {
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
     animation: modalSlideIn 0.2s ease;
-}
-
-@keyframes modalSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 /* Modal Header */
@@ -735,7 +921,7 @@ select {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org2000/svg' width='12' height='12' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23006B54' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
     padding-right: 40px !important;
@@ -968,6 +1154,23 @@ input::placeholder, textarea::placeholder {
         padding: 12px 18px 12px 42px;
         font-size: 0.95rem;
     }
+    
+    .category-dropdown-container {
+        display: block;
+        margin-bottom: 15px;
+    }
+    
+    .category-switcher {
+        display: none;
+    }
+    
+    .category-tabs {
+        display: none;
+    }
+    
+    .category-tabs.mobile-visible {
+        display: flex;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1025,6 +1228,19 @@ input::placeholder, textarea::placeholder {
         padding: 10px 15px 10px 40px;
         font-size: 0.9rem;
         border-radius: 12px;
+    }
+    
+    .category-dropdown-container {
+        padding: 0 12px;
+        margin-bottom: 12px;
+    }
+    
+    .category-modal {
+        max-height: 70vh;
+    }
+    
+    .category-modal-list {
+        max-height: calc(70vh - 60px);
     }
 }
 
@@ -1084,6 +1300,47 @@ input::placeholder, textarea::placeholder {
     <!-- Search Bar -->
     <div class="search-container">
         <input type="text" id="product-search" class="search-input" placeholder="Cari produk berdasarkan nama atau kode...">
+    </div>
+    
+    <!-- Category Dropdown Button (Visible on Mobile) -->
+    <div class="category-dropdown-container">
+        <button class="category-dropdown-button" id="category-dropdown-button">
+            <span id="category-dropdown-label">Semua Produk</span>
+            <svg class="icon icon-sm category-dropdown-icon" viewBox="0 0 24 24" style="color:#006B54;">
+                <path d="M6 9l6 6 6-6"/>
+            </svg>
+        </button>
+    </div>
+    
+    <!-- Category Modal -->
+    <div class="category-modal-overlay" id="category-modal">
+        <div class="category-modal">
+            <div class="category-modal-header">
+                <span>Pilih Kategori</span>
+                <button class="category-modal-close" onclick="closeCategoryModal()">×</button>
+            </div>
+            <div class="category-modal-list" id="category-modal-list">
+                <!-- Categories will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Category Switcher (Visible on Desktop) -->
+    <div class="category-switcher">
+        <button class="category-toggle-btn active" onclick="showCategoryTabs()">
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+            </svg>
+            Pilih Tab
+        </button>
+        <button class="category-toggle-btn" onclick="showCategoryDropdown()">
+            <svg class="icon icon-sm" viewBox="0 0 24 24">
+                <path d="M6 9l6 6 6-6"/>
+            </svg>
+            Pilih Dropdown
+        </button>
     </div>
     
     <!-- Category Tabs -->
@@ -1268,7 +1525,7 @@ input::placeholder, textarea::placeholder {
 <script>
 // ==================== DATABASE CONFIGURATION ====================
 const DB_NAME = 'POSBarcodeDB';
-const DB_VERSION = 4; // Changed from 3 to 4 to force upgrade and fix issues
+const DB_VERSION = 4;
 
 // Object store names
 const STORES = {
@@ -1276,7 +1533,7 @@ const STORES = {
     CATEGORIES: 'categories',
     SETTINGS: 'settings',
     HISTORY: 'printHistory',
-    APP_STATE: 'appState' // Added new store for app state
+    APP_STATE: 'appState'
 };
 
 // ==================== GLOBAL VARIABLES ====================
@@ -1299,6 +1556,7 @@ let longPressTimer = null;
 let longPressCategory = null;
 let isLongPress = false;
 let isFirstLoad = true;
+let categoryViewMode = 'tabs'; // 'tabs' or 'dropdown'
 
 // Icon definitions
 const icons = {
@@ -1328,7 +1586,6 @@ async function initDatabase() {
         request.onsuccess = (event) => {
             db = event.target.result;
             
-            // Handle database errors
             db.onerror = (event) => {
                 console.error('Database error:', event.target.error);
             };
@@ -1341,7 +1598,6 @@ async function initDatabase() {
             console.log('Upgrading database...');
             const db = event.target.result;
             
-            // Hapus semua store yang ada jika ada
             if (db.objectStoreNames.contains(STORES.PRODUCTS)) {
                 db.deleteObjectStore(STORES.PRODUCTS);
             }
@@ -1358,7 +1614,6 @@ async function initDatabase() {
                 db.deleteObjectStore(STORES.APP_STATE);
             }
             
-            // Buat store baru
             const productStore = db.createObjectStore(STORES.PRODUCTS, { 
                 keyPath: 'id',
                 autoIncrement: true 
@@ -1523,11 +1778,9 @@ async function loadProducts() {
     try {
         products = await dbGetAll(STORES.PRODUCTS);
         
-        // Check if this is the first load and dummy data hasn't been added yet
         if (products.length === 0 && isFirstLoad) {
             const appState = await dbGet(STORES.APP_STATE, 'dummyDataAdded');
             
-            // Only add dummy data if it hasn't been added before
             if (!appState) {
                 await addDummyProducts();
                 await dbPut(STORES.APP_STATE, {
@@ -1536,14 +1789,11 @@ async function loadProducts() {
                     addedAt: new Date().toISOString()
                 });
                 
-                // Reload products after adding dummy data
                 products = await dbGetAll(STORES.PRODUCTS);
             }
         }
         
-        // Validate and clean up corrupted data
         products = products.filter(product => {
-            // Ensure product code is valid
             if (!product.code || typeof product.code !== 'string') {
                 console.warn('Produk dengan kode tidak valid ditemukan:', product);
                 return false;
@@ -1594,7 +1844,6 @@ async function addDummyProducts() {
     
     for (const product of dummyProducts) {
         try {
-            // Check if product code already exists
             const existingProduct = products.find(p => p.code === product.code);
             if (!existingProduct) {
                 await dbAdd(STORES.PRODUCTS, product);
@@ -1639,15 +1888,12 @@ async function saveProduct(productData) {
     try {
         const now = new Date().toISOString();
         
-        // Validate product data
         if (!productData.code || !productData.name) {
             throw new Error('Kode dan nama produk harus diisi');
         }
         
-        // Ensure code is unique (case insensitive)
         const existingProducts = await dbGetAll(STORES.PRODUCTS);
         const duplicateProduct = existingProducts.find(p => {
-            // Skip the current product if editing
             if (productData.id && p.id === productData.id) return false;
             return p.code === productData.code;
         });
@@ -1656,7 +1902,6 @@ async function saveProduct(productData) {
             throw new Error(`Kode produk "${productData.code}" sudah digunakan oleh produk: ${duplicateProduct.name}`);
         }
         
-        // Prepare data for saving
         const dataToSave = {
             name: productData.name,
             code: productData.code,
@@ -1668,18 +1913,15 @@ async function saveProduct(productData) {
         };
         
         if (productData.id) {
-            // Editing existing product
             dataToSave.id = productData.id;
             dataToSave.createdAt = productData.createdAt || now;
             await dbPut(STORES.PRODUCTS, dataToSave);
         } else {
-            // Adding new product - let autoIncrement generate the id
             dataToSave.createdAt = now;
             const newId = await dbAdd(STORES.PRODUCTS, dataToSave);
             dataToSave.id = newId;
         }
         
-        // Add category if it doesn't exist
         if (dataToSave.category && dataToSave.category !== 'Lainnya') {
             const categories = await dbGetAll(STORES.CATEGORIES);
             const categoryExists = categories.some(c => c.name === dataToSave.category);
@@ -1852,12 +2094,10 @@ async function importData() {
                         throw new Error('Format data tidak valid');
                     }
                     
-                    // Clear existing data
                     await dbClear(STORES.PRODUCTS);
                     await dbClear(STORES.CATEGORIES);
                     await dbClear(STORES.SETTINGS);
                     
-                    // Import products
                     for (const product of importedData.products) {
                         try {
                             await dbAdd(STORES.PRODUCTS, product);
@@ -1866,7 +2106,6 @@ async function importData() {
                         }
                     }
                     
-                    // Import categories
                     if (importedData.categories && Array.isArray(importedData.categories)) {
                         for (const category of importedData.categories) {
                             try {
@@ -1877,7 +2116,6 @@ async function importData() {
                         }
                     }
                     
-                    // Import settings
                     if (importedData.settings && Array.isArray(importedData.settings)) {
                         for (const setting of importedData.settings) {
                             try {
@@ -1888,18 +2126,17 @@ async function importData() {
                         }
                     }
                     
-                    // Mark that dummy data shouldn't be added
                     await dbPut(STORES.APP_STATE, {
                         key: 'dummyDataAdded',
                         value: true,
                         updatedAt: new Date().toISOString()
                     });
                     
-                    // Reload data
                     await loadProducts();
                     await loadCategories();
                     await loadSettings();
                     
+                    renderCategoryDropdown();
                     renderCategories();
                     renderProducts();
                     
@@ -1931,6 +2168,7 @@ async function clearAllData() {
             categories = ['all'];
             selectedCategory = 'all';
             
+            renderCategoryDropdown();
             renderCategories();
             renderProducts();
             
@@ -1950,17 +2188,193 @@ async function initApp() {
         await loadProducts();
         await loadCategories();
         
+        renderCategoryDropdown();
         renderCategories();
         renderProducts();
         initPrinterConnection();
         initLongPressEvents();
         setupSearch();
+        setupCategoryViewMode();
         
         console.log('App initialized successfully');
         isFirstLoad = false;
     } catch (error) {
         console.error('Error initializing app:', error);
         showNotification('Gagal memuat aplikasi. Silakan refresh halaman.', 'error');
+    }
+}
+
+// ==================== CATEGORY VIEW MODE FUNCTIONS ====================
+function setupCategoryViewMode() {
+    const dropdownButton = document.getElementById('category-dropdown-button');
+    if (dropdownButton) {
+        dropdownButton.addEventListener('click', showCategoryModal);
+    }
+    
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('category-modal');
+        const button = document.getElementById('category-dropdown-button');
+        
+        if (modal && modal.style.display === 'flex' && 
+            !modal.contains(event.target) && 
+            !button.contains(event.target)) {
+            closeCategoryModal();
+        }
+    });
+    
+    if (window.innerWidth <= 768) {
+        showCategoryDropdownMobile();
+    }
+}
+
+function showCategoryModal() {
+    const modal = document.getElementById('category-modal');
+    const list = document.getElementById('category-modal-list');
+    
+    if (!modal || !list) return;
+    
+    // Clear existing items
+    list.innerHTML = '';
+    
+    // Create category items
+    categories.forEach(category => {
+        const item = document.createElement('div');
+        item.className = `category-modal-item ${selectedCategory === category ? 'active' : ''}`;
+        item.dataset.category = category;
+        
+        item.innerHTML = `
+            <svg class="icon category-modal-icon" viewBox="0 0 24 24">
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                <path d="M10 2v20"/>
+            </svg>
+            ${category === 'all' ? 'Semua Produk' : category}
+        `;
+        
+        item.onclick = () => {
+            if (searchQuery) {
+                const searchInput = document.getElementById('product-search');
+                if (searchInput) {
+                    searchInput.value = '';
+                    searchQuery = '';
+                }
+            }
+            selectedCategory = category;
+            
+            // Update button label
+            const label = document.getElementById('category-dropdown-label');
+            if (label) {
+                label.textContent = category === 'all' ? 'Semua Produk' : category;
+            }
+            
+            // Update button active state
+            const button = document.getElementById('category-dropdown-button');
+            if (button) {
+                button.classList.add('active');
+            }
+            
+            // Update categories and products
+            renderCategories();
+            renderProducts();
+            
+            // Close modal
+            closeCategoryModal();
+        };
+        
+        list.appendChild(item);
+    });
+    
+    // Show modal
+    modal.style.display = 'flex';
+}
+
+function closeCategoryModal() {
+    const modal = document.getElementById('category-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        
+        // Remove active state from button
+        const button = document.getElementById('category-dropdown-button');
+        if (button) {
+            button.classList.remove('active');
+        }
+    }
+}
+
+function renderCategoryDropdown() {
+    const label = document.getElementById('category-dropdown-label');
+    if (label) {
+        label.textContent = selectedCategory === 'all' ? 'Semua Produk' : selectedCategory;
+    }
+}
+
+function showCategoryTabs() {
+    categoryViewMode = 'tabs';
+    document.querySelectorAll('.category-toggle-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector('.category-toggle-btn:first-child').classList.add('active');
+    
+    const tabs = document.getElementById('category-tabs');
+    const dropdownContainer = document.querySelector('.category-dropdown-container');
+    
+    if (tabs) {
+        tabs.style.display = 'flex';
+    }
+    if (dropdownContainer) {
+        dropdownContainer.style.display = 'none';
+    }
+}
+
+function showCategoryDropdown() {
+    categoryViewMode = 'dropdown';
+    document.querySelectorAll('.category-toggle-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector('.category-toggle-btn:last-child').classList.add('active');
+    
+    const tabs = document.getElementById('category-tabs');
+    const dropdownContainer = document.querySelector('.category-dropdown-container');
+    
+    if (tabs) {
+        tabs.style.display = 'none';
+    }
+    if (dropdownContainer) {
+        dropdownContainer.style.display = 'block';
+    }
+}
+
+function showCategoryDropdownMobile() {
+    const tabs = document.getElementById('category-tabs');
+    const dropdownContainer = document.querySelector('.category-dropdown-container');
+    const switcher = document.querySelector('.category-switcher');
+    
+    if (tabs) {
+        tabs.style.display = 'none';
+        tabs.classList.remove('mobile-visible');
+    }
+    if (dropdownContainer) {
+        dropdownContainer.style.display = 'block';
+    }
+    if (switcher) {
+        switcher.style.display = 'none';
+    }
+}
+
+function showCategoryTabsMobile() {
+    const tabs = document.getElementById('category-tabs');
+    const dropdownContainer = document.querySelector('.category-dropdown-container');
+    const switcher = document.querySelector('.category-switcher');
+    
+    if (tabs) {
+        tabs.style.display = 'flex';
+        tabs.classList.add('mobile-visible');
+    }
+    if (dropdownContainer) {
+        dropdownContainer.style.display = 'none';
+    }
+    if (switcher) {
+        switcher.style.display = 'flex';
     }
 }
 
@@ -2017,6 +2431,7 @@ function renderCategories() {
                     searchQuery = '';
                 }
                 selectedCategory = category;
+                renderCategoryDropdown();
                 renderCategories();
                 renderProducts();
             }
@@ -2025,6 +2440,9 @@ function renderCategories() {
         
         container.appendChild(tab);
     });
+    
+    // Update dropdown selection
+    renderCategoryDropdown();
 }
 
 function renderProducts() {
@@ -2347,7 +2765,6 @@ function showProductModal(product = null) {
     
     document.getElementById('product-modal').style.display = 'flex';
     
-    // Run validation after form is displayed
     setTimeout(() => {
         checkDuplicateCode();
     }, 100);
@@ -2370,10 +2787,9 @@ function checkDuplicateCode() {
     
     const formattedCode = enteredCode.padStart(digitConfig.product, '0');
     
-    // Check for duplicate with correct format
     const duplicateProduct = products.find(p => {
         if (editingProductId && p.id === editingProductId) {
-            return false; // Ignore product being edited
+            return false;
         }
         return p.code === formattedCode || p.code === enteredCode;
     });
@@ -2417,7 +2833,6 @@ async function saveProductHandler() {
     const flex = document.getElementById('product-flex-input')?.value.trim();
     const catcode = document.getElementById('product-catcode-input')?.value.trim();
     
-    // Input validation
     if (!name || !code || !category) {
         showNotification('Nama, kode, dan kategori harus diisi!', 'error');
         return;
@@ -2428,14 +2843,10 @@ async function saveProductHandler() {
         return;
     }
     
-    // Format code with zero padding
     const formattedCode = code.padStart(digitConfig.product, '0');
     
-    // Check for duplicate code more strictly
     const isDuplicate = products.some(p => {
-        // If in edit mode, ignore the product being edited
         if (editingProductId && p.id === editingProductId) return false;
-        // Check if code is the same (with or without padding)
         return p.code === formattedCode || p.code === code;
     });
     
@@ -2444,7 +2855,6 @@ async function saveProductHandler() {
         return;
     }
     
-    // Validate code format (must be numbers)
     if (!/^\d+$/.test(code)) {
         showNotification('Kode produk hanya boleh berisi angka!', 'error');
         return;
@@ -2472,7 +2882,6 @@ async function saveProductHandler() {
         image: imageData
     };
     
-    // Jika edit, pertahankan createdAt
     if (editingProductId) {
         const existingProduct = products.find(p => p.id === editingProductId);
         if (existingProduct) {
@@ -2493,6 +2902,7 @@ async function saveProductHandler() {
         }
         
         await loadCategories();
+        renderCategoryDropdown();
         renderCategories();
         renderProducts();
         
@@ -3056,6 +3466,7 @@ async function addNewCategoryFromSettings() {
     try {
         await saveCategoryToDB(category);
         await loadCategories();
+        renderCategoryDropdown();
         renderCategories();
         
         input.value = '';
@@ -3082,6 +3493,7 @@ async function editCategoryHandler(oldCategory) {
                 selectedCategory = newCategory;
             }
             
+            renderCategoryDropdown();
             renderCategories();
             renderProducts();
             showNotification('Kategori berhasil diubah!', 'success');
@@ -3109,6 +3521,7 @@ async function deleteCategoryHandler(category) {
             selectedCategory = 'all';
         }
         
+        renderCategoryDropdown();
         renderCategories();
         renderProducts();
         showNotification('Kategori berhasil dihapus!', 'success');
@@ -3298,6 +3711,17 @@ window.onclick = function(event) {
         }
     }
 };
+
+// Responsive behavior for category view
+window.addEventListener('resize', function() {
+    if (window.innerWidth <= 768) {
+        showCategoryDropdownMobile();
+    } else {
+        showCategoryTabs();
+        document.querySelector('.category-switcher').style.display = 'flex';
+        document.querySelector('.category-dropdown-container').style.display = 'none';
+    }
+});
 </script>
 </body>
 </html>
