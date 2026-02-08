@@ -2852,69 +2852,31 @@ async function initApp() {
         setupCategoryViewMode();
 
         // ==================== APPLICATION INITIALIZATION ====================
-    async function initApp() {
-        try {
-            console.log('Starting app initialization...');
-            
-            showLoading();
-            hideError();
-            
-            // Initialize database first
-            await initDatabase();
-            
-            // Load data in sequence to ensure dependencies
-            await loadSettings();
-            await loadProducts();
-            await loadCategories();
-            
-            // Initialize UI components
-            renderCategoryDropdown();
-            renderCategories();
-            renderProducts();
-            updateWeightPresetButtons();
-            initPrinterConnection();
-            initLongPressEvents();
-            setupSearch();
-            setupCategoryViewMode();
-            
-            // FOCUS PADA INPUT PENCARIAN SAAT HALAMAN DIMUAT
-            const searchInput = document.getElementById('product-search');
-            if (searchInput) {
-                // Delay sedikit untuk memastikan semua elemen sudah ter-render
-                setTimeout(() => {
-                    searchInput.focus();
-                    // Untuk mobile, pastikan keyboard tidak muncul otomatis (opsional)
-                    // searchInput.blur();
-                    // setTimeout(() => searchInput.focus(), 100);
-                }, 300);
-            }
-            
-            console.log('App initialized successfully');
-            isFirstLoad = false;
-            
-            // Show success message
-            const productCount = products.length;
-            showNotification(`Aplikasi siap. ${productCount} produk dimuat.`, 'success');
-            
-        } catch (error) {
-            console.error('Error initializing app:', error);
-            
-            let errorMessage = 'Gagal memuat aplikasi: ' + error.message;
-            
-            if (error.name === 'VersionError') {
-                errorMessage = 'Database versi tidak kompatibel. Coba reset aplikasi.';
-            } else if (error.name === 'InvalidStateError') {
-                errorMessage = 'Database dalam state tidak valid. Refresh halaman.';
-            } else if (error.message.includes('IndexedDB')) {
-                errorMessage = 'Browser tidak mendukung IndexedDB. Gunakan Chrome/Edge/Firefox.';
-            }
-            
-            showError(errorMessage);
-            
-        } finally {
-            hideLoading();
-        }
-    }
+        // ==================== APPLICATION INITIALIZATION ====================
+async function initApp() {
+    try {
+        console.log('Starting app initialization...');
+        
+        showLoading();
+        hideError();
+        
+        // Initialize database first
+        await initDatabase();
+        
+        // Load data in sequence to ensure dependencies
+        await loadSettings();
+        await loadProducts();
+        await loadCategories();
+        
+        // Initialize UI components
+        renderCategoryDropdown();
+        renderCategories();
+        renderProducts();
+        updateWeightPresetButtons();
+        initPrinterConnection();
+        initLongPressEvents();
+        setupSearch();
+        setupCategoryViewMode();
         
         console.log('App initialized successfully');
         isFirstLoad = false;
@@ -2922,6 +2884,17 @@ async function initApp() {
         // Show success message
         const productCount = products.length;
         showNotification(`Aplikasi siap. ${productCount} produk dimuat.`, 'success');
+        
+        // FOCUS PADA INPUT PENCARIAN SAAT HALAMAN DIMUAT
+        setTimeout(() => {
+            const searchInput = document.getElementById('product-search');
+            if (searchInput) {
+                searchInput.focus();
+                // Untuk mobile, pastikan keyboard tidak muncul otomatis (opsional)
+                // searchInput.blur();
+                // setTimeout(() => searchInput.focus(), 100);
+            }
+        }, 500);
         
     } catch (error) {
         console.error('Error initializing app:', error);
@@ -2947,7 +2920,7 @@ async function retryAppLoad() {
     console.log('Retrying app load...');
     await initApp();
 }
-
+    
 // ==================== CATEGORY VIEW MODE FUNCTIONS ====================
 function setupCategoryViewMode() {
     const dropdownButton = document.getElementById('category-dropdown-button');
