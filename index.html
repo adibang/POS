@@ -664,52 +664,6 @@ body {
     font-size: 0.8rem;
 }
 
-/* ==================== WEIGHT PRESET BUTTONS ==================== */
-.weight-preset-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.weight-preset-btn {
-    padding: 12px 8px;
-    border: 1px solid #006B54;
-    background: #FFFFFF;
-    color: #006B54;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    min-height: 60px;
-}
-
-.weight-preset-btn:hover {
-    background: #f0f9f6;
-    transform: translateY(-2px);
-}
-
-.weight-preset-btn:active {
-    background: #006B54;
-    color: white;
-}
-
-.weight-preset-label {
-    font-size: 11px;
-    opacity: 0.8;
-    margin-bottom: 4px;
-}
-
-.weight-preset-value {
-    font-size: 16px;
-    font-weight: 700;
-}
-
 /* ==================== BUTTONS GRID ==================== */
 .function-row, .buttons {
     display: grid;
@@ -881,23 +835,6 @@ button:active {
     box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
 }
 
-.setting-select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #333333;
-    border-radius: 15px;
-    font-size: 1rem;
-    background: #FFFFFF;
-    color: #333333;
-    cursor: pointer;
-}
-
-.setting-select:focus {
-    outline: none;
-    border-color: #006B54;
-    box-shadow: 0 0 0 3px rgba(0, 107, 84, 0.1);
-}
-
 .digit-summary {
     background: #f5f5f5;
     padding: 15px;
@@ -926,48 +863,6 @@ button:active {
 .category-actions {
     display: flex;
     gap: 5px;
-}
-
-/* ==================== WEIGHT PRESET SETTINGS ==================== */
-.preset-settings-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 15px;
-}
-
-.preset-setting-item {
-    background: #f8f9fa;
-    padding: 12px;
-    border-radius: 15px;
-    border: 1px solid #e9ecef;
-}
-
-.preset-setting-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #333333;
-    font-weight: 500;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.preset-setting-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #333333;
-    border-radius: 10px;
-    font-size: 1rem;
-    text-align: center;
-    background: #FFFFFF;
-}
-
-.preset-setting-input:focus {
-    outline: none;
-    border-color: #006B54;
-    box-shadow: 0 0 0 2px rgba(0, 107, 84, 0.1);
 }
 
 /* ==================== CATEGORY CONTEXT MENU ==================== */
@@ -1218,69 +1113,6 @@ input::placeholder, textarea::placeholder {
     gap: 8px;
 }
 
-/* ==================== LOADING STATES ==================== */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.loading-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.95);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #006B54;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* ==================== ERROR STATES ==================== */
-.error-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: #666;
-    display: none;
-}
-
-.error-state .icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 20px;
-    color: #ff6b6b;
-}
-
-.retry-button {
-    margin-top: 20px;
-    padding: 12px 24px;
-    background: #006B54;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
 /* ==================== RESPONSIVE STYLES ==================== */
 @media (max-width: 768px) {
     .products-grid {
@@ -1349,14 +1181,6 @@ input::placeholder, textarea::placeholder {
     
     .category-tabs.mobile-visible {
         display: flex;
-    }
-    
-    .weight-preset-buttons {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .preset-settings-grid {
-        grid-template-columns: 1fr;
     }
 }
 
@@ -1429,21 +1253,6 @@ input::placeholder, textarea::placeholder {
     .category-modal-list {
         max-height: calc(70vh - 60px);
     }
-    
-    .weight-preset-buttons {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-    }
-    
-    .weight-preset-btn {
-        padding: 8px 4px;
-        min-height: 50px;
-        font-size: 12px;
-    }
-    
-    .weight-preset-value {
-        font-size: 14px;
-    }
 }
 
 /* ==================== ADDITIONAL STYLES ==================== */
@@ -1496,30 +1305,6 @@ input::placeholder, textarea::placeholder {
         </div>
     </div>
 </header>
-
-<!-- ==================== LOADING OVERLAY ==================== -->
-<div id="loading-overlay" class="loading-overlay">
-    <div class="loading-spinner"></div>
-    <div style="margin-top: 20px; color: #006B54; font-weight: 600;">Memuat aplikasi...</div>
-</div>
-
-<!-- ==================== ERROR STATE ==================== -->
-<div id="error-state" class="error-state">
-    <svg class="icon" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/>
-        <line x1="12" y1="8" x2="12" y2="12"/>
-        <line x1="12" y1="16" x2="12.01" y2="16"/>
-    </svg>
-    <h3>Gagal memuat aplikasi</h3>
-    <p id="error-message"></p>
-    <button class="retry-button" onclick="retryAppLoad()">
-        <svg class="icon icon-sm" viewBox="0 0 24 24">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-            <path d="M3 3v5h5"/>
-        </svg>
-        Coba Lagi
-    </button>
-</div>
 
 <!-- ==================== STATIC SEARCH AND CATEGORY CONTAINER ==================== -->
 <div class="sticky-search-category-container">
@@ -1618,11 +1403,6 @@ input::placeholder, textarea::placeholder {
                     <span>BARCODE:</span>
                     <span id="display-barcode">-</span>
                 </div>
-            </div>
-            
-            <!-- Weight Preset Buttons -->
-            <div class="weight-preset-buttons" id="weight-preset-buttons">
-                <!-- Preset buttons will be loaded here -->
             </div>
             
             <!-- Function Row -->
@@ -1759,7 +1539,7 @@ input::placeholder, textarea::placeholder {
 <script>
 // ==================== DATABASE CONFIGURATION ====================
 const DB_NAME = 'POSBarcodeDB';
-const DB_VERSION = 5;
+const DB_VERSION = 4;
 
 // Object store names
 const STORES = {
@@ -1777,7 +1557,6 @@ let categories = [];
 let currentProduct = null;
 let weightValue = '';
 let digitConfig = { flex: 2, category: 2, product: 4, weight: 5 };
-let printDesign = 1; // Default: Desain 1
 let selectedCategory = 'all';
 let editingProductId = null;
 let port = null;
@@ -1793,14 +1572,6 @@ let isLongPress = false;
 let isFirstLoad = true;
 let categoryViewMode = 'tabs'; // 'tabs' or 'dropdown'
 
-// Weight presets
-let weightPresets = {
-    preset1: 100,
-    preset2: 200,
-    preset3: 500,
-    preset4: 1000
-};
-
 // Icon definitions
 const icons = {
     edit: `<svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
@@ -1809,157 +1580,80 @@ const icons = {
     upload: `<svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
     download: `<svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
     category: `<svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M10 2v20"/></svg>`,
-    camera: `<svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`,
-    preset: `<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`
+    camera: `<svg class="icon" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`
 };
-
-// ==================== LOADING STATE FUNCTIONS ====================
-function showLoading() {
-    const overlay = document.getElementById('loading-overlay');
-    const productsGrid = document.getElementById('products-grid');
-    const mainContent = document.querySelector('.main-content');
-    
-    if (overlay) overlay.style.display = 'flex';
-    if (productsGrid) productsGrid.classList.add('loading');
-    if (mainContent) mainContent.style.opacity = '0.5';
-}
-
-function hideLoading() {
-    const overlay = document.getElementById('loading-overlay');
-    const productsGrid = document.getElementById('products-grid');
-    const mainContent = document.querySelector('.main-content');
-    
-    if (overlay) overlay.style.display = 'none';
-    if (productsGrid) productsGrid.classList.remove('loading');
-    if (mainContent) mainContent.style.opacity = '1';
-}
-
-function showError(message) {
-    const errorState = document.getElementById('error-state');
-    const errorMessage = document.getElementById('error-message');
-    const mainContent = document.querySelector('.main-content');
-    const stickyContainer = document.querySelector('.sticky-search-category-container');
-    
-    if (errorState && errorMessage) {
-        errorMessage.textContent = message;
-        errorState.style.display = 'block';
-    }
-    
-    if (mainContent) {
-        mainContent.style.display = 'none';
-    }
-    
-    if (stickyContainer) {
-        stickyContainer.style.display = 'none';
-    }
-}
-
-function hideError() {
-    const errorState = document.getElementById('error-state');
-    const mainContent = document.querySelector('.main-content');
-    const stickyContainer = document.querySelector('.sticky-search-category-container');
-    
-    if (errorState) errorState.style.display = 'none';
-    if (mainContent) mainContent.style.display = 'block';
-    if (stickyContainer) stickyContainer.style.display = 'block';
-}
 
 // ==================== DATABASE FUNCTIONS ====================
 async function initDatabase() {
     return new Promise((resolve, reject) => {
-        // Check if browser supports IndexedDB
-        if (!window.indexedDB) {
-            const error = "Browser tidak mendukung IndexedDB. Gunakan Chrome, Edge, atau Firefox versi terbaru.";
-            console.error(error);
-            showError(error);
-            reject(new Error(error));
-            return;
-        }
-
         const request = indexedDB.open(DB_NAME, DB_VERSION);
         
         request.onerror = (event) => {
             console.error('Database error:', event.target.error);
-            showError('Gagal membuka database: ' + event.target.error);
             reject(event.target.error);
         };
         
         request.onblocked = () => {
             console.warn('Database blocked. Tutup tab lain yang menggunakan aplikasi ini.');
-            showError('Database diblokir. Tutup tab lain dan refresh halaman.');
-            reject(new Error('Database blocked'));
         };
         
         request.onsuccess = (event) => {
             db = event.target.result;
             
-            // Handle database errors
             db.onerror = (event) => {
                 console.error('Database error:', event.target.error);
-                showNotification('Error database: ' + event.target.error, 'error');
             };
             
-            // Handle database version change
-            db.onversionchange = (event) => {
-                console.log('Database version changed, closing...');
-                db.close();
-                showNotification('Database diperbarui, silakan refresh halaman.', 'info');
-            };
-            
-            console.log('Database initialized successfully');
+            console.log('Database initialized');
             resolve();
         };
         
         request.onupgradeneeded = (event) => {
-            console.log('Upgrading database from version', event.oldVersion, 'to', event.newVersion);
+            console.log('Upgrading database...');
             const db = event.target.result;
             
-            // Create object stores if they don't exist
-            if (!db.objectStoreNames.contains(STORES.PRODUCTS)) {
-                console.log('Creating products store...');
-                const productStore = db.createObjectStore(STORES.PRODUCTS, { 
-                    keyPath: 'id',
-                    autoIncrement: true 
-                });
-                productStore.createIndex('category', 'category', { unique: false });
-                productStore.createIndex('code', 'code', { unique: true });
+            if (db.objectStoreNames.contains(STORES.PRODUCTS)) {
+                db.deleteObjectStore(STORES.PRODUCTS);
+            }
+            if (db.objectStoreNames.contains(STORES.CATEGORIES)) {
+                db.deleteObjectStore(STORES.CATEGORIES);
+            }
+            if (db.objectStoreNames.contains(STORES.SETTINGS)) {
+                db.deleteObjectStore(STORES.SETTINGS);
+            }
+            if (db.objectStoreNames.contains(STORES.HISTORY)) {
+                db.deleteObjectStore(STORES.HISTORY);
+            }
+            if (db.objectStoreNames.contains(STORES.APP_STATE)) {
+                db.deleteObjectStore(STORES.APP_STATE);
             }
             
-            if (!db.objectStoreNames.contains(STORES.CATEGORIES)) {
-                console.log('Creating categories store...');
-                const categoryStore = db.createObjectStore(STORES.CATEGORIES, { 
-                    keyPath: 'id',
-                    autoIncrement: true 
-                });
-                categoryStore.createIndex('name', 'name', { unique: true });
-            }
+            const productStore = db.createObjectStore(STORES.PRODUCTS, { 
+                keyPath: 'id',
+                autoIncrement: true 
+            });
+            productStore.createIndex('category', 'category', { unique: false });
+            productStore.createIndex('code', 'code', { unique: true });
             
-            if (!db.objectStoreNames.contains(STORES.SETTINGS)) {
-                console.log('Creating settings store...');
-                db.createObjectStore(STORES.SETTINGS, { 
-                    keyPath: 'key' 
-                });
-            }
+            const categoryStore = db.createObjectStore(STORES.CATEGORIES, { 
+                keyPath: 'id',
+                autoIncrement: true 
+            });
+            categoryStore.createIndex('name', 'name', { unique: true });
             
-            if (!db.objectStoreNames.contains(STORES.HISTORY)) {
-                console.log('Creating history store...');
-                const historyStore = db.createObjectStore(STORES.HISTORY, { 
-                    keyPath: 'id',
-                    autoIncrement: true 
-                });
-                historyStore.createIndex('timestamp', 'timestamp', { unique: false });
-            }
+            const settingsStore = db.createObjectStore(STORES.SETTINGS, { 
+                keyPath: 'key' 
+            });
             
-            if (!db.objectStoreNames.contains(STORES.APP_STATE)) {
-                console.log('Creating app state store...');
-                db.createObjectStore(STORES.APP_STATE, { 
-                    keyPath: 'key' 
-                });
-            }
+            const historyStore = db.createObjectStore(STORES.HISTORY, { 
+                keyPath: 'id',
+                autoIncrement: true 
+            });
+            historyStore.createIndex('timestamp', 'timestamp', { unique: false });
             
-            event.target.transaction.oncomplete = () => {
-                console.log('Database upgrade completed');
-            };
+            const appStateStore = db.createObjectStore(STORES.APP_STATE, { 
+                keyPath: 'key' 
+            });
         };
     });
 }
@@ -1971,24 +1665,12 @@ async function dbGetAll(storeName) {
             return;
         }
         
-        try {
-            const transaction = db.transaction([storeName], 'readonly');
-            const objectStore = transaction.objectStore(storeName);
-            const request = objectStore.getAll();
-            
-            request.onsuccess = () => {
-                console.log(`Retrieved ${request.result.length} items from ${storeName}`);
-                resolve(request.result || []);
-            };
-            
-            request.onerror = (e) => {
-                console.error(`Error getting all from ${storeName}:`, e.target.error);
-                reject(e.target.error);
-            };
-        } catch (error) {
-            console.error(`Exception in dbGetAll for ${storeName}:`, error);
-            reject(error);
-        }
+        const transaction = db.transaction([storeName], 'readonly');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.getAll();
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
     });
 }
 
@@ -1999,20 +1681,12 @@ async function dbGet(storeName, key) {
             return;
         }
         
-        try {
-            const transaction = db.transaction([storeName], 'readonly');
-            const objectStore = transaction.objectStore(storeName);
-            const request = objectStore.get(key);
-            
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = (e) => {
-                console.error(`Error getting from ${storeName} with key ${key}:`, e.target.error);
-                reject(e.target.error);
-            };
-        } catch (error) {
-            console.error(`Exception in dbGet for ${storeName}:`, error);
-            reject(error);
-        }
+        const transaction = db.transaction([storeName], 'readonly');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.get(key);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
     });
 }
 
@@ -2023,28 +1697,15 @@ async function dbAdd(storeName, data) {
             return;
         }
         
-        try {
-            const transaction = db.transaction([storeName], 'readwrite');
-            const objectStore = transaction.objectStore(storeName);
-            const request = objectStore.add(data);
-            
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = (e) => {
-                console.error(`Error adding to ${storeName}:`, data, e.target.error);
-                
-                // Handle constraint errors (duplicate keys)
-                if (e.target.error.name === 'ConstraintError') {
-                    const errorMsg = `Data dengan key yang sama sudah ada di ${storeName}`;
-                    console.error(errorMsg);
-                    reject(new Error(errorMsg));
-                } else {
-                    reject(e.target.error);
-                }
-            };
-        } catch (error) {
-            console.error(`Exception in dbAdd for ${storeName}:`, error);
-            reject(error);
-        }
+        const transaction = db.transaction([storeName], 'readwrite');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.add(data);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = (e) => {
+            console.error('Error adding to', storeName, data, e.target.error);
+            reject(e.target.error);
+        };
     });
 }
 
@@ -2055,20 +1716,15 @@ async function dbPut(storeName, data) {
             return;
         }
         
-        try {
-            const transaction = db.transaction([storeName], 'readwrite');
-            const objectStore = transaction.objectStore(storeName);
-            const request = objectStore.put(data);
-            
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = (e) => {
-                console.error(`Error putting to ${storeName}:`, data, e.target.error);
-                reject(e.target.error);
-            };
-        } catch (error) {
-            console.error(`Exception in dbPut for ${storeName}:`, error);
-            reject(error);
-        }
+        const transaction = db.transaction([storeName], 'readwrite');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.put(data);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = (e) => {
+            console.error('Error putting to', storeName, data, e.target.error);
+            reject(e.target.error);
+        };
     });
 }
 
@@ -2079,20 +1735,12 @@ async function dbDelete(storeName, key) {
             return;
         }
         
-        try {
-            const transaction = db.transaction([storeName], 'readwrite');
-            const objectStore = transaction.objectStore(storeName);
-            const request = objectStore.delete(key);
-            
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = (e) => {
-                console.error(`Error deleting from ${storeName} with key ${key}:`, e.target.error);
-                reject(e.target.error);
-            };
-        } catch (error) {
-            console.error(`Exception in dbDelete for ${storeName}:`, error);
-            reject(error);
-        }
+        const transaction = db.transaction([storeName], 'readwrite');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.delete(key);
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
     });
 }
 
@@ -2103,304 +1751,168 @@ async function dbClear(storeName) {
             return;
         }
         
-        try {
-            const transaction = db.transaction([storeName], 'readwrite');
-            const objectStore = transaction.objectStore(storeName);
-            const request = objectStore.clear();
-            
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = (e) => {
-                console.error(`Error clearing ${storeName}:`, e.target.error);
-                reject(e.target.error);
-            };
-        } catch (error) {
-            console.error(`Exception in dbClear for ${storeName}:`, error);
-            reject(error);
-        }
+        const transaction = db.transaction([storeName], 'readwrite');
+        const objectStore = transaction.objectStore(storeName);
+        const request = objectStore.clear();
+        
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
     });
 }
 
 // ==================== UTILITY FUNCTIONS ====================
 function generateExampleCode(digitCount) {
     if (digitCount <= 0) return '';
+    // Generate example like "01" for 2 digits, "001" for 3 digits, etc.
     return '0'.repeat(digitCount - 1) + '1';
 }
 
 // ==================== APPLICATION DATABASE FUNCTIONS ====================
 async function loadSettings() {
     try {
-        console.log('Loading settings...');
-        
-        // Load barcode configuration
         const savedConfig = await dbGet(STORES.SETTINGS, 'barcodeConfig');
         if (savedConfig) {
             digitConfig = savedConfig.value;
-            console.log('Loaded barcode config:', digitConfig);
         } else {
             digitConfig = { flex: 2, category: 2, product: 4, weight: 5 };
             await saveSettings();
-            console.log('Created default barcode config');
         }
-        
-        // Load print design setting
-        const savedPrintDesign = await dbGet(STORES.SETTINGS, 'printDesign');
-        if (savedPrintDesign) {
-            printDesign = savedPrintDesign.value;
-            console.log('Loaded print design:', printDesign);
-        } else {
-            printDesign = 1;
-            await dbPut(STORES.SETTINGS, {
-                key: 'printDesign',
-                value: printDesign,
-                updatedAt: new Date().toISOString()
-            });
-            console.log('Created default print design');
-        }
-        
-        // Load weight presets
-        const savedWeightPresets = await dbGet(STORES.SETTINGS, 'weightPresets');
-        if (savedWeightPresets) {
-            weightPresets = savedWeightPresets.value;
-            console.log('Loaded weight presets:', weightPresets);
-        } else {
-            weightPresets = {
-                preset1: 100,
-                preset2: 200,
-                preset3: 500,
-                preset4: 1000
-            };
-            await dbPut(STORES.SETTINGS, {
-                key: 'weightPresets',
-                value: weightPresets,
-                updatedAt: new Date().toISOString()
-            });
-            console.log('Created default weight presets');
-        }
-        
-        console.log('Settings loaded successfully');
     } catch (error) {
         console.error('Error loading settings:', error);
-        // Use defaults if settings can't be loaded
         digitConfig = { flex: 2, category: 2, product: 4, weight: 5 };
-        printDesign = 1;
-        weightPresets = {
-            preset1: 100,
-            preset2: 200,
-            preset3: 500,
-            preset4: 1000
-        };
-        showNotification('Menggunakan pengaturan default', 'info');
     }
 }
 
 async function saveSettings() {
     try {
-        console.log('Saving settings...');
-        
-        // Save barcode configuration
         await dbPut(STORES.SETTINGS, {
             key: 'barcodeConfig',
             value: digitConfig,
             updatedAt: new Date().toISOString()
         });
-        
-        // Save print design setting
-        await dbPut(STORES.SETTINGS, {
-            key: 'printDesign',
-            value: printDesign,
-            updatedAt: new Date().toISOString()
-        });
-        
-        // Save weight presets
-        await dbPut(STORES.SETTINGS, {
-            key: 'weightPresets',
-            value: weightPresets,
-            updatedAt: new Date().toISOString()
-        });
-        
-        console.log('Settings saved successfully');
     } catch (error) {
         console.error('Error saving settings:', error);
-        throw error;
     }
 }
 
 async function loadProducts() {
     try {
-        console.log('Loading products...');
         products = await dbGetAll(STORES.PRODUCTS);
         
-        console.log(`Found ${products.length} products in database`);
+        if (products.length === 0 && isFirstLoad) {
+            const appState = await dbGet(STORES.APP_STATE, 'dummyDataAdded');
+            
+            if (!appState) {
+                await addDummyProducts();
+                await dbPut(STORES.APP_STATE, {
+                    key: 'dummyDataAdded',
+                    value: true,
+                    addedAt: new Date().toISOString()
+                });
+                
+                products = await dbGetAll(STORES.PRODUCTS);
+            }
+        }
         
-        // Filter out invalid products
         products = products.filter(product => {
-            if (!product || typeof product !== 'object') {
-                console.warn('Invalid product object found:', product);
-                return false;
-            }
-            
-            // Ensure product has required fields
             if (!product.code || typeof product.code !== 'string') {
-                console.warn('Product has invalid code:', product);
+                console.warn('Produk dengan kode tidak valid ditemukan:', product);
                 return false;
             }
-            
-            if (!product.name || typeof product.name !== 'string') {
-                console.warn('Product has invalid name:', product);
-                return false;
-            }
-            
             return true;
         });
         
-        // If no products and this is first load, add dummy data
-        if (products.length === 0 && isFirstLoad) {
-            console.log('No products found, adding dummy data...');
-            await addDummyProducts();
-            products = await dbGetAll(STORES.PRODUCTS);
-            console.log(`Added ${products.length} dummy products`);
-        }
-        
-        // Sort products by name for better UX
-        products.sort((a, b) => a.name.localeCompare(b.name));
-        
-        console.log(`Successfully loaded ${products.length} products`);
-        
+        console.log('Products loaded:', products.length);
     } catch (error) {
         console.error('Error loading products:', error);
         products = [];
-        throw error;
     }
 }
 
 async function addDummyProducts() {
-    try {
-        console.log('Adding dummy products...');
-        
-        const dummyProducts = [
-            {
-                name: "Beras Premium 5kg",
-                code: "0001",
-                category: "Sembako",
-                flex: "01",
-                catcode: "01",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E",
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            },
-            {
-                name: "Gula Pasir 1kg",
-                code: "0002",
-                category: "Sembako",
-                flex: "01",
-                catcode: "01",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='30' y='30' width='40' height='40' fill='%23fff' stroke='%23006B54' stroke-width='2'/%3E%3C/svg%3E",
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            },
-            {
-                name: "Minyak Goreng 2L",
-                code: "0003",
-                category: "Sembako",
-                flex: "01",
-                catcode: "02",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='35' y='25' width='30' height='50' fill='%23d9d9d9'/%3E%3Ccircle cx='50' cy='80' r='8' fill='%23006B54'/%3E%3C/svg%3E",
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            }
-        ];
-        
-        for (const product of dummyProducts) {
-            try {
-                // Check if product already exists
-                const existingProducts = await dbGetAll(STORES.PRODUCTS);
-                const exists = existingProducts.some(p => p.code === product.code);
-                
-                if (!exists) {
-                    await dbAdd(STORES.PRODUCTS, product);
-                    console.log('Added dummy product:', product.code);
-                }
-            } catch (error) {
-                console.warn('Failed to add dummy product:', product.code, error);
-            }
+    const dummyProducts = [
+        {
+            name: "Beras Premium 5kg",
+            code: "0001",
+            category: "Sembako",
+            flex: "01",
+            catcode: "01",
+            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        },
+        {
+            name: "Gula Pasir 1kg",
+            code: "0002",
+            category: "Sembako",
+            flex: "01",
+            catcode: "01",
+            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='30' y='30' width='40' height='40' fill='%23fff' stroke='%23006B54' stroke-width='2'/%3E%3C/svg%3E",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        },
+        {
+            name: "Minyak Goreng 2L",
+            code: "0003",
+            category: "Sembako",
+            flex: "01",
+            catcode: "02",
+            image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Crect x='35' y='25' width='30' height='50' fill='%23d9d9d9'/%3E%3Ccircle cx='50' cy='80' r='8' fill='%23006B54'/%3E%3C/svg%3E",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
         }
-        
-        // Mark that dummy data has been added
-        await dbPut(STORES.APP_STATE, {
-            key: 'dummyDataAdded',
-            value: true,
-            addedAt: new Date().toISOString()
-        });
-        
-        console.log('Dummy products added successfully');
-    } catch (error) {
-        console.error('Error adding dummy products:', error);
-        throw error;
+    ];
+    
+    for (const product of dummyProducts) {
+        try {
+            const existingProduct = products.find(p => p.code === product.code);
+            if (!existingProduct) {
+                await dbAdd(STORES.PRODUCTS, product);
+                console.log('Dummy product added:', product.code);
+            }
+        } catch (error) {
+            console.warn('Failed to add dummy product:', product.code, error);
+        }
     }
 }
 
 async function loadCategories() {
     try {
-        console.log('Loading categories...');
         const dbCategories = await dbGetAll(STORES.CATEGORIES);
         
         if (dbCategories.length === 0) {
-            console.log('No categories found, creating from products...');
+            const uniqueCategories = [...new Set(products.map(p => p.category).filter(Boolean))];
             
-            // Get unique categories from products
-            const uniqueCategories = [...new Set(products
-                .map(p => p.category)
-                .filter(category => category && category.trim() !== '')
-            )];
-            
-            console.log(`Found ${uniqueCategories.length} unique categories in products`);
-            
-            // Add each category to database
             for (const categoryName of uniqueCategories) {
                 try {
                     await dbAdd(STORES.CATEGORIES, {
                         name: categoryName,
                         createdAt: new Date().toISOString()
                     });
-                    console.log('Added category:', categoryName);
                 } catch (error) {
-                    // Ignore duplicate errors
-                    if (error.message.includes('ConstraintError') || error.message.includes('key yang sama')) {
-                        console.log('Category already exists:', categoryName);
-                    } else {
-                        console.warn('Failed to add category:', categoryName, error);
-                    }
+                    console.warn('Failed to add category:', categoryName, error);
                 }
             }
             
             categories = ['all', ...uniqueCategories];
         } else {
-            // Get category names from database
             const categoryNames = dbCategories.map(c => c.name);
             categories = ['all', ...categoryNames];
         }
-        
-        console.log(`Loaded ${categories.length} categories`);
-        
     } catch (error) {
         console.error('Error loading categories:', error);
         categories = ['all'];
-        throw error;
     }
 }
 
 async function saveProduct(productData) {
     try {
-        console.log('Saving product:', productData);
-        
         const now = new Date().toISOString();
         
-        // Validate required fields
         if (!productData.code || !productData.name) {
             throw new Error('Kode dan nama produk harus diisi');
         }
         
-        // Check for duplicate code
         const existingProducts = await dbGetAll(STORES.PRODUCTS);
         const duplicateProduct = existingProducts.find(p => {
             if (productData.id && p.id === productData.id) return false;
@@ -2411,7 +1923,6 @@ async function saveProduct(productData) {
             throw new Error(`Kode produk "${productData.code}" sudah digunakan oleh produk: ${duplicateProduct.name}`);
         }
         
-        // Prepare data to save
         const dataToSave = {
             name: productData.name,
             code: productData.code,
@@ -2422,24 +1933,30 @@ async function saveProduct(productData) {
             updatedAt: now
         };
         
-        // Add or update product
         if (productData.id) {
-            // Update existing product
             dataToSave.id = productData.id;
             dataToSave.createdAt = productData.createdAt || now;
             await dbPut(STORES.PRODUCTS, dataToSave);
-            console.log('Product updated:', productData.id);
         } else {
-            // Add new product
             dataToSave.createdAt = now;
             const newId = await dbAdd(STORES.PRODUCTS, dataToSave);
             dataToSave.id = newId;
-            console.log('Product added with ID:', newId);
         }
         
-        // Ensure category exists in categories table
         if (dataToSave.category && dataToSave.category !== 'Lainnya') {
-            await ensureCategoryExists(dataToSave.category);
+            const categories = await dbGetAll(STORES.CATEGORIES);
+            const categoryExists = categories.some(c => c.name === dataToSave.category);
+            
+            if (!categoryExists) {
+                try {
+                    await dbAdd(STORES.CATEGORIES, {
+                        name: dataToSave.category,
+                        createdAt: now
+                    });
+                } catch (error) {
+                    console.warn('Failed to add category:', dataToSave.category, error);
+                }
+            }
         }
         
         return dataToSave;
@@ -2449,28 +1966,9 @@ async function saveProduct(productData) {
     }
 }
 
-async function ensureCategoryExists(categoryName) {
-    try {
-        const categories = await dbGetAll(STORES.CATEGORIES);
-        const categoryExists = categories.some(c => c.name === categoryName);
-        
-        if (!categoryExists) {
-            await dbAdd(STORES.CATEGORIES, {
-                name: categoryName,
-                createdAt: new Date().toISOString()
-            });
-            console.log('Category added:', categoryName);
-        }
-    } catch (error) {
-        console.warn('Failed to ensure category exists:', categoryName, error);
-    }
-}
-
 async function deleteProductFromDB(productId) {
     try {
-        console.log('Deleting product:', productId);
         await dbDelete(STORES.PRODUCTS, productId);
-        console.log('Product deleted successfully');
         return true;
     } catch (error) {
         console.error('Error deleting product:', error);
@@ -2480,7 +1978,6 @@ async function deleteProductFromDB(productId) {
 
 async function saveCategoryToDB(categoryName) {
     try {
-        console.log('Saving category:', categoryName);
         const categories = await dbGetAll(STORES.CATEGORIES);
         const existingCategory = categories.find(c => c.name === categoryName);
         
@@ -2489,10 +1986,8 @@ async function saveCategoryToDB(categoryName) {
                 name: categoryName,
                 createdAt: new Date().toISOString()
             });
-            console.log('Category saved successfully');
             return true;
         }
-        console.log('Category already exists');
         return false;
     } catch (error) {
         console.error('Error saving category:', error);
@@ -2502,7 +1997,6 @@ async function saveCategoryToDB(categoryName) {
 
 async function updateCategoryInDB(oldName, newName) {
     try {
-        console.log(`Updating category from "${oldName}" to "${newName}"`);
         const categories = await dbGetAll(STORES.CATEGORIES);
         const categoryToUpdate = categories.find(c => c.name === oldName);
         
@@ -2511,7 +2005,6 @@ async function updateCategoryInDB(oldName, newName) {
             categoryToUpdate.updatedAt = new Date().toISOString();
             await dbPut(STORES.CATEGORIES, categoryToUpdate);
             
-            // Update all products with the old category
             const productsToUpdate = products.filter(p => p.category === oldName);
             for (const product of productsToUpdate) {
                 product.category = newName;
@@ -2519,10 +2012,8 @@ async function updateCategoryInDB(oldName, newName) {
                 await dbPut(STORES.PRODUCTS, product);
             }
             
-            console.log('Category updated successfully');
             return true;
         }
-        console.log('Category not found for update');
         return false;
     } catch (error) {
         console.error('Error updating category:', error);
@@ -2532,14 +2023,12 @@ async function updateCategoryInDB(oldName, newName) {
 
 async function deleteCategoryFromDB(categoryName) {
     try {
-        console.log('Deleting category:', categoryName);
         const categories = await dbGetAll(STORES.CATEGORIES);
         const categoryToDelete = categories.find(c => c.name === categoryName);
         
         if (categoryToDelete) {
             await dbDelete(STORES.CATEGORIES, categoryToDelete.id);
             
-            // Update products to use "Lainnya" category
             const productsToUpdate = products.filter(p => p.category === categoryName);
             for (const product of productsToUpdate) {
                 product.category = "Lainnya";
@@ -2547,16 +2036,13 @@ async function deleteCategoryFromDB(categoryName) {
                 await dbPut(STORES.PRODUCTS, product);
             }
             
-            // Ensure "Lainnya" category exists
             const lainnyaExists = categories.some(c => c.name === "Lainnya");
             if (!lainnyaExists) {
                 await saveCategoryToDB("Lainnya");
             }
             
-            console.log('Category deleted successfully');
             return true;
         }
-        console.log('Category not found for deletion');
         return false;
     } catch (error) {
         console.error('Error deleting category:', error);
@@ -2566,7 +2052,6 @@ async function deleteCategoryFromDB(categoryName) {
 
 async function savePrintHistory(barcodeData, productName, weight) {
     try {
-        console.log('Saving print history...');
         await dbAdd(STORES.HISTORY, {
             barcode: barcodeData,
             productName: productName,
@@ -2574,7 +2059,6 @@ async function savePrintHistory(barcodeData, productName, weight) {
             timestamp: new Date().toISOString(),
             printedAt: new Date().toLocaleString('id-ID')
         });
-        console.log('Print history saved');
     } catch (error) {
         console.error('Error saving print history:', error);
     }
@@ -2582,8 +2066,6 @@ async function savePrintHistory(barcodeData, productName, weight) {
 
 async function exportData() {
     try {
-        showLoading();
-        
         const exportData = {
             products: await dbGetAll(STORES.PRODUCTS),
             categories: await dbGetAll(STORES.CATEGORIES),
@@ -2607,8 +2089,6 @@ async function exportData() {
     } catch (error) {
         console.error('Error exporting data:', error);
         showNotification('Gagal mengeksport data: ' + error.message, 'error');
-    } finally {
-        hideLoading();
     }
 }
 
@@ -2625,8 +2105,6 @@ async function importData() {
                 return;
             }
             
-            showLoading();
-            
             const reader = new FileReader();
             
             reader.onload = async (event) => {
@@ -2637,12 +2115,10 @@ async function importData() {
                         throw new Error('Format data tidak valid');
                     }
                     
-                    // Clear existing data
                     await dbClear(STORES.PRODUCTS);
                     await dbClear(STORES.CATEGORIES);
                     await dbClear(STORES.SETTINGS);
                     
-                    // Import products
                     for (const product of importedData.products) {
                         try {
                             await dbAdd(STORES.PRODUCTS, product);
@@ -2651,7 +2127,6 @@ async function importData() {
                         }
                     }
                     
-                    // Import categories
                     if (importedData.categories && Array.isArray(importedData.categories)) {
                         for (const category of importedData.categories) {
                             try {
@@ -2662,7 +2137,6 @@ async function importData() {
                         }
                     }
                     
-                    // Import settings
                     if (importedData.settings && Array.isArray(importedData.settings)) {
                         for (const setting of importedData.settings) {
                             try {
@@ -2673,19 +2147,16 @@ async function importData() {
                         }
                     }
                     
-                    // Update app state
                     await dbPut(STORES.APP_STATE, {
                         key: 'dummyDataAdded',
                         value: true,
                         updatedAt: new Date().toISOString()
                     });
                     
-                    // Reload data
                     await loadProducts();
                     await loadCategories();
                     await loadSettings();
                     
-                    // Update UI
                     renderCategoryDropdown();
                     renderCategories();
                     renderProducts();
@@ -2696,15 +2167,7 @@ async function importData() {
                     console.error('Error importing data:', error);
                     showNotification('Gagal mengimport data: ' + error.message, 'error');
                     resolve(false);
-                } finally {
-                    hideLoading();
                 }
-            };
-            
-            reader.onerror = () => {
-                showNotification('Gagal membaca file', 'error');
-                hideLoading();
-                resolve(false);
             };
             
             reader.readAsText(file);
@@ -2717,8 +2180,6 @@ async function importData() {
 async function clearAllData() {
     if (confirm('Apakah Anda yakin ingin menghapus SEMUA data?\nTindakan ini tidak dapat dibatalkan!')) {
         try {
-            showLoading();
-            
             await dbClear(STORES.PRODUCTS);
             await dbClear(STORES.CATEGORIES);
             await dbClear(STORES.HISTORY);
@@ -2736,143 +2197,21 @@ async function clearAllData() {
         } catch (error) {
             console.error('Error clearing data:', error);
             showNotification('Gagal menghapus data: ' + error.message, 'error');
-        } finally {
-            hideLoading();
         }
-    }
-}
-
-async function forceResetDatabase() {
-    if (confirm('Yakin ingin reset database? Semua data akan hilang dan aplikasi akan direfresh!')) {
-        try {
-            showLoading();
-            
-            // Close existing connection
-            if (db) {
-                db.close();
-            }
-            
-            // Delete database
-            const deleteRequest = indexedDB.deleteDatabase(DB_NAME);
-            
-            deleteRequest.onsuccess = () => {
-                console.log('Database deleted successfully');
-                showNotification('Database direset. Halaman akan direfresh...', 'success');
-                setTimeout(() => location.reload(), 2000);
-            };
-            
-            deleteRequest.onerror = (event) => {
-                console.error('Error deleting database:', event.target.error);
-                showNotification('Gagal mereset database: ' + event.target.error, 'error');
-                hideLoading();
-            };
-            
-            deleteRequest.onblocked = () => {
-                showNotification('Database diblokir. Tutup tab lain dan coba lagi.', 'error');
-                hideLoading();
-            };
-            
-        } catch (error) {
-            console.error('Error in force reset:', error);
-            showNotification('Error: ' + error.message, 'error');
-            hideLoading();
-        }
-    }
-}
-
-// ==================== WEIGHT PRESET FUNCTIONS ====================
-function updateWeightPresetButtons() {
-    const presetContainer = document.getElementById('weight-preset-buttons');
-    if (!presetContainer) return;
-    
-    presetContainer.innerHTML = '';
-    
-    // Create 4 preset buttons
-    for (let i = 1; i <= 4; i++) {
-        const presetKey = `preset${i}`;
-        const presetValue = weightPresets[presetKey] || 0;
-        
-        const button = document.createElement('button');
-        button.className = 'weight-preset-btn';
-        button.innerHTML = `
-            <div class="weight-preset-label">Preset ${i}</div>
-            <div class="weight-preset-value">${presetValue}g</div>
-        `;
-        button.onclick = () => setWeightFromPreset(presetKey);
-        
-        presetContainer.appendChild(button);
-    }
-}
-
-function setWeightFromPreset(presetKey) {
-    const presetValue = weightPresets[presetKey];
-    if (presetValue && presetValue > 0) {
-        // Set the weight value, ensuring it doesn't exceed the allowed digits
-        const maxDigits = digitConfig.weight;
-        let weightString = presetValue.toString();
-        
-        // If the preset value exceeds the allowed digits, truncate it
-        if (weightString.length > maxDigits) {
-            weightString = weightString.substring(0, maxDigits);
-            showNotification(`Berat dipotong menjadi ${weightString} (maks ${maxDigits} digit)`, 'info');
-        }
-        
-        weightValue = weightString;
-        document.getElementById('display-weight').textContent = weightValue;
-        showNotification(`Berat diatur ke preset: ${presetValue}g`, 'success');
-    } else {
-        showNotification('Preset belum diatur!', 'error');
     }
 }
 
 // ==================== APPLICATION INITIALIZATION ====================
 async function initApp() {
     try {
-        console.log('Starting app initialization...');
-        
-        showLoading();
-        hideError();
-        
-        // Initialize database first
         await initDatabase();
-        
-        // Load data in sequence to ensure dependencies
         await loadSettings();
         await loadProducts();
         await loadCategories();
         
-        // Initialize UI components
         renderCategoryDropdown();
         renderCategories();
         renderProducts();
-        updateWeightPresetButtons();
-        initPrinterConnection();
-        initLongPressEvents();
-        setupSearch();
-        setupCategoryViewMode();
-
-        // ==================== APPLICATION INITIALIZATION ====================
-        // ==================== APPLICATION INITIALIZATION ====================
-async function initApp() {
-    try {
-        console.log('Starting app initialization...');
-        
-        showLoading();
-        hideError();
-        
-        // Initialize database first
-        await initDatabase();
-        
-        // Load data in sequence to ensure dependencies
-        await loadSettings();
-        await loadProducts();
-        await loadCategories();
-        
-        // Initialize UI components
-        renderCategoryDropdown();
-        renderCategories();
-        renderProducts();
-        updateWeightPresetButtons();
         initPrinterConnection();
         initLongPressEvents();
         setupSearch();
@@ -2880,47 +2219,12 @@ async function initApp() {
         
         console.log('App initialized successfully');
         isFirstLoad = false;
-        
-        // Show success message
-        const productCount = products.length;
-        showNotification(`Aplikasi siap. ${productCount} produk dimuat.`, 'success');
-        
-        // FOCUS PADA INPUT PENCARIAN SAAT HALAMAN DIMUAT
-        setTimeout(() => {
-            const searchInput = document.getElementById('product-search');
-            if (searchInput) {
-                searchInput.focus();
-                // Untuk mobile, pastikan keyboard tidak muncul otomatis (opsional)
-                // searchInput.blur();
-                // setTimeout(() => searchInput.focus(), 100);
-            }
-        }, 500);
-        
     } catch (error) {
         console.error('Error initializing app:', error);
-        
-        let errorMessage = 'Gagal memuat aplikasi: ' + error.message;
-        
-        if (error.name === 'VersionError') {
-            errorMessage = 'Database versi tidak kompatibel. Coba reset aplikasi.';
-        } else if (error.name === 'InvalidStateError') {
-            errorMessage = 'Database dalam state tidak valid. Refresh halaman.';
-        } else if (error.message.includes('IndexedDB')) {
-            errorMessage = 'Browser tidak mendukung IndexedDB. Gunakan Chrome/Edge/Firefox.';
-        }
-        
-        showError(errorMessage);
-        
-    } finally {
-        hideLoading();
+        showNotification('Gagal memuat aplikasi. Silakan refresh halaman.', 'error');
     }
 }
 
-async function retryAppLoad() {
-    console.log('Retrying app load...');
-    await initApp();
-}
-    
 // ==================== CATEGORY VIEW MODE FUNCTIONS ====================
 function setupCategoryViewMode() {
     const dropdownButton = document.getElementById('category-dropdown-button');
@@ -2928,6 +2232,7 @@ function setupCategoryViewMode() {
         dropdownButton.addEventListener('click', showCategoryModal);
     }
     
+    // Close modal when clicking outside
     document.addEventListener('click', function(event) {
         const modal = document.getElementById('category-modal');
         const button = document.getElementById('category-dropdown-button');
@@ -2939,11 +2244,8 @@ function setupCategoryViewMode() {
         }
     });
     
-    // Set initial view based on screen size
     if (window.innerWidth <= 768) {
         showCategoryDropdownMobile();
-    } else {
-        showCategoryTabs();
     }
 }
 
@@ -2953,8 +2255,10 @@ function showCategoryModal() {
     
     if (!modal || !list) return;
     
+    // Clear existing items
     list.innerHTML = '';
     
+    // Create category items
     categories.forEach(category => {
         const item = document.createElement('div');
         item.className = `category-modal-item ${selectedCategory === category ? 'active' : ''}`;
@@ -2978,25 +2282,30 @@ function showCategoryModal() {
             }
             selectedCategory = category;
             
+            // Update button label
             const label = document.getElementById('category-dropdown-label');
             if (label) {
                 label.textContent = category === 'all' ? 'Semua Produk' : category;
             }
             
+            // Update button active state
             const button = document.getElementById('category-dropdown-button');
             if (button) {
                 button.classList.add('active');
             }
             
+            // Update categories and products
             renderCategories();
             renderProducts();
             
+            // Close modal
             closeCategoryModal();
         };
         
         list.appendChild(item);
     });
     
+    // Show modal
     modal.style.display = 'flex';
 }
 
@@ -3005,6 +2314,7 @@ function closeCategoryModal() {
     if (modal) {
         modal.style.display = 'none';
         
+        // Remove active state from button
         const button = document.getElementById('category-dropdown-button');
         if (button) {
             button.classList.remove('active');
@@ -3160,6 +2470,7 @@ function renderCategories() {
         container.appendChild(tab);
     });
     
+    // Update dropdown selection
     renderCategoryDropdown();
 }
 
@@ -3172,8 +2483,8 @@ function renderProducts() {
     let filteredProducts;
     if (searchQuery) {
         filteredProducts = products.filter(p => 
-            (p.name && p.name.toLowerCase().includes(searchQuery)) || 
-            (p.code && p.code.toLowerCase().includes(searchQuery))
+            p.name.toLowerCase().includes(searchQuery) || 
+            p.code.toLowerCase().includes(searchQuery)
         );
     } else {
         filteredProducts = selectedCategory === 'all'
@@ -3181,61 +2492,42 @@ function renderProducts() {
             : products.filter(p => p.category === selectedCategory);
     }
     
-    if (filteredProducts.length === 0) {
-        const emptyState = document.createElement('div');
-        emptyState.style.gridColumn = '1 / -1';
-        emptyState.style.textAlign = 'center';
-        emptyState.style.padding = '40px 20px';
-        emptyStyle = document.createElement('style');
-        emptyState.innerHTML = `
-            <svg class="icon" viewBox="0 0 24 24" style="width:60px;height:60px;color:#d9d9d9;margin-bottom:20px;">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="8" x2="12" y2="12"/>
-                <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-            <h3 style="color:#666;margin-bottom:10px;">Tidak ada produk</h3>
-            <p style="color:#999;">${searchQuery ? 'Tidak ditemukan produk dengan kata kunci "' + searchQuery + '"' : 'Tambahkan produk baru dengan mengklik kartu "+" di bawah'}</p>
+    filteredProducts.forEach(product => {
+        const card = document.createElement('div');
+        card.className = `product-card ${currentProduct?.id === product.id ? 'selected' : ''}`;
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-actions">
+                <button class="action-btn edit-btn">${icons.edit}</button>
+                <button class="action-btn delete-btn">${icons.delete}</button>
+            </div>
+            <div class="product-info">
+                <div class="product-name">${product.name}</div>
+                <div class="product-code">${product.code}</div>
+            </div>
         `;
-        container.appendChild(emptyState);
-    } else {
-        filteredProducts.forEach(product => {
-            const card = document.createElement('div');
-            card.className = `product-card ${currentProduct?.id === product.id ? 'selected' : ''}`;
-            card.innerHTML = `
-                <img src="${product.image}" alt="${product.name}" class="product-image">
-                <div class="product-actions">
-                    <button class="action-btn edit-btn">${icons.edit}</button>
-                    <button class="action-btn delete-btn">${icons.delete}</button>
-                </div>
-                <div class="product-info">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-code">${product.code}</div>
-                </div>
-            `;
-            
-            const editBtn = card.querySelector('.edit-btn');
-            const deleteBtn = card.querySelector('.delete-btn');
-            
-            editBtn.onclick = (event) => {
-                event.stopPropagation();
-                editProduct(product.id);
-            };
-            
-            deleteBtn.onclick = (event) => {
-                event.stopPropagation();
-                deleteProductHandler(product.id);
-            };
-            
-            card.onclick = () => {
-                currentProduct = product;
-                showWeightModal();
-            };
-            
-            container.appendChild(card);
-        });
-    }
+        
+        const editBtn = card.querySelector('.edit-btn');
+        const deleteBtn = card.querySelector('.delete-btn');
+        
+        editBtn.onclick = (event) => {
+            event.stopPropagation();
+            editProduct(product.id);
+        };
+        
+        deleteBtn.onclick = (event) => {
+            event.stopPropagation();
+            deleteProductHandler(product.id);
+        };
+        
+        card.onclick = () => {
+            currentProduct = product;
+            showWeightModal();
+        };
+        
+        container.appendChild(card);
+    });
     
-    // Add the "Add Product" card
     const addCard = document.createElement('div');
     addCard.className = 'add-product-card';
     addCard.innerHTML = `
@@ -3257,10 +2549,7 @@ function renderProducts() {
 
 async function editProduct(productId) {
     const product = products.find(p => p.id === productId);
-    if (!product) {
-        showNotification('Produk tidak ditemukan', 'error');
-        return;
-    }
+    if (!product) return;
     
     editingProductId = productId;
     showProductModal(product);
@@ -3270,7 +2559,6 @@ async function deleteProductHandler(productId) {
     if (!confirm('Hapus produk ini?')) return;
     
     try {
-        showLoading();
         await deleteProductFromDB(productId);
         products = products.filter(p => p.id !== productId);
         
@@ -3283,8 +2571,6 @@ async function deleteProductHandler(productId) {
     } catch (error) {
         console.error('Error deleting product:', error);
         showNotification('Gagal menghapus produk: ' + error.message, 'error');
-    } finally {
-        hideLoading();
     }
 }
 
@@ -3342,6 +2628,7 @@ function showProductModal(product = null) {
         Tambah Produk
     `;
     
+    // Generate example codes based on current digitConfig
     const productExample = generateExampleCode(digitConfig.product);
     const flexExample = generateExampleCode(digitConfig.flex);
     const catcodeExample = generateExampleCode(digitConfig.category);
@@ -3541,7 +2828,9 @@ function checkDuplicateCode() {
     const formattedCode = enteredCode.padStart(digitConfig.product, '0');
     
     const duplicateProduct = products.find(p => {
-        if (editingProductId && p.id === editingProductId) return false;
+        if (editingProductId && p.id === editingProductId) {
+            return false;
+        }
         return p.code === formattedCode || p.code === enteredCode;
     });
     
@@ -3611,6 +2900,7 @@ async function saveProductHandler() {
         return;
     }
     
+    // Validasi flex code
     if (flex && flex.length > digitConfig.flex) {
         showNotification(`Flex code maksimal ${digitConfig.flex} digit!`, 'error');
         return;
@@ -3621,6 +2911,7 @@ async function saveProductHandler() {
         return;
     }
     
+    // Validasi catcode
     if (catcode && catcode.length > digitConfig.category) {
         showNotification(`Kode kategori maksimal ${digitConfig.category} digit!`, 'error');
         return;
@@ -3643,6 +2934,7 @@ async function saveProductHandler() {
         imageData = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect width='300' height='300' fill='%23f5f5f5'/%3E%3Crect x='50' y='80' width='200' height='140' fill='%23006B54' rx='15'/%3E%3Ccircle cx='150' cy='150' r='50' fill='%23d9d9d9'/%3E%3Cpath d='M130 140 L150 160 L180 120' stroke='white' stroke-width='10' fill='none'/%3E%3C/svg%3E";
     }
     
+    // Jika flex atau catcode kosong, gunakan default "01"
     const finalFlex = flex ? flex.padStart(digitConfig.flex, '0') : '01';
     const finalCatcode = catcode ? catcode.padStart(digitConfig.category, '0') : '01';
     
@@ -3664,7 +2956,6 @@ async function saveProductHandler() {
     }
     
     try {
-        showLoading();
         const savedProduct = await saveProduct(productData);
         
         if (editingProductId) {
@@ -3686,7 +2977,7 @@ async function saveProductHandler() {
         resetProductForm();
     } catch (error) {
         console.error('Error saving product:', error);
-        if (error.name === 'ConstraintError' || error.message.includes('key yang sama')) {
+        if (error.name === 'ConstraintError') {
             showNotification('Kode produk sudah digunakan! Silakan gunakan kode lain.', 'error');
         } else if (error.message.includes('key path')) {
             showNotification('Database error. Coba reset aplikasi.', 'error');
@@ -3694,8 +2985,6 @@ async function saveProductHandler() {
         } else {
             showNotification('Gagal menyimpan produk: ' + error.message, 'error');
         }
-    } finally {
-        hideLoading();
     }
 }
 
@@ -3726,9 +3015,6 @@ function showWeightModal() {
     document.getElementById('current-barcode').textContent = 'Klik GENERATE untuk membuat barcode';
     currentBarcodeData = '';
     updatePrinterButton();
-    
-    // Update preset buttons
-    updateWeightPresetButtons();
     
     document.getElementById('weight-modal').style.display = 'flex';
 }
@@ -3769,9 +3055,9 @@ function backspaceWeight() {
 
 // ==================== PRINTER FUNCTIONS ====================
 function initPrinterConnection() {
-    try {
-        const savedConnection = localStorage.getItem('printerConnection');
-        if (savedConnection) {
+    const savedConnection = localStorage.getItem('printerConnection');
+    if (savedConnection) {
+        try {
             const connectionData = JSON.parse(savedConnection);
             const savedTime = new Date(connectionData.timestamp);
             const currentTime = new Date();
@@ -3790,13 +3076,13 @@ function initPrinterConnection() {
                 updatePrinterButton();
                 localStorage.removeItem('printerConnection');
             }
-        } else {
+        } catch (e) {
+            console.error('Error loading printer connection:', e);
             isPrinterConnected = false;
             updatePrinterLED(false);
             updatePrinterButton();
         }
-    } catch (e) {
-        console.error('Error loading printer connection:', e);
+    } else {
         isPrinterConnected = false;
         updatePrinterLED(false);
         updatePrinterButton();
@@ -3869,15 +3155,11 @@ function handlePrinterDisconnect() {
 }
 
 function savePrinterConnection() {
-    try {
-        const connectionData = {
-            isPrinterConnected: isPrinterConnected,
-            timestamp: new Date().toISOString()
-        };
-        localStorage.setItem('printerConnection', JSON.stringify(connectionData));
-    } catch (e) {
-        console.error('Error saving printer connection:', e);
-    }
+    const connectionData = {
+        isPrinterConnected: isPrinterConnected,
+        timestamp: new Date().toISOString()
+    };
+    localStorage.setItem('printerConnection', JSON.stringify(connectionData));
 }
 
 function updatePrinterLED(connected) {
@@ -3932,9 +3214,9 @@ async function connectToPrinter() {
             return false;
         }
         
-        showNotification("Memilih printer...", 'info');
+        showNotification("Memilih printer...");
         port = await navigator.serial.requestPort();
-        showNotification("Membuka koneksi...", 'info');
+        showNotification("Membuka koneksi...");
         await port.open({ baudRate: 9600 });
         writer = port.writable.getWriter();
         isPrinterConnected = true;
@@ -4050,66 +3332,24 @@ async function printBarcode() {
             return;
         }
         
-        showNotification("Mengirim data ke printer...", 'info');
+        showNotification("Mengirim data ke printer...");
         
         const esc = '\x1B';
         const gs = '\x1D';
         const lf = '\x0A';
         
         let data = esc + '@';
-        
-        // Set alignment center
         data += esc + 'a' + '\x01';
-        
-        // Baris kosong pertama
+        data += `[${currentProduct.flex.padStart(digitConfig.flex, '0')}][${currentProduct.catcode.padStart(digitConfig.category, '0')}]` +
+                `[${currentProduct.code.padStart(digitConfig.product, '0')}][${weightValue.padStart(digitConfig.weight, '0')}]${lf}`;
         data += lf;
-        
-        if (printDesign === 1) {
-            // Desain 1: Baris kosong, Nilai barcode (tengah), Barcode (tengah), Baris kosong, Potong
-            
-            // Print barcode value (centered)
-            data += currentBarcodeData + '\n';
-            
-            // Print barcode
-            data += gs + 'h' + '\x50'; // Barcode height
-            data += gs + 'w' + '\x02'; // Barcode width
-            data += gs + 'k' + '\x49'; // CODE128 barcode
-            data += String.fromCharCode(currentBarcodeData.length);
-            data += currentBarcodeData;
-            data += lf;
-            
-            // Baris kosong di bawah
-            data += lf;
-            
-        } else if (printDesign === 2) {
-            // Desain 2: Baris kosong, Nama produk (tengah), Barcode (tengah), Nilai barcode (tengah), Nilai berat (tengah), Baris kosong, Potong
-            
-            // Print separator line
-            data += '-----------------------------\n';
-            
-            // Print product name (centered)
-            const productName = currentProduct.name;
-            data += productName + '\n';
-            
-            // Print barcode
-            data += gs + 'h' + '\x50'; // Barcode height
-            data += gs + 'w' + '\x02'; // Barcode width
-            data += gs + 'k' + '\x49'; // CODE128 barcode
-            data += String.fromCharCode(currentBarcodeData.length);
-            data += currentBarcodeData;
-            data += lf;
-            
-            // Print barcode value
-            data += currentBarcodeData + '\n';
-            
-            // Print weight value
-            data += weightValue + ' gram\n';
-            
-            // Print separator line
-            data += '-----------------------------\n';
-        }
-        
-        // Baris kosong terakhir dan cut
+        data += esc + 'a' + '\x01';
+        data += gs + 'h' + '\x50';
+        data += gs + 'w' + '\x02';
+        data += gs + 'k' + '\x49';
+        data += String.fromCharCode(currentBarcodeData.length);
+        data += currentBarcodeData;
+        data += lf;
         data += lf + lf;
         data += gs + 'V' + '\x41' + '\x00';
         
@@ -4206,101 +3446,6 @@ function showSettingsModal() {
         <div style="margin-bottom:20px;">
             <div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-                    ${icons.preset}
-                </svg>
-                Preset Berat (gram)
-            </div>
-            <div class="preset-settings-grid">
-                <div class="preset-setting-item">
-                    <div class="preset-setting-label">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-                            <rect x="3" y="3" width="7" height="7"/>
-                        </svg>
-                        Preset 1
-                    </div>
-                    <input type="number" class="preset-setting-input" id="weight-preset1" value="${weightPresets.preset1}" min="0" step="1">
-                </div>
-                <div class="preset-setting-item">
-                    <div class="preset-setting-label">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-                            <rect x="14" y="3" width="7" height="7"/>
-                        </svg>
-                        Preset 2
-                    </div>
-                    <input type="number" class="preset-setting-input" id="weight-preset2" value="${weightPresets.preset2}" min="0" step="1">
-                </div>
-                <div class="preset-setting-item">
-                    <div class="preset-setting-label">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-                            <rect x="3" y="14" width="7" height="7"/>
-                        </svg>
-                        Preset 3
-                    </div>
-                    <input type="number" class="preset-setting-input" id="weight-preset3" value="${weightPresets.preset3}" min="0" step="1">
-                </div>
-                <div class="preset-setting-item">
-                    <div class="preset-setting-label">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-                            <rect x="14" y="14" width="7" height="7"/>
-                        </svg>
-                        Preset 4
-                    </div>
-                    <input type="number" class="preset-setting-input" id="weight-preset4" value="${weightPresets.preset4}" min="0" step="1">
-                </div>
-            </div>
-        </div>
-        
-        <div style="margin-bottom:20px;">
-            <div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
-                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-                    <polyline points="6 9 6 2 18 2 18 9"/>
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1-2 2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-                    <rect x="6" y="14" width="12" height="8"/>
-                </svg>
-                Desain Cetak Barcode
-            </div>
-            <div style="margin-bottom:15px;">
-                <div style="color:#333333;margin-bottom:5px;font-weight:500;">Pilih Desain Cetak</div>
-                <select class="setting-select" id="print-design-select">
-                    <option value="1" ${printDesign === 1 ? 'selected' : ''}>Desain 1: Nilai barcode + Barcode</option>
-                    <option value="2" ${printDesign === 2 ? 'selected' : ''}>Desain 2: Nama produk + Barcode + Nilai + Berat</option>
-                </select>
-            </div>
-            <div style="background:#f5f5f5;padding:15px;border-radius:15px;margin-top:10px;">
-                <div style="font-weight:600;margin-bottom:10px;color:#006B54;display:flex;align-items:center;gap:8px;">
-                    <svg class="icon icon-sm" viewBox="0 0 24 24">
-                        <path d="M12 20h9"/>
-                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                    </svg>
-                    Preview Desain
-                </div>
-                <div id="design-preview" style="background:white;padding:15px;border-radius:10px;border:1px solid #d9d9d9;">
-                    ${printDesign === 1 ? 
-                        '<div style="text-align:center;color:#333333;">' +
-                        '<div style="margin-bottom:10px;font-weight:600;">Desain 1</div>' +
-                        '<div>-----------------------------</div>' +
-                        '<div style="margin:10px 0;">[nilai barcode]</div>' +
-                        '<div style="margin:10px 0;font-size:0.9em;">[barcode image]</div>' +
-                        '<div>-----------------------------</div>' +
-                        '</div>' 
-                        : 
-                        '<div style="text-align:center;color:#333333;">' +
-                        '<div style="margin-bottom:10px;font-weight:600;">Desain 2</div>' +
-                        '<div>-----------------------------</div>' +
-                        '<div style="margin:10px 0;">[nama produk]</div>' +
-                        '<div style="margin:10px 0;font-size:0.9em;">[barcode image]</div>' +
-                        '<div style="margin:10px 0;">[nilai barcode]</div>' +
-                        '<div style="margin:10px 0;">[berat] gram</div>' +
-                        '<div>-----------------------------</div>' +
-                        '</div>'
-                    }
-                </div>
-            </div>
-        </div>
-        
-        <div style="margin-bottom:20px;">
-            <div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
-                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
                     <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
                     <path d="M10 2v20"/>
                 </svg>
@@ -4345,14 +3490,6 @@ function showSettingsModal() {
                 ${icons.delete}
                 Hapus Semua Data
             </button>
-            <button style="width:100%;padding:12px;border:none;border-radius:15px;background:#dc3545;color:white;font-weight:600;margin-top:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid #dc3545;"
-                onclick="forceResetDatabase()">
-                <svg class="icon icon-sm" viewBox="0 0 24 24">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                    <path d="M3 3v5h5"/>
-                </svg>
-                Force Reset Database
-            </button>
         </div>
         
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -4374,14 +3511,6 @@ function showSettingsModal() {
         </div>
     `;
     
-    // Add event listener for design selection
-    const designSelect = document.getElementById('print-design-select');
-    if (designSelect) {
-        designSelect.addEventListener('change', function() {
-            updateDesignPreview(this.value);
-        });
-    }
-    
     const inputs = ['flex-digits', 'category-digits', 'product-digits', 'weight-digits'];
     inputs.forEach(id => {
         const el = document.getElementById(id);
@@ -4391,46 +3520,12 @@ function showSettingsModal() {
     document.getElementById('settings-modal').style.display = 'flex';
 }
 
-function updateDesignPreview(design) {
-    const preview = document.getElementById('design-preview');
-    if (!preview) return;
-    
-    if (design === '1') {
-        preview.innerHTML = `
-            <div style="text-align:center;color:#333333;">
-                <div style="margin-bottom:10px;font-weight:600;">Desain 1</div>
-                <div>-----------------------------</div>
-                <div style="margin:10px 0;">[nilai barcode]</div>
-                <div style="margin:10px 0;font-size:0.9em;">[barcode image]</div>
-                <div>-----------------------------</div>
-            </div>
-        `;
-    } else {
-        preview.innerHTML = `
-            <div style="text-align:center;color:#333333;">
-                <div style="margin-bottom:10px;font-weight:600;">Desain 2</div>
-                <div>-----------------------------</div>
-                <div style="margin:10px 0;">[nama produk]</div>
-                <div style="margin:10px 0;font-size:0.9em;">[barcode image]</div>
-                <div style="margin:10px 0;">[nilai barcode]</div>
-                <div style="margin:10px 0;">[berat] gram</div>
-                <div>-----------------------------</div>
-            </div>
-        `;
-    }
-}
-
 async function addNewCategoryFromSettings() {
     const input = document.getElementById('new-category-input-settings');
     const category = input.value.trim();
     
     if (!category) {
         showNotification('Masukkan nama kategori!', 'error');
-        return;
-    }
-    
-    if (category === 'all') {
-        showNotification('Kategori "all" tidak dapat digunakan', 'error');
         return;
     }
     
@@ -4454,11 +3549,6 @@ async function editCategoryHandler(oldCategory) {
     
     const newCategory = prompt('Edit nama kategori:', oldCategory);
     if (newCategory && newCategory.trim() && newCategory !== oldCategory) {
-        if (newCategory === 'all') {
-            showNotification('Kategori "all" tidak dapat digunakan', 'error');
-            return;
-        }
-        
         try {
             await updateCategoryInDB(oldCategory, newCategory);
             
@@ -4539,13 +3629,6 @@ async function saveSettingsConfig() {
     const category = parseInt(document.getElementById('category-digits').value) || 2;
     const product = parseInt(document.getElementById('product-digits').value) || 4;
     const weight = parseInt(document.getElementById('weight-digits').value) || 5;
-    const design = parseInt(document.getElementById('print-design-select').value) || 1;
-    
-    // Get weight presets
-    const preset1 = parseInt(document.getElementById('weight-preset1').value) || 0;
-    const preset2 = parseInt(document.getElementById('weight-preset2').value) || 0;
-    const preset3 = parseInt(document.getElementById('weight-preset3').value) || 0;
-    const preset4 = parseInt(document.getElementById('weight-preset4').value) || 0;
     
     const total = flex + category + product + weight;
     if (total !== 13) {
@@ -4553,27 +3636,15 @@ async function saveSettingsConfig() {
         return;
     }
     
-    // Update global variables
     digitConfig = { flex, category, product, weight };
-    printDesign = design;
-    weightPresets = {
-        preset1,
-        preset2,
-        preset3,
-        preset4
-    };
     
     try {
-        showLoading();
         await saveSettings();
-        updateWeightPresetButtons();
         showNotification('Pengaturan berhasil disimpan!', 'success');
         closeSettingsModal();
     } catch (error) {
         console.error('Error saving settings:', error);
         showNotification('Gagal menyimpan pengaturan: ' + error.message, 'error');
-    } finally {
-        hideLoading();
     }
 }
 
@@ -4690,10 +3761,7 @@ function showNotification(message, type = 'success') {
 }
 
 // ==================== EVENT LISTENERS ====================
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOM fully loaded, initializing app...');
-    await initApp();
-});
+document.addEventListener('DOMContentLoaded', initApp);
 
 window.onclick = function(event) {
     if (event.target.classList.contains('modal-overlay')) {
@@ -4710,6 +3778,7 @@ window.onclick = function(event) {
     }
 };
 
+// Responsive behavior for category view
 window.addEventListener('resize', function() {
     if (window.innerWidth <= 768) {
         showCategoryDropdownMobile();
@@ -4719,29 +3788,6 @@ window.addEventListener('resize', function() {
         document.querySelector('.category-dropdown-container').style.display = 'none';
     }
 });
-
-// Handle page visibility changes for data refresh
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-        console.log('Page became visible, refreshing data...');
-        refreshData();
-    }
-});
-
-async function refreshData() {
-    try {
-        showLoading();
-        await loadProducts();
-        await loadCategories();
-        renderCategories();
-        renderProducts();
-        console.log('Data refreshed successfully');
-    } catch (error) {
-        console.error('Error refreshing data:', error);
-    } finally {
-        hideLoading();
-    }
-}
 </script>
 </body>
 </html>
