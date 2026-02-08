@@ -2820,6 +2820,7 @@ function setWeightFromPreset(presetKey) {
         weightValue = weightString;
         document.getElementById('display-weight').textContent = weightValue;
         showNotification(`Berat diatur ke preset: ${presetValue}g`, 'success');
+        generateBarcode();
     } else {
         showNotification('Preset belum diatur!', 'error');
     }
