@@ -631,6 +631,13 @@ body {
     margin-bottom: 0;
 }
 
+/* MODIFIKASI: Perbesar font untuk nilai berat */
+#display-weight {
+    font-size: 1.8em; /* Diperbesar dari sebelumnya */
+    font-weight: 700;
+    color: #006B54;
+}
+
 /* ==================== PRODUCT INFO COMPACT ==================== */
 .product-info-section {
     background: #f5f5f5;
@@ -1520,6 +1527,10 @@ input::placeholder, textarea::placeholder {
 <audio id="notification-error" class="audio-notification" preload="auto">
     <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
 </audio>
+<!-- MODIFIKASI: Tambahkan audio untuk efek suara tombol numerik -->
+<audio id="button-click-sound" class="audio-notification" preload="auto">
+    <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+</audio>
 
 <!-- ==================== LOADING OVERLAY ==================== -->
 <div id="loading-overlay" class="loading-overlay">
@@ -1843,6 +1854,12 @@ function createFallbackSounds() {
     if (errorAudio) {
         errorAudio.src = createBeepSound(400, 0.5);
     }
+    
+    // MODIFIKASI: Tambahkan suara untuk tombol klik
+    const buttonClickAudio = document.getElementById('button-click-sound');
+    if (buttonClickAudio) {
+        buttonClickAudio.src = createBeepSound(600, 0.1);
+    }
 }
 
 // Function to create beep sound as base64 WAV
@@ -1891,6 +1908,57 @@ function createBeepSound(frequency, duration) {
 function writeString(view, offset, string) {
     for (let i = 0; i < string.length; i++) {
         view.setUint8(offset + i, string.charCodeAt(i));
+    }
+}
+
+// MODIFIKASI: Tambahkan fungsi untuk memainkan suara klik tombol
+function playClickSound() {
+    try {
+        // Initialize audio on first play
+        if (!audioInitialized) {
+            initAudioSystem();
+        }
+        
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        
+        if (audioContext && audioContext.state === 'running') {
+            // Use Web Audio API for better timing
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 600;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+            
+            // Clean up
+            oscillator.onended = () => {
+                oscillator.disconnect();
+                gainNode.disconnect();
+            };
+        } else {
+            // Fallback to HTML5 Audio
+            const buttonClickAudio = document.getElementById('button-click-sound');
+            if (buttonClickAudio) {
+                buttonClickAudio.currentTime = 0;
+                buttonClickAudio.play().catch(e => {
+                    console.log("Audio play failed, using silent mode:", e);
+                });
+            }
+        }
+    } catch (error) {
+        console.log("Click sound play failed:", error);
+        // Silent fail - don't interrupt user experience
     }
 }
 
@@ -3095,6 +3163,9 @@ function updateWeightPresetButtons() {
 }
 
 function setWeightFromPreset(presetKey) {
+    // MODIFIKASI: Tambahkan suara klik saat preset ditekan
+    playClickSound();
+    
     const presetValue = weightPresets[presetKey];
     if (presetValue && presetValue > 0) {
         // Set the weight value, ensuring it doesn't exceed the allowed digits
@@ -3994,7 +4065,11 @@ function closeWeightModal() {
     });
 }
 
+// MODIFIKASI: Tambahkan suara klik pada fungsi appendNumber
 function appendNumber(num) {
+    // Mainkan suara klik
+    playClickSound();
+    
     if (num === '00') {
         if (weightValue.length <= digitConfig.weight - 2) {
             weightValue += '00';
@@ -4006,12 +4081,20 @@ function appendNumber(num) {
     document.getElementById('display-weight').textContent = displayWeight;
 }
 
+// MODIFIKASI: Tambahkan suara klik pada fungsi clearWeight
 function clearWeight() {
+    // Mainkan suara klik
+    playClickSound();
+    
     weightValue = '';
     document.getElementById('display-weight').textContent = '0';
 }
 
+// MODIFIKASI: Tambahkan suara klik pada fungsi backspaceWeight
 function backspaceWeight() {
+    // Mainkan suara klik
+    playClickSound();
+    
     if (weightValue.length > 0) {
         weightValue = weightValue.slice(0, -1);
     }
