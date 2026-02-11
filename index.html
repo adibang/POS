@@ -1465,6 +1465,19 @@ input::placeholder, textarea::placeholder {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* ==================== AUDIO NOTIFICATION STYLES ==================== */
+.audio-notification {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
 </style>
 </head>
 <body>
@@ -1496,6 +1509,17 @@ input::placeholder, textarea::placeholder {
         </div>
     </div>
 </header>
+
+<!-- ==================== AUDIO ELEMENTS FOR NOTIFICATION SOUNDS ==================== -->
+<audio id="notification-success" class="audio-notification" preload="auto">
+    <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+</audio>
+<audio id="notification-warning" class="audio-notification" preload="auto">
+    <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+</audio>
+<audio id="notification-error" class="audio-notification" preload="auto">
+    <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" type="audio/wav">
+</audio>
 
 <!-- ==================== LOADING OVERLAY ==================== -->
 <div id="loading-overlay" class="loading-overlay">
@@ -1757,6 +1781,96 @@ input::placeholder, textarea::placeholder {
 <div id="notification"></div>
 
 <script>
+// ==================== AUDIO NOTIFICATION FUNCTIONS ====================
+// Function to play success sound (barcode generated or print success)
+function playSuccessSound() {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+    } catch (error) {
+        console.log("Audio context not supported, using fallback sound");
+        // Fallback using base64 encoded beep sound
+        const successAudio = document.getElementById('notification-success');
+        if (successAudio) {
+            successAudio.currentTime = 0;
+            successAudio.play().catch(e => console.log("Audio play failed:", e));
+        }
+    }
+}
+
+// Function to play warning sound (printer not connected)
+function playWarningSound() {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 600;
+        oscillator.type = 'sine';
+        
+        // Two beeps for warning
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime + 0.3);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+    } catch (error) {
+        console.log("Audio context not supported, using fallback sound");
+        const warningAudio = document.getElementById('notification-warning');
+        if (warningAudio) {
+            warningAudio.currentTime = 0;
+            warningAudio.play().catch(e => console.log("Audio play failed:", e));
+        }
+    }
+}
+
+// Function to play error sound (print failed)
+function playErrorSound() {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 400;
+        oscillator.type = 'sawtooth';
+        
+        // Longer, lower tone for error
+        gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.8);
+    } catch (error) {
+        console.log("Audio context not supported, using fallback sound");
+        const errorAudio = document.getElementById('notification-error');
+        if (errorAudio) {
+            errorAudio.currentTime = 0;
+            errorAudio.play().catch(e => console.log("Audio play failed:", e));
+        }
+    }
+}
+
 // ==================== DATABASE CONFIGURATION ====================
 const DB_NAME = 'POSBarcodeDB';
 const DB_VERSION = 5;
@@ -3990,6 +4104,9 @@ function generateBarcode() {
         document.getElementById('display-barcode').textContent = currentBarcodeData;
         document.getElementById('current-barcode').textContent = currentBarcodeData;
         showNotification('Barcode berhasil digenerate!', 'success');
+        
+        // Play success sound for barcode generation
+        playSuccessSound();
     } catch (error) {
         console.error("Barcode generation error:", error);
         showNotification('Gagal membuat barcode: ' + error.message, 'error');
@@ -4010,6 +4127,8 @@ async function printBarcode() {
         
         if (!isPrinterConnected || !writer) {
             showNotification('Printer belum terhubung. Klik CONNECT dulu.', 'error');
+            // Play warning sound for printer not connected
+            playWarningSound();
             return;
         }
         
@@ -4082,9 +4201,16 @@ async function printBarcode() {
         
         await savePrintHistory(currentBarcodeData, currentProduct.name, weightValue);
         showNotification('Barcode berhasil dicetak!', 'success');
+        
+        // Play success sound for successful print
+        playSuccessSound();
     } catch (error) {
         console.error("Print error:", error);
         showNotification("Gagal mengirim ke printer: " + error.message, 'error');
+        
+        // Play error sound for print failure
+        playErrorSound();
+        
         if (error.message.includes("closed") || error.message.includes("disconnected") || error.name === 'NetworkError') {
             handlePrinterDisconnect();
         }
