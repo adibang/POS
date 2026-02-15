@@ -22,6 +22,108 @@ body {
     color: #333333;
 }
 
+/* ==================== DRAWER SIDEBAR ==================== */
+.drawer-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #006B54;
+}
+
+.drawer-toggle svg {
+    width: 24px;
+    height: 24px;
+}
+
+.sidebar {
+    position: fixed;
+    left: -220px;
+    top: 0;
+    width: 220px;
+    height: 100vh;
+    background: #ffffff;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    z-index: 300;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar button {
+    margin: 0 10px;
+    padding: 12px 16px;
+    border: 1px solid #006B54;
+    border-radius: 15px;
+    background: white;
+    color: #006B54;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sidebar button:hover {
+    background: #f0f9f6;
+}
+
+.sidebar button svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Drawer overlay */
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 250;
+    display: none;
+}
+
+.drawer-overlay.show {
+    display: block;
+}
+
+/* Adjust main content when drawer is open */
+body.drawer-open .app-header,
+body.drawer-open .sticky-search-category-container,
+body.drawer-open .main-content {
+    margin-left: 0; /* karena drawer tidak mengambil ruang secara permanen */
+}
+
+/* Responsive: drawer tetap sama */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+    }
+    .sidebar button span {
+        display: none;
+    }
+    .sidebar.open {
+        width: 220px;
+    }
+    .sidebar.open button span {
+        display: inline;
+    }
+}
+
 /* ==================== HEADER ==================== */
 .app-header {
     background: #FFFFFF;
@@ -92,8 +194,8 @@ body {
 }
 
 @keyframes pulse-red {
-    0% { box-shadow: 0 0 10px rgba(220, 53, 69, 0.7); }
-    50% { box-shadow: 0 0 20px rgba(220, 53, 69, 0.9), 0 0 40px rgba(220, 53, 69, 0.6); }
+    0% { box-shadow: 0 0 10px rgba(220, 53,69, 0.7); }
+    50% { box-shadow: 0 0 20px rgba(220, 53,69, 0.9), 0 0 40px rgba(220, 53,69, 0.6); }
     100% { box-shadow: 0 0 10px rgba(220, 53,69, 0.7); }
 }
 
@@ -187,7 +289,7 @@ body {
     transform: rotate(180deg);
 }
 
-/* ==================== CATEGORY MODAL ==================== */
+/* ==================== CATEGORY MODAL (for selection) ==================== */
 .category-modal-overlay {
     display: none;
     position: fixed;
@@ -259,8 +361,34 @@ body {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+/* MODIFIKASI: Toggle untuk list/grid */
+.category-modal-view-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.view-toggle-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #006B54;
+    background: white;
+    color: #006B54;
+    border-radius: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.view-toggle-btn.active {
+    background: #006B54;
+    color: white;
+}
+
 .category-modal-list {
-    max-height: calc(60vh - 60px); /* Sesuaikan dengan tinggi modal */
+    max-height: calc(60vh - 110px); /* header + toggle = ~110px */
     overflow-y: auto;
     padding: 10px 0;
 }
@@ -275,6 +403,7 @@ body {
     border-bottom: 1px solid #f0f0f0;
     color: #333333;
     font-weight: 500;
+    position: relative;
 }
 
 .category-modal-item:last-child {
@@ -305,6 +434,152 @@ body {
 .category-modal-item.active .category-modal-icon {
     opacity: 1;
     color: white;
+}
+
+/* Tombol aksi untuk kategori di modal */
+.category-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.category-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: #666;
+}
+
+.category-action-btn:hover {
+    background: rgba(0,0,0,0.05);
+    color: #006B54;
+}
+
+.category-action-btn.edit:hover {
+    color: #006B54;
+}
+
+.category-action-btn.delete:hover {
+    color: #ff6b6b;
+}
+
+.category-modal-item.active .category-action-btn {
+    color: rgba(255,255,255,0.9);
+}
+
+.category-modal-item.active .category-action-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+/* MODIFIKASI: Tampilan grid */
+.category-modal-list.grid-mode {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 15px;
+    max-height: calc(60vh - 110px);
+}
+
+.category-modal-list.grid-mode .category-modal-item {
+    flex-direction: column;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background: white;
+    transition: all 0.2s;
+    height: auto;
+    border-bottom: none;
+    position: relative;
+}
+
+.category-modal-list.grid-mode .category-modal-item:hover {
+    border-color: #006B54;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.category-modal-list.grid-mode .category-modal-item.active {
+    background: #006B54;
+    color: white;
+    border-color: #006B54;
+}
+
+.category-grid-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 5px;
+}
+
+.category-grid-name {
+    font-size: 0.8rem;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.category-modal-list.grid-mode .category-modal-icon {
+    display: none; /* Sembunyikan ikon di mode grid */
+}
+
+/* Tombol aksi untuk mode grid (pojok kanan atas) */
+.category-modal-list.grid-mode .category-actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin-left: 0;
+    background: rgba(255,255,255,0.9);
+    border-radius: 15px;
+    padding: 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.category-modal-list.grid-mode .category-action-btn {
+    padding: 2px;
+}
+
+.category-modal-list.grid-mode .category-action-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ==================== CATEGORY CRUD MODAL ==================== */
+.category-crud-modal .modal-content {
+    max-width: 450px;
+}
+
+.category-image-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 15px;
+    object-fit: cover;
+    margin: 10px auto;
+    border: 2px solid #d9d9d9;
+    display: block;
+}
+
+.category-image-upload-area {
+    border: 2px dashed #d9d9d9;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+    background: #f5f5f5;
+}
+
+.category-image-upload-area:hover {
+    border-color: #006B54;
+    background: #f0f9f6;
 }
 
 /* ==================== CATEGORY SWITCHER ==================== */
@@ -372,7 +647,7 @@ body {
     font-weight: 500;
     flex-shrink: 0;
     position: relative;
-    touch-action: manipulation;
+    touch-action: manipulation; /* Memperbaiki long-press pada mobile */
 }
 
 .category-tab:hover {
@@ -1290,6 +1565,10 @@ input::placeholder, textarea::placeholder {
 
 /* ==================== RESPONSIVE STYLES ==================== */
 @media (max-width: 768px) {
+    .category-modal-list.grid-mode {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
     .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         gap: 16px;
@@ -1434,7 +1713,7 @@ input::placeholder, textarea::placeholder {
     }
     
     .category-modal-list {
-        max-height: calc(70vh - 60px);
+        max-height: calc(70vh - 110px);
     }
     
     .weight-preset-buttons {
@@ -1492,6 +1771,13 @@ input::placeholder, textarea::placeholder {
 <header class="app-header">
     <div class="header-content">
         <div class="app-title">
+            <button class="drawer-toggle" id="drawer-toggle" onclick="toggleDrawer()">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <div class="icon-container">
                 <svg class="icon box-icon icon-primary" viewBox="0 0 24 24">
                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
@@ -1516,6 +1802,27 @@ input::placeholder, textarea::placeholder {
         </div>
     </div>
 </header>
+
+<!-- ==================== DRAWER SIDEBAR ==================== -->
+<div class="sidebar" id="sidebar">
+    <button onclick="openCategoryCrudModal()">
+        <svg class="icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        <span>Tambah Kategori</span>
+    </button>
+    <button onclick="showProductModal()">
+        <svg class="icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        <span>Tambah Produk</span>
+    </button>
+</div>
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
 
 <!-- ==================== AUDIO ELEMENTS FOR NOTIFICATION SOUNDS ==================== -->
 <audio id="notification-success" class="audio-notification" preload="auto">
@@ -1594,12 +1901,17 @@ input::placeholder, textarea::placeholder {
 
 <!-- ==================== MAIN CONTENT ==================== -->
 <main class="main-content">
-    <!-- Category Modal -->
+    <!-- Category Modal (for selection) -->
     <div class="category-modal-overlay" id="category-modal">
         <div class="category-modal">
             <div class="category-modal-header">
                 <span>Pilih Kategori</span>
                 <button class="category-modal-close" onclick="closeCategoryModal()">×</button>
+            </div>
+            <!-- MODIFIKASI: Toggle list/grid -->
+            <div class="category-modal-view-toggle">
+                <button class="view-toggle-btn active" data-view="list" onclick="setCategoryViewMode('list')">List</button>
+                <button class="view-toggle-btn" data-view="grid" onclick="setCategoryViewMode('grid')">Grid</button>
             </div>
             <div class="category-modal-list" id="category-modal-list">
                 <!-- Categories will be loaded here -->
@@ -1617,6 +1929,67 @@ input::placeholder, textarea::placeholder {
         <!-- Products will be loaded here -->
     </div>
 </main>
+
+<!-- ==================== CATEGORY CRUD MODAL ==================== -->
+<div class="modal-overlay" id="category-crud-modal">
+    <div class="modal-content category-crud-modal">
+        <div class="modal-header">
+            <h2 class="modal-title" id="category-crud-title">
+                <svg class="icon icon-primary" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="16"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                </svg>
+                Tambah Kategori
+            </h2>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom:15px;">
+                <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                        <path d="M10 2v20"/>
+                    </svg>
+                    Nama Kategori
+                </div>
+                <input type="text" class="form-input" id="category-name-input" placeholder="Masukkan nama kategori">
+            </div>
+            
+            <div style="margin-bottom:20px;">
+                <div style="color:#333333;margin-bottom:5px;font-weight:500;display:flex;align-items:center;gap:8px;">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    Gambar Kategori
+                </div>
+                <div class="category-image-upload-area" onclick="document.getElementById('category-image-input').click()">
+                    <img id="category-image-preview" class="category-image-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E" style="display:block;">
+                    <div style="color:#666;margin-top:5px;">Klik untuk upload gambar</div>
+                </div>
+                <input type="file" id="category-image-input" accept="image/*" style="display:none;">
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <button class="form-button-secondary" onclick="closeCategoryCrudModal()">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#333333;">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                    BATAL
+                </button>
+                <button class="form-button-primary" onclick="saveCategoryHandler()" id="save-category-btn">
+                    <svg class="icon icon-sm icon-white" viewBox="0 0 24 24">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                    SIMPAN
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- ==================== WEIGHT INPUT MODAL ==================== -->
 <div class="modal-overlay" id="weight-modal">
@@ -2131,7 +2504,8 @@ const STORES = {
 // ==================== GLOBAL VARIABLES ====================
 let db = null;
 let products = [];
-let categories = [];
+let categories = []; // array of category names (including 'all')
+let categoryObjects = []; // MODIFIKASI: array of category objects from database
 let currentProduct = null;
 let weightValue = '';
 let digitConfig = { flex: 2, category: 2, product: 4, weight: 5 };
@@ -2150,6 +2524,7 @@ let longPressCategory = null;
 let isLongPress = false;
 let isFirstLoad = true;
 let categoryViewMode = 'tabs'; // 'tabs' or 'dropdown'
+let currentCategoryViewMode = 'list'; // MODIFIKASI: mode tampilan modal kategori
 
 // Weight presets
 let weightPresets = {
@@ -2158,6 +2533,10 @@ let weightPresets = {
     preset3: 500,
     preset4: 1000
 };
+
+// Variabel untuk CRUD kategori
+let editingCategoryId = null; // untuk menyimpan id kategori yang sedang diedit
+let categoryImageBase64 = null; // untuk menyimpan gambar kategori sementara
 
 // Icon definitions
 const icons = {
@@ -2700,9 +3079,9 @@ async function addDummyProducts() {
 async function loadCategories() {
     try {
         console.log('Loading categories...');
-        const dbCategories = await dbGetAll(STORES.CATEGORIES);
+        categoryObjects = await dbGetAll(STORES.CATEGORIES);
         
-        if (dbCategories.length === 0) {
+        if (categoryObjects.length === 0) {
             console.log('No categories found, creating from products...');
             
             // Get unique categories from products
@@ -2713,13 +3092,17 @@ async function loadCategories() {
             
             console.log(`Found ${uniqueCategories.length} unique categories in products`);
             
-            // Add each category to database
+            // Add each category to database with default image
             for (const categoryName of uniqueCategories) {
                 try {
-                    await dbAdd(STORES.CATEGORIES, {
+                    const newCat = {
                         name: categoryName,
+                        image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E",
                         createdAt: new Date().toISOString()
-                    });
+                    };
+                    const id = await dbAdd(STORES.CATEGORIES, newCat);
+                    newCat.id = id;
+                    categoryObjects.push(newCat);
                     console.log('Added category:', categoryName);
                 } catch (error) {
                     // Ignore duplicate errors
@@ -2731,18 +3114,20 @@ async function loadCategories() {
                 }
             }
             
-            categories = ['all', ...uniqueCategories];
-        } else {
-            // Get category names from database
-            const categoryNames = dbCategories.map(c => c.name);
-            categories = ['all', ...categoryNames];
+            // Reload categories
+            categoryObjects = await dbGetAll(STORES.CATEGORIES);
         }
+        
+        // Build categories array for selection
+        const categoryNames = categoryObjects.map(c => c.name);
+        categories = ['all', ...categoryNames];
         
         console.log(`Loaded ${categories.length} categories`);
         
     } catch (error) {
         console.error('Error loading categories:', error);
         categories = ['all'];
+        categoryObjects = [];
         throw error;
     }
 }
@@ -2815,6 +3200,7 @@ async function ensureCategoryExists(categoryName) {
         if (!categoryExists) {
             await dbAdd(STORES.CATEGORIES, {
                 name: categoryName,
+                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E",
                 createdAt: new Date().toISOString()
             });
             console.log('Category added:', categoryName);
@@ -2836,54 +3222,55 @@ async function deleteProductFromDB(productId) {
     }
 }
 
-async function saveCategoryToDB(categoryName) {
+// Fungsi untuk menyimpan kategori (tambah/edit) dengan gambar
+async function saveCategoryToDB(categoryData) {
     try {
-        console.log('Saving category:', categoryName);
-        const categories = await dbGetAll(STORES.CATEGORIES);
-        const existingCategory = categories.find(c => c.name === categoryName);
+        console.log('Saving category:', categoryData);
+        const now = new Date().toISOString();
         
-        if (!existingCategory) {
-            await dbAdd(STORES.CATEGORIES, {
-                name: categoryName,
-                createdAt: new Date().toISOString()
-            });
-            console.log('Category saved successfully');
-            return true;
+        // Check for duplicate name if adding new
+        const existingCategories = await dbGetAll(STORES.CATEGORIES);
+        const duplicateName = existingCategories.find(c => {
+            if (categoryData.id && c.id === categoryData.id) return false;
+            return c.name.toLowerCase() === categoryData.name.toLowerCase();
+        });
+        
+        if (duplicateName) {
+            throw new Error(`Kategori "${categoryData.name}" sudah ada!`);
         }
-        console.log('Category already exists');
-        return false;
+        
+        const dataToSave = {
+            name: categoryData.name,
+            image: categoryData.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E",
+            updatedAt: now
+        };
+        
+        if (categoryData.id) {
+            // Update existing category
+            dataToSave.id = categoryData.id;
+            dataToSave.createdAt = categoryData.createdAt || now;
+            await dbPut(STORES.CATEGORIES, dataToSave);
+            
+            // Update all products with this category name (if name changed)
+            const oldCategory = categoryData.oldName || categoryData.name;
+            if (oldCategory !== categoryData.name) {
+                const productsToUpdate = products.filter(p => p.category === oldCategory);
+                for (const product of productsToUpdate) {
+                    product.category = categoryData.name;
+                    product.updatedAt = now;
+                    await dbPut(STORES.PRODUCTS, product);
+                }
+            }
+        } else {
+            // Add new category
+            dataToSave.createdAt = now;
+            await dbAdd(STORES.CATEGORIES, dataToSave);
+        }
+        
+        console.log('Category saved successfully');
+        return true;
     } catch (error) {
         console.error('Error saving category:', error);
-        throw error;
-    }
-}
-
-async function updateCategoryInDB(oldName, newName) {
-    try {
-        console.log(`Updating category from "${oldName}" to "${newName}"`);
-        const categories = await dbGetAll(STORES.CATEGORIES);
-        const categoryToUpdate = categories.find(c => c.name === oldName);
-        
-        if (categoryToUpdate) {
-            categoryToUpdate.name = newName;
-            categoryToUpdate.updatedAt = new Date().toISOString();
-            await dbPut(STORES.CATEGORIES, categoryToUpdate);
-            
-            // Update all products with the old category
-            const productsToUpdate = products.filter(p => p.category === oldName);
-            for (const product of productsToUpdate) {
-                product.category = newName;
-                product.updatedAt = new Date().toISOString();
-                await dbPut(STORES.PRODUCTS, product);
-            }
-            
-            console.log('Category updated successfully');
-            return true;
-        }
-        console.log('Category not found for update');
-        return false;
-    } catch (error) {
-        console.error('Error updating category:', error);
         throw error;
     }
 }
@@ -2908,7 +3295,7 @@ async function deleteCategoryFromDB(categoryName) {
             // Ensure "Lainnya" category exists
             const lainnyaExists = categories.some(c => c.name === "Lainnya");
             if (!lainnyaExists) {
-                await saveCategoryToDB("Lainnya");
+                await saveCategoryToDB({ name: "Lainnya" });
             }
             
             console.log('Category deleted successfully');
@@ -3187,6 +3574,190 @@ function setWeightFromPreset(presetKey) {
     }
 }
 
+// ==================== DRAWER FUNCTIONS ====================
+function toggleDrawer() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('drawer-overlay');
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+    document.body.classList.toggle('drawer-open');
+}
+
+function closeDrawer() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('drawer-overlay');
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+    document.body.classList.remove('drawer-open');
+}
+
+// ==================== CATEGORY CRUD MODAL FUNCTIONS ====================
+function openCategoryCrudModal(categoryData = null) {
+    const modal = document.getElementById('category-crud-modal');
+    const title = document.getElementById('category-crud-title');
+    const nameInput = document.getElementById('category-name-input');
+    const imagePreview = document.getElementById('category-image-preview');
+    const saveBtn = document.getElementById('save-category-btn');
+    
+    // Reset form
+    nameInput.value = '';
+    categoryImageBase64 = null;
+    editingCategoryId = null;
+    
+    if (categoryData) {
+        // Edit mode
+        title.innerHTML = `
+            <svg class="icon icon-primary" viewBox="0 0 24 24">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            Edit Kategori
+        `;
+        nameInput.value = categoryData.name;
+        imagePreview.src = categoryData.image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E";
+        editingCategoryId = categoryData.id;
+    } else {
+        // Add mode
+        title.innerHTML = `
+            <svg class="icon icon-primary" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="16"/>
+                <line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            Tambah Kategori
+        `;
+        imagePreview.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f5f5'/%3E%3Cpath d='M30,40 L70,40 L65,60 L35,60 Z' fill='%23006B54'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23d9d9d9'/%3E%3C/svg%3E";
+    }
+    
+    modal.style.display = 'flex';
+    
+    // Setup image upload
+    const imageInput = document.getElementById('category-image-input');
+    imageInput.onchange = function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (!file.type.match('image.*')) {
+            showNotification('File harus gambar!', 'error');
+            return;
+        }
+        
+        if (file.size > 2 * 1024 * 1024) {
+            showNotification('Maksimal 2MB!', 'error');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            imagePreview.src = event.target.result;
+            categoryImageBase64 = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    };
+}
+
+function closeCategoryCrudModal() {
+    document.getElementById('category-crud-modal').style.display = 'none';
+    editingCategoryId = null;
+    categoryImageBase64 = null;
+}
+
+async function saveCategoryHandler() {
+    const nameInput = document.getElementById('category-name-input');
+    const name = nameInput.value.trim();
+    
+    if (!name) {
+        showNotification('Nama kategori harus diisi!', 'error');
+        return;
+    }
+    
+    if (name === 'all') {
+        showNotification('Kategori "all" tidak dapat digunakan', 'error');
+        return;
+    }
+    
+    const image = categoryImageBase64 || document.getElementById('category-image-preview').src;
+    
+    const categoryData = {
+        id: editingCategoryId || undefined,
+        name: name,
+        image: image
+    };
+    
+    // If editing, store old name for product update
+    if (editingCategoryId) {
+        const existingCategory = (await dbGetAll(STORES.CATEGORIES)).find(c => c.id === editingCategoryId);
+        if (existingCategory) {
+            categoryData.oldName = existingCategory.name;
+            categoryData.createdAt = existingCategory.createdAt;
+        }
+    }
+    
+    try {
+        showLoading();
+        await saveCategoryToDB(categoryData);
+        
+        // Reload categories
+        await loadCategories();
+        
+        // Update UI
+        renderCategoryDropdown();
+        renderCategories();
+        renderProducts(); // Karena kategori mungkin berubah pada produk
+        
+        showNotification(editingCategoryId ? 'Kategori diperbarui!' : 'Kategori ditambahkan!', 'success');
+        closeCategoryCrudModal();
+    } catch (error) {
+        console.error('Error saving category:', error);
+        showNotification('Gagal menyimpan kategori: ' + error.message, 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+// Override fungsi editCategoryHandler dan deleteCategoryHandler untuk menggunakan modal
+async function editCategoryHandler(categoryName) {
+    if (categoryName === 'all') return;
+    
+    const categoriesList = await dbGetAll(STORES.CATEGORIES);
+    const category = categoriesList.find(c => c.name === categoryName);
+    if (category) {
+        openCategoryCrudModal(category);
+    } else {
+        showNotification('Kategori tidak ditemukan', 'error');
+    }
+}
+
+async function deleteCategoryHandler(categoryName) {
+    if (categoryName === 'all') return;
+    
+    if (!confirm(`Hapus kategori "${categoryName}"?\nProduk dalam kategori ini akan dipindahkan ke kategori "Lainnya".`)) {
+        return;
+    }
+    
+    try {
+        showLoading();
+        await deleteCategoryFromDB(categoryName);
+        
+        await loadProducts();
+        await loadCategories();
+        
+        if (selectedCategory === categoryName) {
+            selectedCategory = 'all';
+        }
+        
+        renderCategoryDropdown();
+        renderCategories();
+        renderProducts();
+        showNotification('Kategori berhasil dihapus!', 'success');
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        showNotification('Gagal menghapus kategori: ' + error.message, 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
 // ==================== APPLICATION INITIALIZATION ====================
 async function initApp() {
     try {
@@ -3271,57 +3842,157 @@ function setupCategoryViewMode() {
     }
 }
 
+// MODIFIKASI: Fungsi untuk menampilkan modal kategori dengan mode tampilan
 function showCategoryModal() {
     const modal = document.getElementById('category-modal');
     const list = document.getElementById('category-modal-list');
     
     if (!modal || !list) return;
     
-    list.innerHTML = '';
+    // Set view mode based on current
+    list.className = 'category-modal-list' + (currentCategoryViewMode === 'grid' ? ' grid-mode' : '');
+    // Update toggle buttons
+    const listBtn = document.querySelector('.view-toggle-btn[data-view="list"]');
+    const gridBtn = document.querySelector('.view-toggle-btn[data-view="grid"]');
+    if (listBtn && gridBtn) {
+        if (currentCategoryViewMode === 'list') {
+            listBtn.classList.add('active');
+            gridBtn.classList.remove('active');
+        } else {
+            listBtn.classList.remove('active');
+            gridBtn.classList.add('active');
+        }
+    }
     
-    categories.forEach(category => {
-        const item = document.createElement('div');
-        item.className = `category-modal-item ${selectedCategory === category ? 'active' : ''}`;
-        item.dataset.category = category;
-        
-        item.innerHTML = `
-            <svg class="icon category-modal-icon" viewBox="0 0 24 24">
-                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-                <path d="M10 2v20"/>
-            </svg>
-            ${category === 'all' ? 'Semua Produk' : category}
-        `;
-        
-        item.onclick = () => {
-            if (searchQuery) {
-                const searchInput = document.getElementById('product-search');
-                if (searchInput) {
-                    searchInput.value = '';
-                    searchQuery = '';
-                }
-            }
-            selectedCategory = category;
-            
-            const label = document.getElementById('category-dropdown-label');
-            if (label) {
-                label.textContent = category === 'all' ? 'Semua Produk' : category;
-            }
-            
-            const button = document.getElementById('category-dropdown-button');
-            if (button) {
-                button.classList.add('active');
-            }
-            
-            renderCategories();
-            renderProducts();
-            
-            closeCategoryModal();
-        };
-        
-        list.appendChild(item);
-    });
+    renderCategoryModalItems(list, currentCategoryViewMode);
     
     modal.style.display = 'flex';
+}
+
+// MODIFIKASI: Render item modal kategori berdasarkan mode dengan ikon edit/hapus
+function renderCategoryModalItems(container, viewMode = 'list') {
+    container.innerHTML = '';
+    
+    // Add "Semua Produk" item (no edit/delete)
+    const allItem = document.createElement('div');
+    allItem.className = `category-modal-item ${selectedCategory === 'all' ? 'active' : ''}`;
+    allItem.dataset.category = 'all';
+    allItem.setAttribute('oncontextmenu', 'return false;'); // Cegah menu konteks default
+    if (viewMode === 'grid') {
+        allItem.innerHTML = `
+            <svg class="icon category-modal-icon" viewBox="0 0 24 24" width="40" height="40">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+            <span class="category-grid-name">Semua Produk</span>
+        `;
+    } else {
+        allItem.innerHTML = `
+            <svg class="icon category-modal-icon" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <line x1="3" y1="9" x2="21" y2="9"/>
+                <line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+            <span>Semua Produk</span>
+        `;
+    }
+    allItem.onclick = () => selectCategory('all');
+    container.appendChild(allItem);
+    
+    // Add category items from categoryObjects
+    categoryObjects.forEach(cat => {
+        const item = document.createElement('div');
+        item.className = `category-modal-item ${selectedCategory === cat.name ? 'active' : ''}`;
+        item.dataset.category = cat.name;
+        item.setAttribute('oncontextmenu', 'return false;'); // Cegah menu konteks default
+        
+        // Buat konten berdasarkan mode
+        if (viewMode === 'grid') {
+            // Untuk mode grid, tampilkan gambar dan nama, serta ikon aksi di pojok
+            item.innerHTML = `
+                <img src="${cat.image || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100\' height=\'100\' fill=\'%23f5f5f5\'/%3E%3Cpath d=\'M30,40 L70,40 L65,60 L35,60 Z\' fill=\'%23006B54\'/%3E%3Ccircle cx=\'50\' cy=\'35\' r=\'15\' fill=\'%23d9d9d9\'/%3E%3C/svg%3E'}" alt="${cat.name}" class="category-grid-image" oncontextmenu="return false;">
+                <span class="category-grid-name">${cat.name}</span>
+                <div class="category-actions">
+                    <button class="category-action-btn edit" onclick="event.stopPropagation(); editCategoryHandler('${cat.name}')">${icons.edit}</button>
+                    <button class="category-action-btn delete" onclick="event.stopPropagation(); deleteCategoryHandler('${cat.name}')">${icons.delete}</button>
+                </div>
+            `;
+        } else {
+            // Mode list: ikon, nama, dan aksi di kanan
+            item.innerHTML = `
+                <svg class="icon category-modal-icon" viewBox="0 0 24 24">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                    <path d="M10 2v20"/>
+                </svg>
+                <span>${cat.name}</span>
+                <div class="category-actions">
+                    <button class="category-action-btn edit" onclick="event.stopPropagation(); editCategoryHandler('${cat.name}')">${icons.edit}</button>
+                    <button class="category-action-btn delete" onclick="event.stopPropagation(); deleteCategoryHandler('${cat.name}')">${icons.delete}</button>
+                </div>
+            `;
+        }
+        
+        // Klik pada item (selain tombol aksi) akan memilih kategori
+        item.onclick = (e) => {
+            // Pastikan klik bukan pada tombol aksi
+            if (!e.target.closest('.category-action-btn')) {
+                selectCategory(cat.name);
+            }
+        };
+        container.appendChild(item);
+    });
+}
+
+// MODIFIKASI: Fungsi untuk mengganti mode tampilan modal kategori
+function setCategoryViewMode(mode) {
+    currentCategoryViewMode = mode;
+    const list = document.getElementById('category-modal-list');
+    if (!list) return;
+    
+    // Update button active states
+    const listBtn = document.querySelector('.view-toggle-btn[data-view="list"]');
+    const gridBtn = document.querySelector('.view-toggle-btn[data-view="grid"]');
+    if (listBtn && gridBtn) {
+        if (mode === 'list') {
+            listBtn.classList.add('active');
+            gridBtn.classList.remove('active');
+            list.classList.remove('grid-mode');
+        } else {
+            listBtn.classList.remove('active');
+            gridBtn.classList.add('active');
+            list.classList.add('grid-mode');
+        }
+    }
+    
+    // Re-render items with the new mode
+    renderCategoryModalItems(list, mode);
+}
+
+function selectCategory(category) {
+    if (searchQuery) {
+        const searchInput = document.getElementById('product-search');
+        if (searchInput) {
+            searchInput.value = '';
+            searchQuery = '';
+        }
+    }
+    selectedCategory = category;
+    
+    const label = document.getElementById('category-dropdown-label');
+    if (label) {
+        label.textContent = category === 'all' ? 'Semua Produk' : category;
+    }
+    
+    const button = document.getElementById('category-dropdown-button');
+    if (button) {
+        button.classList.add('active');
+    }
+    
+    renderCategories();
+    renderProducts();
+    
+    closeCategoryModal();
 }
 
 function closeCategoryModal() {
@@ -3442,6 +4113,7 @@ function renderCategories() {
         const tab = document.createElement('div');
         tab.className = `category-tab ${selectedCategory === category ? 'active' : ''}`;
         tab.dataset.category = category;
+        tab.setAttribute('oncontextmenu', 'return false;'); // Cegah menu konteks default
         
         if (category !== 'all') {
             tab.innerHTML = `
@@ -4475,43 +5147,17 @@ async function printBarcode() {
     }
 }
 
+// ==================== FUNGSI TAMBAH KATEGORI DARI SIDEBAR ====================
+function addCategoryFromSidebar() {
+    // Buka modal tambah kategori, bukan prompt
+    openCategoryCrudModal();
+}
+
 // ==================== SETTINGS MODAL FUNCTIONS ====================
 function showSettingsModal() {
     const settingsContent = document.getElementById('settings-content');
-    const uniqueCategories = categories.filter(c => c !== 'all');
     const totalDigits = digitConfig.flex + digitConfig.category + digitConfig.product + digitConfig.weight;
     const isValid = totalDigits === 13;
-    
-    let categoryListHTML = '';
-    if (uniqueCategories.length > 0) {
-        uniqueCategories.forEach(cat => {
-            categoryListHTML += `
-                <div class="category-item">
-                    <span style="font-weight:500;display:flex;align-items:center;gap:8px;">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="width:14px;height:14px;opacity:0.7;color:#006B54;">
-                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-                            <path d="M10 2v20"/>
-                        </svg>
-                        ${cat}
-                    </span>
-                    <div class="category-actions">
-                        <button style="padding:5px 10px;border:none;border-radius:15px;background:#006B54;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;border:1px solid #006B54;"
-                            onclick="editCategoryHandler('${cat}')">
-                            ${icons.edit}
-                            Edit
-                        </button>
-                        <button style="padding:5px 10px;border:none;border-radius:15px;background:#ff6b6b;color:white;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;border:1px solid #ff6b6b;"
-                            onclick="deleteCategoryHandler('${cat}')">
-                            ${icons.delete}
-                            Hapus
-                        </button>
-                    </div>
-                </div>
-            `;
-        });
-    } else {
-        categoryListHTML = '<div style="text-align:center;color:#999;padding:10px;">Belum ada kategori</div>';
-    }
     
     settingsContent.innerHTML = `
         <div style="margin-bottom:20px;">
@@ -4648,29 +5294,6 @@ function showSettingsModal() {
         <div style="margin-bottom:20px;">
             <div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
-                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-                    <path d="M10 2v20"/>
-                </svg>
-                Manajemen Kategori
-            </div>
-            <div style="background:#f5f5f5;padding:15px;border-radius:15px;margin-bottom:10px;">
-                <div style="display:flex;gap:10px;margin-bottom:10px;">
-                    <input type="text" class="form-input" id="new-category-input-settings" placeholder="Nama kategori baru">
-                    <button style="padding:10px 15px;border:none;border-radius:15px;background:#006B54;color:white;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;border:1px solid #006B54;"
-                        onclick="addNewCategoryFromSettings()">
-                        ${icons.add}
-                        Tambah
-                    </button>
-                </div>
-                <div style="max-height:200px;overflow-y:auto;margin-top:10px;" id="categories-list">
-                    ${categoryListHTML}
-                </div>
-            </div>
-        </div>
-        
-        <div style="margin-bottom:20px;">
-            <div style="color:#333333;margin-bottom:10px;font-weight:600;font-size:1rem;display:flex;align-items:center;gap:8px;">
-                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color:#006B54;">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="17 8 12 3 7 8"/>
                     <line x1="12" y1="3" x2="12" y2="15"/>
@@ -4767,93 +5390,6 @@ function updateDesignPreview(design) {
     }
 }
 
-async function addNewCategoryFromSettings() {
-    const input = document.getElementById('new-category-input-settings');
-    const category = input.value.trim();
-    
-    if (!category) {
-        showNotification('Masukkan nama kategori!', 'error');
-        return;
-    }
-    
-    if (category === 'all') {
-        showNotification('Kategori "all" tidak dapat digunakan', 'error');
-        return;
-    }
-    
-    try {
-        await saveCategoryToDB(category);
-        await loadCategories();
-        renderCategoryDropdown();
-        renderCategories();
-        
-        input.value = '';
-        showNotification(`Kategori "${category}" ditambahkan!`, 'success');
-        showSettingsModal();
-    } catch (error) {
-        console.error('Error adding category:', error);
-        showNotification('Gagal menambahkan kategori: ' + error.message, 'error');
-    }
-}
-
-async function editCategoryHandler(oldCategory) {
-    if (oldCategory === 'all') return;
-    
-    const newCategory = prompt('Edit nama kategori:', oldCategory);
-    if (newCategory && newCategory.trim() && newCategory !== oldCategory) {
-        if (newCategory === 'all') {
-            showNotification('Kategori "all" tidak dapat digunakan', 'error');
-            return;
-        }
-        
-        try {
-            await updateCategoryInDB(oldCategory, newCategory);
-            
-            await loadProducts();
-            await loadCategories();
-            
-            if (selectedCategory === oldCategory) {
-                selectedCategory = newCategory;
-            }
-            
-            renderCategoryDropdown();
-            renderCategories();
-            renderProducts();
-            showNotification('Kategori berhasil diubah!', 'success');
-        } catch (error) {
-            console.error('Error updating category:', error);
-            showNotification('Gagal mengubah kategori: ' + error.message, 'error');
-        }
-    }
-}
-
-async function deleteCategoryHandler(category) {
-    if (category === 'all') return;
-    
-    if (!confirm(`Hapus kategori "${category}"?\nProduk dalam kategori ini akan dipindahkan ke kategori "Lainnya".`)) {
-        return;
-    }
-    
-    try {
-        await deleteCategoryFromDB(category);
-        
-        await loadProducts();
-        await loadCategories();
-        
-        if (selectedCategory === category) {
-            selectedCategory = 'all';
-        }
-        
-        renderCategoryDropdown();
-        renderCategories();
-        renderProducts();
-        showNotification('Kategori berhasil dihapus!', 'success');
-    } catch (error) {
-        console.error('Error deleting category:', error);
-        showNotification('Gagal menghapus kategori: ' + error.message, 'error');
-    }
-}
-
 function updateDigitSummary() {
     const flex = parseInt(document.getElementById('flex-digits').value) || 0;
     const category = parseInt(document.getElementById('category-digits').value) || 0;
@@ -4947,7 +5483,7 @@ function handleTouchStart(e) {
             showCategoryContextMenu(longPressCategory, e.touches[0].clientX, e.touches[0].clientY);
             indicator.style.display = 'none';
         }, 800);
-        e.preventDefault();
+        // Hapus preventDefault agar scrolling tetap berfungsi
     }
 }
 
@@ -5008,8 +5544,26 @@ function showCategoryContextMenu(category, x, y) {
     menu.appendChild(editItem);
     menu.appendChild(deleteItem);
     
-    menu.style.left = x + 'px';
-    menu.style.top = y + 'px';
+    // Adjust position to stay within viewport
+    const menuWidth = 180; // min-width from CSS
+    const menuHeight = 100; // approximate
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    let left = x;
+    let top = y;
+    
+    if (left + menuWidth > viewportWidth) {
+        left = viewportWidth - menuWidth - 10;
+    }
+    if (top + menuHeight > viewportHeight) {
+        top = viewportHeight - menuHeight - 10;
+    }
+    if (left < 10) left = 10;
+    if (top < 10) top = 10;
+    
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
     menu.style.display = 'block';
     
     setTimeout(() => {
@@ -5053,6 +5607,8 @@ window.onclick = function(event) {
             });
         } else if (event.target.id === 'product-modal') {
             resetProductForm();
+        } else if (event.target.id === 'category-crud-modal') {
+            closeCategoryCrudModal();
         }
     }
 };
